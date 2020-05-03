@@ -1,0 +1,39 @@
+{% load static %}
+<html>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'miscosas/bootstrap.min.css' %}">
+
+    <!-- imagen del sitio -->
+    <img src="{% static "miscosas/black_album.jpg" %}" width="200" height="200" align="right">
+
+    <title>MisCosasWeb</title>
+  </head>
+  <body>
+    <ul class="nav nav-pills">
+      <li class="nav-item">
+        <a class="nav-link active" href="/conciertos/">Alimentadores</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/conciertos/grupos/">Items</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/conciertos/musicos/">Usuarios</a>
+      </li>
+    </ul>
+    <!-- aquí vendría la caja de login -->
+    <div class="jumbotron">
+        {% block contenido %}
+        {% endblock %}
+     </div>
+      <!--{% if user.is_authenticated %}-->
+        {% block formulario %}
+        {% endblock %}
+    <!--  {% endif %}-->
+
+    </body>
+</html>

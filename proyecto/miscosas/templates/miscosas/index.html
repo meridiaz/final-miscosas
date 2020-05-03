@@ -1,0 +1,24 @@
+{% extends 'conciertos/base.html' %}
+
+    {% block contenido %}
+
+        <!-- {% if objects_list %}
+            <ul>
+            {% for object in objects_list %}
+                <li><a href="/conciertos/{{ type }}/{{ object.id }}">{{ object }}</a></li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No contents are available.</p>
+        {% endif %} -->
+
+    {% endblock %}
+
+  {% block formulario %}
+       <h2>BIENVENIDO</h2>
+        <!-- <form method="POST" action="/conciertos/{{ type }}/0">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="save btn btn-info">Guardar</button>
+        </form> -->
+  {% endblock %}
