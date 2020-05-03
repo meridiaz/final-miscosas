@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from datetime import datetime
 
 # Create your views here.
@@ -8,6 +7,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from django.template import loader
+from django.contrib.auth.forms import AuthenticationForm
 
 #from .forms import GrupoForm, MusicoForm, ConciertoForm
 #from .models import Grupo, Musico, Concierto
@@ -16,6 +16,6 @@ from django.template import loader
 
 def index(request):
     #lista = Concierto.objects.all()
-    #form = ConciertoForm()
-    context = {}#{'objects_list': lista, 'form': form, 'type': "conciertos"}
+    form = AuthenticationForm(request)
+    context = {'form': form}#{'objects_list': lista, 'form': form, 'type': "conciertos"}
     return render(request, 'miscosas/index.html', context)

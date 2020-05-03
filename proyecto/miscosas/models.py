@@ -1,10 +1,11 @@
 from django.db import models
+#from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 class Alimentador(models.Model):
     nombre = models.CharField(max_length=64)
     enlace = models.TextField()
-    elegido = models.Boolean()
+    elegido = models.BooleanField()
 
     def __str__(self):
         return self.nombre
@@ -16,7 +17,7 @@ class Usuario(models.Model):
     foto = models.TextField()
     tamLetra =  models.CharField(max_length=10)
     estilo = models.CharField(max_length=10)
-    alimentadores = models.ArrayField(Alimentador)
+    #alimentadores = ArrayField(ArrayField(Alimentador))
 
     def __str__(self):
         return "Soy el usuario con nombre: "+ self.nombre

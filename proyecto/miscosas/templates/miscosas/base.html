@@ -7,14 +7,25 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static 'miscosas/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'miscosas/micss.css' %}">
 
-    <!-- imagen del sitio -->
-    <img src="{% static "miscosas/black_album.jpg" %}" width="200" height="200" align="right">
 
     <title>MisCosasWeb</title>
   </head>
   <body>
-    <ul class="nav nav-pills">
+
+    <div class="cabecera" >
+      <!-- imagen del sitio -->
+      <img src="{% static "miscosas/black_album.jpg" %}" width="150" height="150" align="left">
+
+        <h2>BIENVENIDO</h2>
+         <form method="POST" action="/">
+             {% csrf_token %}
+             {{ form.as_p }}
+             <button type="submit" class="save btn btn-info">Guardar</button>
+         </form>
+    </div>
+    <div class="nav nav-pills">
       <li class="nav-item">
         <a class="nav-link active" href="/conciertos/">Alimentadores</a>
       </li>
@@ -24,15 +35,11 @@
       <li class="nav-item">
         <a class="nav-link" href="/conciertos/musicos/">Usuarios</a>
       </li>
-    </ul>
-    <!-- aquí vendría la caja de login -->
-    <div class="jumbotron">
-        {% block contenido %}
-        {% endblock %}
-     </div>
+    </div>
       <!--{% if user.is_authenticated %}-->
         {% block formulario %}
         {% endblock %}
+
     <!--  {% endif %}-->
 
     </body>

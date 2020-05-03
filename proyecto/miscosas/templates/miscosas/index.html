@@ -1,6 +1,6 @@
-{% extends 'conciertos/base.html' %}
+{% extends 'miscosas/base.html' %}
 
-    {% block contenido %}
+    <!--{% block contenido %}
 
         <!-- {% if objects_list %}
             <ul>
@@ -10,15 +10,15 @@
             </ul>
         {% else %}
             <p>No contents are available.</p>
-        {% endif %} -->
+        {% endif %}
 
-    {% endblock %}
+    {% endblock %}-->
 
   {% block formulario %}
        <h2>BIENVENIDO</h2>
-        <!-- <form method="POST" action="/conciertos/{{ type }}/0">
+        <form method="POST" action="/">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit" class="save btn btn-info">Guardar</button>
-        </form> -->
+        </form>
   {% endblock %}
