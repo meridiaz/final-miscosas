@@ -1,24 +1,34 @@
 {% extends 'miscosas/base.html' %}
+{% load static %}
 
-    <!--{% block contenido %}
+    {% block contenido %}
+    <link rel="stylesheet" href="{% static 'miscosas/indexcss.css' %}">
+    
+      <div class="top10">
+        <h2>A continuación el top 10 de alimentadores:</h2>
+      </div>
 
+      <div class="formalimentadores">
+        <!--<h2>A continuación formularios de alimentadores:</h2>-->
+        <form method="POST" action="/">
+          <h3>Alimentador de youtbe:</h3>
+          <input class="textbox" type="text" name="referencia del formulario" placeholder="Username">
+          <a class="boton" href="registro">Elegir alimentador</a>
+        </form>
+        <form method="POST" action="/">
+          <h3>Alimentador de musica:</h3>
+          <input class="textbox" type="text" name="referencia del formulario" placeholder="Username">
+          <a class="boton" href="registro">Elegir alimentador</a>
+        </form>
+      </div>
         <!-- {% if objects_list %}
             <ul>
             {% for object in objects_list %}
                 <li><a href="/conciertos/{{ type }}/{{ object.id }}">{{ object }}</a></li>
             {% endfor %}
             </ul>
-        {% else %}
-            <p>No contents are available.</p>
-        {% endif %}
+        {% else %}-  {%endif %} -->
 
-    {% endblock %}-->
 
-  {% block formulario %}
-       <h2>BIENVENIDO</h2>
-        <form method="POST" action="/">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="save btn btn-info">Guardar</button>
-        </form>
-  {% endblock %}
+
+    {% endblock %}

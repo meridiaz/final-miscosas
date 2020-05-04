@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from django.template import loader
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import logout
 
 #from .forms import GrupoForm, MusicoForm, ConciertoForm
 #from .models import Grupo, Musico, Concierto
@@ -17,5 +18,11 @@ from django.contrib.auth.forms import AuthenticationForm
 def index(request):
     #lista = Concierto.objects.all()
     form = AuthenticationForm(request)
-    context = {'form': form}#{'objects_list': lista, 'form': form, 'type': "conciertos"}
+    context = {'form': form, 'user': request.user}
+    print(request.user.is_authenticated)
     return render(request, 'miscosas/index.html', context)
+
+
+def logout_view(request):
+    logout(request)
+    return redirect("/")

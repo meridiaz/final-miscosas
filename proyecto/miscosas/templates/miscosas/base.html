@@ -15,15 +15,18 @@
   <body>
 
     <div class="cabecera" >
-      <!-- imagen del sitio -->
-      <img src="{% static "miscosas/black_album.jpg" %}" width="150" height="150" align="left">
-
+      <!-- imagen del sitio #2d6360;-->
+      <img src="{% static "miscosas/banner.jpg" %}" width="186" height="150" align="left">
+      <h1>MIS COSAS WEB</h1>
         <h2>BIENVENIDO</h2>
-         <form method="POST" action="/">
-             {% csrf_token %}
-             {{ form.as_p }}
-             <button type="submit" class="save btn btn-info">Guardar</button>
-         </form>
+        {% if user.is_authenticated %}
+
+               <h2>{{user.username}}
+               <a href="/logout">Logout</a></h2>
+        {% else %}
+              <p>aqui deberia ir el formulario de registrarion</p>
+
+        {% endif %}
     </div>
     <div class="nav nav-pills">
       <li class="nav-item">
@@ -36,11 +39,9 @@
         <a class="nav-link" href="/conciertos/musicos/">Usuarios</a>
       </li>
     </div>
-      <!--{% if user.is_authenticated %}-->
-        {% block formulario %}
+    <div class="contenido">
+        {% block contenido %}
         {% endblock %}
-
-    <!--  {% endif %}-->
-
+    </div>
     </body>
 </html>
