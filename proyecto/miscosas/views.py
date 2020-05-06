@@ -11,10 +11,10 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login as do_login
 from django.contrib.auth import logout
 from django.contrib.auth import authenticate
-from .forms import RegistrationForm
+from .forms import RegistrationForm, PagUsForm
+from django.contrib.auth.models import User
 
-#from .forms import GrupoForm, MusicoForm, ConciertoForm
-#from .models import Grupo, Musico, Concierto
+from .models import PagUsuario, tamano, estilous
 
 # Create your views here.
 
@@ -62,3 +62,23 @@ def login_view(request):
                 do_login(request, user)
 
     return redirect(recurso_us)
+
+
+def cuenta_usuario(request, us):
+    try:
+        usuario = User.Objects.get(us)
+        if request.method == 'GET':
+            form = PagUsForm()
+            #request.POST, instance=contenido
+            context = {'form': form, 'usario': us}
+            return render(request, 'miscosas/usuario.html', context)
+        elif request.methon == 'POST':
+            form = PagUsForm(request.POST)
+            if form.is_valid():
+                pagUsEstilo = PagUsuario(tamletra=form.cleaned_data['tamano'],
+                                        estilo=form.cleaned_data['estilo'],
+                                        usuario = usuario)
+                pagUsEstilo.save()
+                return redirect('usuario', us=usuario)
+    except User.ObjectDoesNotExist:
+        return redirect('/')

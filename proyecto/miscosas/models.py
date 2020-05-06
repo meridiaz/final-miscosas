@@ -1,6 +1,13 @@
 from django.db import models
+from django.contrib.auth.models import User
 #from django.contrib.postgres.fields import ArrayField
 
+tamano = {'pequena': 40,
+            'mediana': 60,
+            'grande': 80}
+
+estilous = {'oscuro': {'color_letra': 'white', 'fondo_cabec': 'fondo_cabecera2.jpg'},
+            'ligero': {'color_letra': 'black', 'fondo_cabec': 'fondo_cabecera2.jpg'}}
 # Create your models here.
 class Alimentador(models.Model):
     nombre = models.CharField(max_length=64)
@@ -10,17 +17,21 @@ class Alimentador(models.Model):
     def __str__(self):
         return self.nombre
 
-
 #class LastAlim(Alimentador):
-class Usuario(models.Model):
-    nombre = models.CharField(max_length=64)
-    foto = models.TextField()
-    tamLetra =  models.CharField(max_length=10)
-    estilo = models.CharField(max_length=10)
+
+# class estiloPag(models.Model):
+#     color_letra = models.CharField(max_length=10)
+#     fondo_cabec = models.CharField(max_length=20)
+
+class PagUsuario(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    foto = models.TextField(default=None)
+    tamLetra =  models.CharField(max_length=10, default='mediana')
+    estilo = models.CharField(default='ligero', max_length=100)
     #alimentadores = ArrayField(ArrayField(Alimentador))
 
     def __str__(self):
-        return "Soy el usuario con nombre: "+ self.nombre
+        return "Soy el usuario con nombre: "+ self.usuario.Username
 
 
 class Item(models.Model):
@@ -30,14 +41,14 @@ class Item(models.Model):
     alimentador =  models.ForeignKey(Alimentador, on_delete=models.CASCADE)
 
 class Comentario(models.Model):
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     fecha = models.DateTimeField()
     texto =  models.TextField()
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
 
 
 class Like(models.Model):
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     #el campo de a continuacion indica si el video tiene un like por parte del usuario: 1
     #no lo ha votado : 0
