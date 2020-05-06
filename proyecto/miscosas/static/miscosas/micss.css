@@ -24,7 +24,7 @@ h1{
 
 
 .cabecera h2{
-  right:30;
+  right:40;
   top:10;
 }
 
@@ -38,22 +38,29 @@ h1{
 
 .cabecera p{
   position: absolute;
-  right: 50;
+  right: 60;
 }
 
 .cabecera form{
   position: relative;
-  right:15
+  box-sizing: content-box;
+  padding: 5px;
+  text-align:right;
+  left: 900;
+  width: 400px;
 }
 
+
+
 .nav{
+    margin-left: 5;
    top:0px;
    background-color: white;
 }
 
 .contenido{
   box-sizing: content-box;
-  background-color: #9eaff6;
+  background-color: #eff0dc;
   height: 100%;
   width: 95%;
   margin:20;
@@ -61,4 +68,21 @@ h1{
 
 body{
   background: 90% url(fondo.jpg);
+  position: relative;
+}
+#id_password {
+    position: relative;
+    bottom: -40;
+}
+
+.cabecera button{
+  position: relative;
+  bottom: -20;
+}
+
+button{
+  background-color: #007bff;
+  color: #fff;
+  border-radius: .25rem;
+  border-color: #007bff;
 }

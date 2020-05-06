@@ -3,7 +3,7 @@
 
     {% block contenido %}
     <link rel="stylesheet" href="{% static 'miscosas/indexcss.css' %}">
-    
+
       <div class="top10">
         <h2>A continuación el top 10 de alimentadores:</h2>
       </div>
@@ -12,13 +12,15 @@
         <!--<h2>A continuación formularios de alimentadores:</h2>-->
         <form method="POST" action="/">
           <h3>Alimentador de youtbe:</h3>
+          {% csrf_token %}
           <input class="textbox" type="text" name="referencia del formulario" placeholder="Username">
-          <a class="boton" href="registro">Elegir alimentador</a>
+          <button type="submit">Elegir alimentador</button>
         </form>
         <form method="POST" action="/">
           <h3>Alimentador de musica:</h3>
+          {% csrf_token %}
           <input class="textbox" type="text" name="referencia del formulario" placeholder="Username">
-          <a class="boton" href="registro">Elegir alimentador</a>
+          <button type="submit">Elegir alimentador</button>
         </form>
       </div>
         <!-- {% if objects_list %}

@@ -22,9 +22,23 @@
         {% if user.is_authenticated %}
 
                <h2>{{user.username}}
-               <a href="/logout">Logout</a></h2>
+               <a href="/logout?recurso={{recurso_us}}">Logout</a></h2>
         {% else %}
-              <p>aqui deberia ir el formulario de registrarion</p>
+
+             <form method="POST" action="/login?recurso={{recurso_us}}">
+                {% csrf_token %}
+
+               <!-- <input class="textbox" type="text" name="referencia del formulario" placeholder="Username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username">
+               <input class="textbox" type="password" name="referencia del formulario" placeholder="password" autocomplete="current-password" required="" id="id_password"> -->
+                <!-- <p><label for="id_username">Username:</label> <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username"></p>
+                <p><label for="id_password">Password:</label> <input type="password" name="password" autocomplete="current-password" required="" id="id_password"></p> -->
+                <input class="textbox" type="text" name="username" placeholder="Username" style = "margin-bottom: 5">
+                <input class="textbox" type="password" name="password" placeholder="Contraseña">
+                <input class="textbox" type="hidden" name="recurso" value={{recurso_us}}>
+                <button type="submit" name ="action" value="Login">Login</button>
+                <button type="submit" name="action" value="Registrar">Registrar</button>
+
+            </form>
 
         {% endif %}
     </div>
