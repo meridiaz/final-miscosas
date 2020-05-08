@@ -1,0 +1,178 @@
+.cabecera{
+  box-sizing: content-box;
+  padding: 5px;
+  position: relative;
+
+  height:166px;
+  text-align:right;
+  background: #2d6360 70% url(static/miscosas/{{fondo_cabec}}) no-repeat;
+}
+
+h2{
+  color: {{color_letra}};
+  font-family: Arial, Helvetica, sans-serif;
+  position: relative;
+}
+
+h1{
+  font-style: italic;
+  text-align:center;
+  font-weight: 550;
+  font-family: 'Libre Baskerville', sans-serif;
+  color: {{color_letra}};
+}
+
+p{
+  color: {{color_letra}};
+  font-size: 20px;
+}
+
+
+.cabecera h2{
+  right:40;
+  top:10;
+  font-size: 35;
+}
+
+.cabecera h1{
+
+  position: absolute;
+  top:65;
+  left: 475;
+  font-size: 45px;
+}
+
+.cabecera p{
+  position: absolute;
+  right: 60;
+}
+
+.cabecera form{
+  position: relative;
+  box-sizing: content-box;
+  padding: 5px;
+  text-align:right;
+  left: 900;
+  width: 400px;
+}
+
+.nav-item{
+    background-color: white;
+
+}
+
+.nav{
+    /* box-sizing: content-box;
+    width: 40%; */
+    margin-left: 5;
+    top:0px;
+    border-color: #007bff
+    /* justify-content:  center; */
+    /* background-color: #007bff; */
+
+}
+
+.contenido{
+  box-sizing: content-box;
+  /* background-color: #eff0dc; */
+  height: 100%;
+  width: 95%;
+  margin:20;
+  border-radius: 50px;
+}
+
+body{
+  background: 90% url(static/miscosas/{{fondo}});
+  position: relative;
+}
+#id_password {
+    position: relative;
+    bottom: -40;
+}
+
+.cabecera button{
+  position: relative;
+  bottom: -20;
+}
+
+button{
+  background-color: #007bff;
+  color: #fff;
+  border-radius: .25rem;
+  border-color: #007bff;
+}
+
+.contenido h2{
+  font-size: {{tam}};
+  box-sizing: content-box;
+  width: 700px;
+}
+
+.top10{
+  box-sizing: content-box;
+  padding: 5px;
+  position: relative;
+  text-align:left;
+  width: 700px;
+  height: 70%;
+  left: 50;
+  top: 30;
+  border-right: 3px solid black;
+  border-left: 3px solid black;
+  border-top: 3px solid black;
+  border-bottom: 3px solid black;
+}
+
+.formalimentadores{
+  box-sizing: content-box;
+  padding: 5px;
+  position: relative;
+  text-align:left;
+
+  width: 400px;
+  left: 850px;
+  bottom:300px;
+
+}
+
+.formalimentadores form{
+  border-right: 3px solid indigo;
+  border-left: 3px solid indigo;
+  border-top: 3px solid indigo;
+  border-bottom: 3px solid indigo;
+  background-color: #f69ed6;
+}
+
+.fotoperfil{
+  box-sizing: content-box;
+  padding: 5px;
+  position: relative;
+  text-align:left;
+  border-right: 3px solid grey;
+  border-left: 3px solid grey;
+  border-top: 3px solid grey;
+  border-bottom: 3px solid grey;
+   background-color: #aca2a2;
+  border-radius: 6px;
+
+
+  width: 500px;
+  left: 800px;
+
+}
+.cambiarestilo{
+  box-sizing: content-box;
+  padding: 5px;
+  position: relative;
+  text-align:left;
+  background-color: #41d8ed;
+  border-right: 3px solid grey;
+  border-left: 3px solid grey;
+  border-top: 3px solid grey;
+  border-bottom: 3px solid grey;
+  border-radius: 6px;
+
+  width: 400px;
+  
+  bottom:-240px;
+}

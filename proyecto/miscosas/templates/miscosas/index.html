@@ -2,14 +2,14 @@
 {% load static %}
 
     {% block contenido %}
-    <link rel="stylesheet" href="{% static 'miscosas/indexcss.css' %}">
+
 
       <div class="top10">
-        <h2>A continuación el top 10 de alimentadores:</h2>
+        <h2>Top 10 items mas votados:</h2>
       </div>
 
       <div class="formalimentadores">
-        <!--<h2>A continuación formularios de alimentadores:</h2>-->
+        <!--<h2>Formularios de alimentadores:</h2>-->
         <form method="POST" action="/">
           <h3>Alimentador de youtbe:</h3>
           {% csrf_token %}
@@ -23,14 +23,5 @@
           <button type="submit">Elegir alimentador</button>
         </form>
       </div>
-        <!-- {% if objects_list %}
-            <ul>
-            {% for object in objects_list %}
-                <li><a href="/conciertos/{{ type }}/{{ object.id }}">{{ object }}</a></li>
-            {% endfor %}
-            </ul>
-        {% else %}-  {%endif %} -->
-
-
 
     {% endblock %}

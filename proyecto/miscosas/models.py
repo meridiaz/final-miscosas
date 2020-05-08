@@ -2,12 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 #from django.contrib.postgres.fields import ArrayField
 
-tamano = {'pequena': 40,
-            'mediana': 60,
-            'grande': 80}
+tamano = {'pequena': 30,
+            'mediana': 40,
+            'grande': 50}
 
-estilous = {'oscuro': {'color_letra': 'white', 'fondo_cabec': 'fondo_cabecera2.jpg'},
-            'ligero': {'color_letra': 'black', 'fondo_cabec': 'fondo_cabecera2.jpg'}}
+estilous = {'oscuro': {'color_letra': 'white', 'fondo_cabec': 'fondo_cabecera_oscuro.jpg',
+                        'fondo': 'fondo_oscuro.jpg'},
+            'ligero': {'color_letra': 'black', 'fondo_cabec': 'fondo_cabecera2.jpg',
+                        'fondo': 'fondo.jpg'}}
 # Create your models here.
 class Alimentador(models.Model):
     nombre = models.CharField(max_length=64)
@@ -25,13 +27,10 @@ class Alimentador(models.Model):
 
 class PagUsuario(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    foto = models.TextField(default=None)
+    foto = models.TextField(default="")
     tamLetra =  models.CharField(max_length=10, default='mediana')
     estilo = models.CharField(default='ligero', max_length=100)
     #alimentadores = ArrayField(ArrayField(Alimentador))
-
-    def __str__(self):
-        return "Soy el usuario con nombre: "+ self.usuario.Username
 
 
 class Item(models.Model):
