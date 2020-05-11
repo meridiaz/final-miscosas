@@ -5,7 +5,7 @@
 
   <h2>Nombre: {{usuario}}</h2>
     <img src="{{foto}}" align="left" width="186" height="150">
-  <div class="cambiarestilo" >
+  <div id="cambiarestilo" >
       <h2> Cambiar formato</h2>
       <form method="POST" action="/usuario/{{usuario}}">
           {% csrf_token %}
@@ -13,7 +13,7 @@
           <button type="submit" name="action" class="save btn btn-info" value="formato">Guardar</button>
       </form>
       </div>
-  <div class="fotoperfil" >
+  <div id="fotoperfil" >
       <h2> Cambiar foto de perfil</h2>
       <form method="POST" action="/usuario/{{usuario}}">
           {% csrf_token %}

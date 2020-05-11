@@ -14,7 +14,7 @@
   </head>
   <body>
 
-    <div class="cabecera" >
+    <div id="cabecera" >
       <!-- imagen del sitio #2d6360;-->
       <img src="{% static "miscosas/banner.jpg" %}" width="186" height="150" align="left">
       <h1>MIS COSAS WEB</h1>
@@ -28,11 +28,7 @@
              <form method="POST" action="/login?recurso={{recurso_us}}">
                 {% csrf_token %}
 
-               <!-- <input class="textbox" type="text" name="referencia del formulario" placeholder="Username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username">
-               <input class="textbox" type="password" name="referencia del formulario" placeholder="password" autocomplete="current-password" required="" id="id_password"> -->
-                <!-- <p><label for="id_username">Username:</label> <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username"></p>
-                <p><label for="id_password">Password:</label> <input type="password" name="password" autocomplete="current-password" required="" id="id_password"></p> -->
-                <input class="textbox" type="text" name="username" placeholder="Username" style = "margin-bottom: 5">
+               <input class="textbox" type="text" name="username" placeholder="Username" style = "margin-bottom: 5">
                 <input class="textbox" type="password" name="password" placeholder="Contraseña">
                 <button type="submit" name ="action" value="Login">Login</button>
                 <button type="submit" name="action" value="Registrar">Registrar</button>
@@ -55,7 +51,7 @@
         <a class="nav-link" href="/informacion">Informacion</a>
       </li>
     </div>
-    <div class="contenido">
+    <div id="contenido">
         {% block contenido %}
         {% endblock %}
     </div>

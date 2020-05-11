@@ -23,10 +23,22 @@ from .models import PagUsuario, tamano, estilous
 
 # Create your views here.
 
+def ytalim():
+    print("holi")
+
+def gestionar_alims(request):
+    action = request.POST['action']
+    if action == "yt":
+        ytalim()
+    elif action == "musica":
+        print("holi2")
+
+
+def alimentador(request, id=0):
+    if request.POST:
+        gestionar_alims(request)
+
 def index(request):
-    #lista = Concierto.objects.all()
-    #form = AuthenticationForm(request)
-    #<!--"{% url 'login_view' recurso=recurso_us %}"> -->
     context = {'user': request.user, 'recurso_us': '/'}
     print(request.user.is_authenticated)
     return render(request, 'miscosas/index.html', context)
@@ -75,35 +87,34 @@ def login_view(request):
 def cuenta_usuario(request, us):
     try:
         usuario = User.objects.get(username=us)
-        pagUsEstilo = PagUsuario.objects.get(usuario=usuario)
-        if request.method == 'GET':
-            form = PagUsForm()
-            context = {'form': form, 'usuario': us, 'recurso_us': '/usuario/'+us,
-                        'foto': pagUsEstilo.foto}
-            return render(request, 'miscosas/usuario.html', context)
-        elif request.method == 'POST':
-            action = request.POST['action']
-            if action=="foto":
-                pagUsEstilo.foto = request.POST['url']
-                pagUsEstilo.save()
-                return redirect('/usuario/'+us)
-            elif action=="formato":
-                form = PagUsForm(request.POST)
 
-                if form.is_valid():
-
-                    pagUsEstilo.tamLetra = form.cleaned_data['tamano']
-                    pagUsEstilo.estilo = form.cleaned_data['estilo']
-                    pagUsEstilo.save()
-                    return redirect('/usuario/'+us)
     except ObjectDoesNotExist:
         return redirect('/')
 
+    pagUsEstilo = PagUsuario.objects.get(usuario=usuario)
+    if request.method == 'GET':
+        form = PagUsForm()
+        context = {'form': form, 'usuario': us, 'recurso_us': '/usuario/'+us,
+                    'foto': pagUsEstilo.foto}
+        return render(request, 'miscosas/usuario.html', context)
+    elif request.method == 'POST':
+        action = request.POST['action']
+        if action=="foto":
+            pagUsEstilo.foto = request.POST['url']
+            pagUsEstilo.save()
+            return redirect('/usuario/'+us)
+        elif action=="formato":
+            form = PagUsForm(request.POST)
+            if form.is_valid():
+                pagUsEstilo.tamLetra = form.cleaned_data['tamano']
+                pagUsEstilo.estilo = form.cleaned_data['estilo']
+                pagUsEstilo.save()
+                return redirect('/usuario/'+us)
+
+
 
 def procesar_css(request):
-    print("me han pedido el cass")
     template = get_template("miscosas/micss.css")
-    print("me piden el css")
     try:
         username = request.user.get_username()
         pag_usuario = PagUsuario.objects.get(usuario__username=username)

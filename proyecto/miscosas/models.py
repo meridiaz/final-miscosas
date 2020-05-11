@@ -12,12 +12,16 @@ estilous = {'oscuro': {'color_letra': 'white', 'fondo_cabec': 'fondo_cabecera_os
                         'fondo': 'fondo.jpg'}}
 # Create your models here.
 class Alimentador(models.Model):
+    tipo = models.CharField(max_length=10, default="")
     nombre = models.CharField(max_length=64)
-    enlace = models.TextField()
+    enlace = models.TextField() #al canal o al subreddit
     elegido = models.BooleanField()
+    puntuacion = models.IntegerField(default=0)
 
     def __str__(self):
         return self.nombre
+
+
 
 #class LastAlim(Alimentador):
 
