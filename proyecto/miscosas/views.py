@@ -18,28 +18,58 @@ from django.template import Context
 
 from urllib import request
 
-from .forms import RegistrationForm, PagUsForm
-from .models import PagUsuario, tamano, estilous
+from .forms import RegistrationForm, PagUsForm, AlimForm
+from .models import PagUsuario, tamano, estilous, Alimentador
+from .ytalim import YTChannel
 
 # Create your views here.
 
-def ytalim():
-    print("holi")
+def alim_yaexiste(id, tipo):
+    try:
+        alim = Alimentador.objects.get(nombre=id)
+        print("el alimentador elegido ya existe")
+        return True #ya existe el alimentador
+    except ObjectDoesNotExist:
+        alim = Alimentador(tipo=tipo, nombre=id)
+        return False
 
 def gestionar_alims(request):
-    action = request.POST['action']
-    if action == "yt":
-        ytalim()
-    elif action == "musica":
-        print("holi2")
+    form = AlimForm(request.POST)
+    if not form.is_valid():
+         print("hay un error")
+         return
+    else:
+        print("no hay error")
 
+    tipo = form.cleaned_data['tipo_alimentador']
+    nombre = form.cleaned_data['identificador_o_nombre']
+    print(nombre)
+    if not alim_yaexiste(nombre, tipo):
+        if tipo == "yt":
+            print("para procesar alimentado de youtube")
+            url = 'https://www.youtube.com/feeds/videos.xml?channel_id=' \
+          + nombre
+            YTChannel(url)
+        elif tipo == "reddit":
+            print("holi2")
+    else:
+        # actualizar_alim()
+        print("el alimentador elegido ya existe2")
+
+    return nombre
 
 def alimentador(request, id=0):
-    if request.POST:
-        gestionar_alims(request)
+    if request.method == "POST":
+        id = gestionar_alims(request)
+        print("ya gestionado")
+        return redirect('/alimentador/id')
+    elif request.method == "GET":
+        print("----------------TODO HA IDO BIEN")
+        return redirect('/')
 
 def index(request):
-    context = {'user': request.user, 'recurso_us': '/'}
+    form = AlimForm()
+    context = {'user': request.user, 'recurso_us': '/', 'form': form}
     print(request.user.is_authenticated)
     return render(request, 'miscosas/index.html', context)
 
@@ -87,7 +117,6 @@ def login_view(request):
 def cuenta_usuario(request, us):
     try:
         usuario = User.objects.get(username=us)
-
     except ObjectDoesNotExist:
         return redirect('/')
 

@@ -11,77 +11,88 @@ from xml.sax.handler import ContentHandler
 from xml.sax import make_parser
 import sys
 import string
+from urllib.request import urlopen
 
 class YTHandler(ContentHandler):
-    """Class to handle events fired by the SAX parser
-    Fills in self.videos with title, link and id for videos
-    in a YT channel XML document.
-    """
+    def meterBSVideo(self):
+        from .models import Item, Alimentador
+
+        if self.canal == "":
+            c = Alimentador(nombre=self.CanalTit, enlace=self.CanalLink, tipo="yt")
+            c.save()
+            self.canal = c
+        v = Item(alimentador=self.canal, titulo=self.title, enlace=self.link,
+                  descrip=self.descrip)
+        v.save()
 
     def __init__ (self):
-        """Initialization of variables for the parser
-        * inEntry: within <entry>
-        * inContent: reading interesting target content (leaf strings)
-        * content: target content being readed
-        * title: title of the current entry
-        * id: id of the current entry
-        * link: link of the current entry
-        * videos: list of videos (<entry> elements) in the channel,
-            each video is a dictionary (title, link, id)
-        """
+
         self.inEntry = False
         self.inContent = False
         self.content = ""
         self.title = ""
+
         self.id = ""
+
         self.link = ""
         self.videos = []
+
+        self.inContentCanal = False
+        self.canal = ""
+        self.inCanal = False
+        self.CanalLink = ""
+        self.descrip = ""
+        self.CanalTit = ""
 
     def startElement (self, name, attrs):
         if name == 'entry':
             self.inEntry = True
         elif self.inEntry:
-            if name == 'title':
+            if name == 'title' or name == "media:description":
                 self.inContent = True
             elif name == 'link':
                 self.link = attrs.get('href')
-            elif name == 'yt:videoId':
+        elif name == "feed":
+            self.inCanal = True
+        elif self.inCanal:
+            if name == "title":
                 self.inContent = True
+            elif name == "link" and (attrs.get('rel') == "alternate"):
+                self.CanalLink = attrs.get('href')
 
     def endElement (self, name):
         global videos
 
         if name == 'entry':
             self.inEntry = False
-            self.videos.append({'link': self.link,
-                                'title': self.title,
-                                'id': self.id})
+            self.meterBSVideo()
         elif self.inEntry:
             if name == 'title':
                 self.title = self.content
                 self.content = ""
                 self.inContent = False
-            elif name == 'yt:videoId':
-                self.id = self.content
+            elif name == "media:description":
+                self.descrip = self.content
                 self.content = ""
                 self.inContent = False
+        elif name == "feed":
+            self.inCanal = False
+        elif self.inCanal:
+            if name == "title":
+                self.CanalTit = self.content
+                self.inContent = False
+                self.content = ""
 
     def characters (self, chars):
         if self.inContent:
             self.content = self.content + chars
 
 class YTChannel:
-    """Class to get videos in a YouTube channel.
-    Extracts video links and titles from the XML document for a YT channel.
-    The list of videos found can be retrieved lated by calling videos()
-    """
 
-    def __init__(self, stream):
+    def __init__(self, url):
+        print("url en el ytalim fich"+url)
+        xmlStream = urlopen(url)
         self.parser = make_parser()
         self.handler = YTHandler()
         self.parser.setContentHandler(self.handler)
-        self.parser.parse(stream)
-
-    def videos (self):
-
-        return self.handler.videos
+        self.parser.parse(xmlStream)

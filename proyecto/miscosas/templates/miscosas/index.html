@@ -11,17 +11,18 @@
       <div id="formalimentadores">
         <!--<h2>Formularios de alimentadores:</h2>-->
         <form method="POST" action="/alimentador/0">
-          <h3>Alimentador de youtbe:</h3>
+          <h3>Formularios alimentadores:</h3>
           {% csrf_token %}
-          <input class="textbox" type="text" name="referencia del formulario" placeholder="Identificador">
+          {{form.as_p}}
+          <!-- <input class="textbox" type="text" name="referencia del formulario" placeholder="Identificador"> -->
           <button type="submit" action="yt">Elegir alimentador</button>
         </form>
-        <form method="POST" action="/alimentador/0">
+        <!-- <form method="POST" action="/alimentador/0">
           <h3>Alimentador de musica:</h3>
           {% csrf_token %}
-          <input class="textbox" type="text" name="referencia del formulario" placeholder="Identificador">
-          <button type="submit" action="musica">Elegir alimentador</button>
-        </form>
+          <!-- <input class="textbox" type="text" name="referencia del formulario" placeholder="Identificador"> -->
+          <!-- <button type="submit" action="musica">Elegir alimentador</button> -->
+        <!-- </form> --> 
       </div>
 
     {% endblock %}

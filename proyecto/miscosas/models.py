@@ -14,8 +14,8 @@ estilous = {'oscuro': {'color_letra': 'white', 'fondo_cabec': 'fondo_cabecera_os
 class Alimentador(models.Model):
     tipo = models.CharField(max_length=10, default="")
     nombre = models.CharField(max_length=64)
-    enlace = models.TextField() #al canal o al subreddit
-    elegido = models.BooleanField()
+    enlace = models.TextField(default="") #al canal o al subreddit
+    elegido = models.BooleanField(default=True)
     puntuacion = models.IntegerField(default=0)
 
     def __str__(self):
@@ -42,6 +42,9 @@ class Item(models.Model):
     enlace = models.TextField()
     descrip = models.TextField()
     alimentador =  models.ForeignKey(Alimentador, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.titulo
 
 class Comentario(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
