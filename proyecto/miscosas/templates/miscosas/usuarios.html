@@ -1,0 +1,11 @@
+{% extends 'miscosas/base.html' %}
+{% load static %}
+
+{% block contenido %}
+    <h2>Lista de usuarios con cuenta</h2>
+    {% for us in lista %}
+        <h3>Nombre: <a href="/usuario/{{us.username}}">{{us.username}}</a></h3>
+        <h3>Items votados: {{us.item.like_set.all.count}}</h3>
+    {% endfor  %}
+
+{% endblock %}

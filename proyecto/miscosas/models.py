@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
 #from django.contrib.postgres.fields import ArrayField
 
 tamano = {'pequena': 30,
@@ -20,6 +21,12 @@ class Alimentador(models.Model):
 
     def __str__(self):
         return self.nombre
+
+    def count(alim):
+        count = 0
+        for item in alim.item_set.all():
+            count = Item.count(item) + count
+        return count
 
 
 
@@ -42,26 +49,31 @@ class Item(models.Model):
     enlace = models.TextField()
     descrip = models.TextField()
     alimentador =  models.ForeignKey(Alimentador, on_delete=models.CASCADE)
+    id_item = models.CharField(max_length=20, default="")
 
     def __str__(self):
         return self.titulo
 
+    def count(item):
+        count = 0
+        for like in item.like_set.all():
+            count = like.boton + count
+        return count
+
 class Comentario(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    fecha = models.DateTimeField()
+    fecha = models.DateTimeField(default=datetime.now)
     texto =  models.TextField()
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "Comentario del item:"+self.item.titulo
 
 
 class Like(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    #el campo de a continuacion indica si el video tiene un like por parte del usuario: 1
-    #no lo ha votado : 0
-    #o le ha dado a dislike: -1
-    class Answer(models.IntegerChoices):
-        like = 1,
-        dislike = -1
-        __empty__ = 0
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, default=None)
+    boton = models.IntegerField(default=0)
 
-    boton = models.IntegerField(choices=Answer.choices, default=0)
+    def __str__(self):
+        return "Like de "+ self.usuario.username +" en el item: "+self.item.titulo

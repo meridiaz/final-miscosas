@@ -21,8 +21,9 @@ class YTHandler(ContentHandler):
             c = Alimentador(nombre=self.CanalTit, enlace=self.CanalLink, tipo="yt")
             c.save()
             self.canal = c
+        print("-----------en ytalim:"+self.canal.nombre)
         v = Item(alimentador=self.canal, titulo=self.title, enlace=self.link,
-                  descrip=self.descrip)
+                  descrip=self.descrip, id_item=self.ytid)
         v.save()
 
     def __init__ (self):
@@ -43,12 +44,13 @@ class YTHandler(ContentHandler):
         self.CanalLink = ""
         self.descrip = ""
         self.CanalTit = ""
+        self.ytid = ""
 
     def startElement (self, name, attrs):
         if name == 'entry':
             self.inEntry = True
         elif self.inEntry:
-            if name == 'title' or name == "media:description":
+            if name == 'title' or name == "media:description" or name == 'yt:videoId':
                 self.inContent = True
             elif name == 'link':
                 self.link = attrs.get('href')
@@ -75,6 +77,10 @@ class YTHandler(ContentHandler):
                 self.descrip = self.content
                 self.content = ""
                 self.inContent = False
+            elif name == "yt:videoId":
+                self.ytid = self.content
+                self.content = ""
+                self.inContent = False
         elif name == "feed":
             self.inCanal = False
         elif self.inCanal:
@@ -89,10 +95,16 @@ class YTHandler(ContentHandler):
 
 class YTChannel:
 
-    def __init__(self, url):
-        print("url en el ytalim fich"+url)
+    def __init__(self, nombre):
+
+        url = 'https://www.youtube.com/feeds/videos.xml?channel_id=' \
+        + nombre
         xmlStream = urlopen(url)
         self.parser = make_parser()
         self.handler = YTHandler()
         self.parser.setContentHandler(self.handler)
         self.parser.parse(xmlStream)
+
+    def __str__(self):
+        print("----en yt parser:"+ self.handler.canal.nombre)
+        return self.handler.canal.nombre

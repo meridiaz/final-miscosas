@@ -18,11 +18,21 @@ from django.template import Context
 
 from urllib import request
 
-from .forms import RegistrationForm, PagUsForm, AlimForm
-from .models import PagUsuario, tamano, estilous, Alimentador
+from .forms import RegistrationForm, PagUsForm, AlimForm, ComentarioForm
+from .models import PagUsuario, tamano, estilous, Alimentador, Item, Comentario, Like
 from .ytalim import YTChannel
 
 # Create your views here.
+
+def usuarios(request):
+    lista = User.objects.all()
+    context = {'lista': lista, 'recurso_us': "/usuarios"}
+    return render(request, 'miscosas/usuarios.html', context)
+
+def alimentadores(request):
+    lista = Alimentador.objects.all()
+    context = {'lista': lista, 'recurso_us': "/alimentadores"}
+    return render(request, 'miscosas/alimentadores.html', context)
 
 def alim_yaexiste(id, tipo):
     try:
@@ -43,29 +53,85 @@ def gestionar_alims(request):
 
     tipo = form.cleaned_data['tipo_alimentador']
     nombre = form.cleaned_data['identificador_o_nombre']
-    print(nombre)
     if not alim_yaexiste(nombre, tipo):
         if tipo == "yt":
-            print("para procesar alimentado de youtube")
-            url = 'https://www.youtube.com/feeds/videos.xml?channel_id=' \
-          + nombre
-            YTChannel(url)
+            nombre = str(YTChannel(nombre))
         elif tipo == "reddit":
             print("holi2")
     else:
         # actualizar_alim()
         print("el alimentador elegido ya existe2")
-
     return nombre
 
 def alimentador(request, id=0):
     if request.method == "POST":
         id = gestionar_alims(request)
-        print("ya gestionado")
-        return redirect('/alimentador/id')
+        return redirect('/alimentador/'+id)
     elif request.method == "GET":
-        print("----------------TODO HA IDO BIEN")
-        return redirect('/')
+        try:
+            alim = Alimentador.objects.get(nombre=id)
+        except ObjectDoesNotExist:
+            return render(request, 'miscosas/alimentador.html', {'error': "El alimentador pedido no existe"})
+
+        context = {'alim': alim, "error": "", 'recurso_us': '/alimentador/'+alim.nombre}
+        return render(request, 'miscosas/alimentador.html', context)
+
+def gestionar_voto(action, request, item):
+    if action == "like":
+        num =  1
+    elif action == "dislike":
+        num = -1
+    try:
+        voto = Like.objects.get(usuario=request.user, item=item)
+        voto.boton = num
+    except ObjectDoesNotExist:
+        voto = Like(usuario=request.user, item=item, boton=num)
+    voto.save()
+
+def gestionar_comen(request, item):
+    form = ComentarioForm(request.POST)
+    #print(form)
+    if form.is_valid():
+        comen = Comentario(texto= form.cleaned_data['texto'], usuario=request.user,
+                            item=item)
+        comen.save()
+
+def iluminar_voto(request, item):
+    if request.user.is_authenticated:
+        try:
+            valor = request.user.like_set.get(item=item).boton
+        except ObjectDoesNotExist:
+            valor = 0
+    else:
+        valor = 0
+
+    if valor==0:
+        return "/static/miscosas/like.jpg", "/static/miscosas/dis.jpg"
+    elif valor == -1:
+        return "/static/miscosas/like.jpg", "/static/miscosas/dis_sel.jpg"
+    else:
+        return "/static/miscosas/like_sel.jpg", "/static/miscosas/dis.jpg"
+
+def mostrar_item(request, id):
+    try:
+        item = Item.objects.get(id_item=id)
+        nombre = item.id_item
+    except ObjectDoesNotExist:
+        return render(request, 'miscosas/item.html', {"error": "El item pedido no existe"})
+
+    if request.method == "POST":
+        action = request.POST['action']
+        if action=="comentario":
+            gestionar_comen(request, item)
+        elif action=="like" or action =="dislike":
+            gestionar_voto(action, request, item)
+
+    boton_like, boton_dislike = iluminar_voto(request, item)
+    lista = Comentario.objects.filter(item=item)
+    context = {'item': item, "error": "", 'recurso_us': '/item/'+nombre,
+                'lista': lista, 'user': request.user, 'form': ComentarioForm(),
+                'boton_like': boton_like, 'boton_dislike': boton_dislike, 'punt': Alimentador.count(item.alimentador)}
+    return render(request, 'miscosas/item.html', context)
 
 def index(request):
     form = AlimForm()
@@ -82,33 +148,26 @@ def logout_view(request):
 
 
 def login_view(request):
+    recurso_us = request.GET['recurso']
     if request.method == "POST":
-        recurso_us = request.GET['recurso']
         action = request.POST['action']
         request.POST =  request.POST.copy()
         if action=="Registrar":
             request.POST['password1'] = request.POST['password']
             form = RegistrationForm(data=request.POST)
         else:
-            # Añadimos los datos recibidos al formulario
             form = AuthenticationForm(data=request.POST)
-        # Si el formulario es válido...
         if form.is_valid():
             if action=="Registrar":
                 user = form.save()
                 pagUs = PagUsuario(usuario = user)
                 pagUs.save()
             else:
-                # Recuperamos las credenciales validadas
-                username = form.cleaned_data['username']
-                password = form.cleaned_data['password']
-
                 # Verificamos las credenciales del usuario
-                user = authenticate(username=username, password=password)
-
+                user = authenticate(username=form.cleaned_data['username'],
+                                    password=form.cleaned_data['password'])
             # Si existe un usuario con ese nombre y contraseña, o se crea correctamente
             if user is not None:
-                # Hacemos el login manualmente
                 do_login(request, user)
 
     return redirect(recurso_us)
@@ -118,27 +177,24 @@ def cuenta_usuario(request, us):
     try:
         usuario = User.objects.get(username=us)
     except ObjectDoesNotExist:
-        return redirect('/')
+        return render(request, 'miscosas/usuario.html', {'error': "El usuario pedido no existe"})
 
     pagUsEstilo = PagUsuario.objects.get(usuario=usuario)
-    if request.method == 'GET':
-        form = PagUsForm()
-        context = {'form': form, 'usuario': us, 'recurso_us': '/usuario/'+us,
-                    'foto': pagUsEstilo.foto}
-        return render(request, 'miscosas/usuario.html', context)
-    elif request.method == 'POST':
+    if request.method == 'POST':
         action = request.POST['action']
         if action=="foto":
             pagUsEstilo.foto = request.POST['url']
             pagUsEstilo.save()
-            return redirect('/usuario/'+us)
         elif action=="formato":
             form = PagUsForm(request.POST)
             if form.is_valid():
                 pagUsEstilo.tamLetra = form.cleaned_data['tamano']
                 pagUsEstilo.estilo = form.cleaned_data['estilo']
                 pagUsEstilo.save()
-                return redirect('/usuario/'+us)
+    form = PagUsForm()
+    context = {'form': form, 'usuario': us, 'recurso_us': '/usuario/'+us,
+                'foto': pagUsEstilo.foto, 'error': ""}
+    return render(request, 'miscosas/usuario.html', context)
 
 
 
