@@ -12,13 +12,31 @@
                <p>Votos positivos: {{item.npos}}</p>
                <p>Votos negativos: {{item.nneg}}</p>
                {% if user.is_authenticated %}
-
+               <div id="voto_index">
+                   <form method="POST" action="/item/{{item.id_item}}">
+                     {% csrf_token %}
+                     <button type="submit" name= "action" value="like" class="save btn btn-info"><img src = "{{item.boton_like}}" width="30" height="15"></button>
+                     <button type="submit" name= "action" value="dislike" class="save btn btn-info"><img src = "{{item.boton_dislike}}" width="30" height="15"></button>
+                   </form>
+                </div>
                 {% endif%}
         {% endfor %}
+        </div>
         {% if user.is_authenticated %}
+        <div id="top5">
+        <h2>Top 5 ultimos items votados:</h2>
+            {% for item in top5 %}
+                <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id_item}}">(Enlace al formato detallado del item)</a></li></p>
 
-        {% endif%} 
-      </div>
+                    <form method="POST" action="/item/{{item.id_item}}">
+                      {% csrf_token %}
+                      <button type="submit" name= "action" value="like" class="save btn btn-info"><img src = "{{item.boton_like}}" width="30" height="15"></button>
+                      <button type="submit" name= "action" value="dislike" class="save btn btn-info"><img src = "{{item.boton_dislike}}" width="30" height="15"></button>
+                    </form>
+
+            {% endfor%}
+        {% endif%}
+        </div>
 
       <div id="formalimentadores">
         <!--<h2>Formularios de alimentadores:</h2>-->
@@ -29,12 +47,7 @@
           <!-- <input class="textbox" type="text" name="referencia del formulario" placeholder="Identificador"> -->
           <button type="submit" action="yt">Elegir alimentador</button>
         </form>
-        <!-- <form method="POST" action="/alimentador/0">
-          <h3>Alimentador de musica:</h3>
-          {% csrf_token %}
-          <!-- <input class="textbox" type="text" name="referencia del formulario" placeholder="Identificador"> -->
-          <!-- <button type="submit" action="musica">Elegir alimentador</button> -->
-        <!-- </form> -->
+
       </div>
 
     {% endblock %}

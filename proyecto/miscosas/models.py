@@ -38,7 +38,7 @@ class Alimentador(models.Model):
 
 class PagUsuario(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    foto = models.TextField(default="")
+    foto = models.ImageField(upload_to="img_users")
     tamLetra =  models.CharField(max_length=10, default='mediana')
     estilo = models.CharField(default='ligero', max_length=100)
     #alimentadores = ArrayField(ArrayField(Alimentador))

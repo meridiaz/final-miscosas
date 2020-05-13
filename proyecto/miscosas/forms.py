@@ -21,3 +21,9 @@ class ComentarioForm(forms.ModelForm):
     class Meta:
         model = Comentario
         fields = ('texto', )
+
+class UploadImageForm(forms.ModelForm):
+
+    class Meta:
+        model = PagUsuario
+        fields = ['foto']

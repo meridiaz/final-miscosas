@@ -8,48 +8,51 @@
         </div>
       {% else %}
           <h2>Titulo: <a href="{{item.enlace}}">{{item.titulo}}</a></h2>
+          <h3>Nombre canal: <a href="{{item.alimentador.enlace}}">{{item.alimentador.nombre}}</a>, <a href="/alimentador/{{item.alimentador.nombre}}">{{item.alimentador.nombre}} en detalle</a></h3>
           <div id="video_empo">
                 <iframe width="560" height="315"
-                    src="https://www.youtube.com/embed/HZOodD84MR8"
+                    src="https://www.youtube.com/embed/{{item.id_item}}"
                     frameborder="0"allow="accelerometer; autoplay; encrypted-media; gyroscope;
                     picture-in-picture"allowfullscreen>
                 </iframe>
           </div>
-          <h3>Nombre canal: <a href="{{item.alimentador.enlace}}">{{item.alimentador.nombre}}</a>, <a href="/alimentador/{{item.alimentador.nombre}}">{{item.alimentador.nombre}} en detalle</a></h3>
-          <h3>Mas items de este alimentador:</h3>
-          {% for item in item.alimentador.item_set.all %}
-              <p><li><a href="/item/{{item.id_item}}">{{item.titulo}}</a></li></p>
-          {% endfor  %}
-          <p>Puntuacion total del alimentador: {{item.count}}</p>
-          <div id="descrip_video">
-              <h3>Descripcion:</h3>
-              <p> {{item.descrip}}</p>
-          </div>
+
+          <h3>Descripcion:</h3>
+          <p> {{item.descrip}}</p>
+
 
           <h3> Comentarios de los usuarios:</h3>
           {% for comentario in lista %}
-            <p>   - El usuario {{comentario.usuario.username}} ha dicho {{comentario.texto}}. A día {{comentario.fecha}}</p>
+          <p>   - El usuario {{comentario.usuario.username}} ha dicho {{comentario.texto}}. A día {{comentario.fecha}}</p>
           {% endfor  %}
+
+
+
+
           {% if user.is_authenticated %}
             <div id="votar_item">
-                <h3>Votar item </h3>
+                <!-- <h3>Votar item </h3> -->
                 <form method="POST" action="/item/{{item.id_item}}">
                   {% csrf_token %}
-                  <button type="submit" name= "action" value="like" class="save btn btn-info"><img src = "{{boton_like}}" width="75" height="37"></button>
-                  <button type="submit" name= "action" value="dislike" class="save btn btn-info"><img src = "{{boton_dislike}}" width="75" height="37"></button>
+                  <button type="submit" name= "action" value="like" class="save btn btn-info"><img src = "{{boton_like}}" width="50" height="30"></button>
+                  <button type="submit" name= "action" value="dislike" class="save btn btn-info"><img src = "{{boton_dislike}}" width="50" height="30"></button>
                 </form>
               </div>
-              <div id="formu_comentario">
+               <div id="formu_comentario">
                   <h3>Comentar item</h3>
                   <form method="POST" action="/item/{{item.id_item}}">
                     {% csrf_token %}
                     {{form.as_p}}
                     <button type="submit" name= "action" value="comentario"class="save btn btn-info">Enviar comentario</button>
                   </form>
-              </div>
-            {% else %}
-            <h2>aqui no habria nada </h2>
+                </div>
+
             {% endif %}
+            <h3>Mas items de este alimentador:</h3>
+            {% for item in item.alimentador.item_set.all %}
+                <p><li><a href="/item/{{item.id_item}}">{{item.titulo}}</a></li></p>
+            {% endfor  %}
+            <p>Puntuacion total del alimentador: {{item.count}}</p>
 
       {% endif %}
 

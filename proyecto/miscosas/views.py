@@ -16,11 +16,12 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.template import Context
 
-from django.db.models import Sum, Count, Q
+from django.db.models import Sum, Count, Q, Case, When, Value
+from django.db.models.functions import Coalesce
 
 from urllib import request
 
-from .forms import RegistrationForm, PagUsForm, AlimForm, ComentarioForm
+from .forms import RegistrationForm, PagUsForm, AlimForm, ComentarioForm, UploadImageForm
 from .models import PagUsuario, tamano, estilous, Alimentador, Item, Comentario, Like
 from .ytalim import YTChannel
 
@@ -113,7 +114,7 @@ def iluminar_voto(request, item):
     else:
         valor = 0
 
-    return archivo_like[valor]
+    return path_foto_votar + archivo_like[valor][0], path_foto_votar +archivo_like[valor][1]
 
 def mostrar_item(request, id):
     try:
@@ -133,23 +134,35 @@ def mostrar_item(request, id):
     lista = Comentario.objects.filter(item=item)
     context = {'item': item, "error": "", 'recurso_us': '/item/'+nombre,
                 'lista': lista, 'user': request.user, 'form': ComentarioForm(),
-                'boton_like': path_foto_votar+boton_like, 'boton_dislike': path_foto_votar+boton_dislike}
+                'boton_like': boton_like, 'boton_dislike': boton_dislike}
     return render(request, 'miscosas/item.html', context)
+
+def add_boton_voto(top, request):
+    for it in top:
+        it.boton_like, it.boton_dislike = iluminar_voto(request, it)
+
 
 def index(request):
     #visto en: https://stackoverflow.com/questions/18198977/django-sum-a-field-based-on-foreign-key
     # y en: https://docs.djangoproject.com/en/3.0/topics/db/aggregation/
-    top10=Item.objects.annotate(npos=Count('like', filter=Q(like__boton=1)),
-                                nneg= Count('like', filter=Q(like__boton=-1)),
-                                nlikes=Sum('like__boton')).order_by('-nlikes')[0:10]
-    top5=[]
+    #https://martinpeveri.wordpress.com/2018/06/24/la-funcion-coalesce-en-django/
+
+    top10 = Item.objects.annotate(npos=Count('like', filter=Q(like__boton=1)),
+                                    nneg= Count('like', filter=Q(like__boton=-1)),
+                                    nlikes=Coalesce(Sum('like__boton'), Value(0))).order_by('-nlikes')[0:10]
+    top5 = []
     if request.user.is_authenticated:
-        # top5=Item.objects.annotate(npos=Count('like', filter=Q(like__boton=1)),
-        #                             nneg= Count('like', filter=Q(like__boton=-1)).order_by('-nlikes')[0:10]
-        top5=[]
-    form = AlimForm()
-    context = {'user': request.user, 'recurso_us': '/', 'form': form,
-                'nav_index': 'active', 'top10': top10}
+
+        add_boton_voto(top10, request)
+        items_user = Item.objects.filter(like__usuario = request.user)
+
+        fixed_date = datetime(2000, 1, 1)
+        top5 = items_user.annotate(nueva_fecha=
+                                    Coalesce('like__fecha', Value(fixed_date))).order_by('-nueva_fecha')[0:5]
+        add_boton_voto(top5, request)
+
+    context = {'user': request.user, 'recurso_us': '/', 'form': AlimForm(),
+                'nav_index': 'active', 'top10': top10, 'top5': top5}
     return render(request, 'miscosas/index.html', context)
 
 
@@ -190,30 +203,38 @@ def login_view(request):
 
     return redirect(recurso_us)
 
+def procesar_post_pagus(request):
+    action = request.POST['action']
+    pagUsEstilo = PagUsuario.objects.get(usuario=request.user)
+
+    if action=="foto":
+        form = UploadImageForm(request.POST, request.FILES)
+        print(form)
+        if form.is_valid():
+            pagUsEstilo.foto = form.cleaned_data['foto']
+            print("aquichiiiiiiiiiiiiiiiiiiiiiii")
+            print(form.cleaned_data['foto'])
+    elif action=="formato":
+        form = PagUsForm(request.POST)
+        if form.is_valid():
+            pagUsEstilo.tamLetra = form.cleaned_data['tamano']
+            pagUsEstilo.estilo = form.cleaned_data['estilo']
+    pagUsEstilo.save()
 
 def cuenta_usuario(request, us):
     try:
         usuario = User.objects.get(username=us)
+        pagUsEstilo = PagUsuario.objects.get(usuario=usuario)
+        foto = pagUsEstilo.foto
     except ObjectDoesNotExist:
         return render(request, 'miscosas/usuario.html', {'error': "El usuario pedido no existe"})
 
-    pagUsEstilo = PagUsuario.objects.get(usuario=usuario)
     if request.method == 'POST':
-        action = request.POST['action']
-        if action=="foto":
-            pagUsEstilo.foto = request.POST['url']
-            pagUsEstilo.save()
-        elif action=="formato":
-            form = PagUsForm(request.POST)
-            if form.is_valid():
-                pagUsEstilo.tamLetra = form.cleaned_data['tamano']
-                pagUsEstilo.estilo = form.cleaned_data['estilo']
-                pagUsEstilo.save()
-    form = PagUsForm()
-    context = {'form': form, 'usuario': us, 'recurso_us': '/usuario/'+us,
-                'foto': pagUsEstilo.foto, 'error': ""}
-    return render(request, 'miscosas/usuario.html', context)
+        procesar_post_pagus(request)
 
+    context = {'form_estilo': PagUsForm(), 'usuario': usuario, 'recurso_us': '/usuario/'+us,
+                'foto': foto, 'error': "", 'form_foto': UploadImageForm(), 'us_log': request.user}
+    return render(request, 'miscosas/usuario.html', context)
 
 
 def procesar_css(request):
