@@ -20,7 +20,7 @@
           {% for item in item.alimentador.item_set.all %}
               <p><li><a href="/item/{{item.id_item}}">{{item.titulo}}</a></li></p>
           {% endfor  %}
-          <p>Puntuacion total del alimentador: {{punt}}</p>
+          <p>Puntuacion total del alimentador: {{item.count}}</p>
           <div id="descrip_video">
               <h3>Descripcion:</h3>
               <p> {{item.descrip}}</p>

@@ -16,6 +16,8 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.template import Context
 
+from django.db.models import Sum, Count, Q
+
 from urllib import request
 
 from .forms import RegistrationForm, PagUsForm, AlimForm, ComentarioForm
@@ -24,14 +26,20 @@ from .ytalim import YTChannel
 
 # Create your views here.
 
+path_foto_votar = "/static/miscosas/"
+archivo_like={1:  ['like_sel.jpg', 'dis.jpg'],
+            0:  ['like.jpg', 'dis.jpg'],
+            -1:  ['like.jpg', 'dis_sel.jpg'],
+}
+
 def usuarios(request):
     lista = User.objects.all()
-    context = {'lista': lista, 'recurso_us': "/usuarios"}
+    context = {'lista': lista, 'recurso_us': "/usuarios", 'nav_users': 'active'}
     return render(request, 'miscosas/usuarios.html', context)
 
 def alimentadores(request):
     lista = Alimentador.objects.all()
-    context = {'lista': lista, 'recurso_us': "/alimentadores"}
+    context = {'lista': lista, 'recurso_us': "/alimentadores", 'nav_alims': 'active'}
     return render(request, 'miscosas/alimentadores.html', context)
 
 def alim_yaexiste(id, tipo):
@@ -47,7 +55,7 @@ def gestionar_alims(request):
     form = AlimForm(request.POST)
     if not form.is_valid():
          print("hay un error")
-         return
+         return "0"
     else:
         print("no hay error")
 
@@ -105,12 +113,7 @@ def iluminar_voto(request, item):
     else:
         valor = 0
 
-    if valor==0:
-        return "/static/miscosas/like.jpg", "/static/miscosas/dis.jpg"
-    elif valor == -1:
-        return "/static/miscosas/like.jpg", "/static/miscosas/dis_sel.jpg"
-    else:
-        return "/static/miscosas/like_sel.jpg", "/static/miscosas/dis.jpg"
+    return archivo_like[valor]
 
 def mostrar_item(request, id):
     try:
@@ -130,13 +133,23 @@ def mostrar_item(request, id):
     lista = Comentario.objects.filter(item=item)
     context = {'item': item, "error": "", 'recurso_us': '/item/'+nombre,
                 'lista': lista, 'user': request.user, 'form': ComentarioForm(),
-                'boton_like': boton_like, 'boton_dislike': boton_dislike, 'punt': Alimentador.count(item.alimentador)}
+                'boton_like': path_foto_votar+boton_like, 'boton_dislike': path_foto_votar+boton_dislike}
     return render(request, 'miscosas/item.html', context)
 
 def index(request):
+    #visto en: https://stackoverflow.com/questions/18198977/django-sum-a-field-based-on-foreign-key
+    # y en: https://docs.djangoproject.com/en/3.0/topics/db/aggregation/
+    top10=Item.objects.annotate(npos=Count('like', filter=Q(like__boton=1)),
+                                nneg= Count('like', filter=Q(like__boton=-1)),
+                                nlikes=Sum('like__boton')).order_by('-nlikes')[0:10]
+    top5=[]
+    if request.user.is_authenticated:
+        # top5=Item.objects.annotate(npos=Count('like', filter=Q(like__boton=1)),
+        #                             nneg= Count('like', filter=Q(like__boton=-1)).order_by('-nlikes')[0:10]
+        top5=[]
     form = AlimForm()
-    context = {'user': request.user, 'recurso_us': '/', 'form': form}
-    print(request.user.is_authenticated)
+    context = {'user': request.user, 'recurso_us': '/', 'form': form,
+                'nav_index': 'active', 'top10': top10}
     return render(request, 'miscosas/index.html', context)
 
 
@@ -155,8 +168,10 @@ def login_view(request):
         if action=="Registrar":
             request.POST['password1'] = request.POST['password']
             form = RegistrationForm(data=request.POST)
+            msg = "El usuario o la contraseña no son correctos"
         else:
             form = AuthenticationForm(data=request.POST)
+            msg = "Informacion de autenticacioin no valida, o el usuario ya tiene cuenta"
         if form.is_valid():
             if action=="Registrar":
                 user = form.save()
@@ -169,6 +184,9 @@ def login_view(request):
             # Si existe un usuario con ese nombre y contraseña, o se crea correctamente
             if user is not None:
                 do_login(request, user)
+        else:
+            context = {'recurso_us': recurso_us, 'error': msg}
+            return render(request, 'miscosas/login_err.html', context)
 
     return redirect(recurso_us)
 

@@ -22,10 +22,10 @@ class Alimentador(models.Model):
     def __str__(self):
         return self.nombre
 
-    def count(alim):
+    def count(self):
         count = 0
-        for item in alim.item_set.all():
-            count = Item.count(item) + count
+        for item in self.item_set.all():
+            count = item.count() + count
         return count
 
 
@@ -54,9 +54,9 @@ class Item(models.Model):
     def __str__(self):
         return self.titulo
 
-    def count(item):
+    def count(self):
         count = 0
-        for like in item.like_set.all():
+        for like in self.like_set.all():
             count = like.boton + count
         return count
 
@@ -74,6 +74,7 @@ class Like(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE, default=None)
     boton = models.IntegerField(default=0)
+    fecha = models.DateTimeField(default=datetime.now)
 
     def __str__(self):
         return "Like de "+ self.usuario.username +" en el item: "+self.item.titulo

@@ -9,8 +9,8 @@
           <h2>Nombre: {{alim.nombre}}, <a href="{{alim.enlace}}">Enlace al alimentador</a></h2>
           <h3> Lista de items: </h3>
               {% for item in alim.item_set.all %}
-                    <li><p><a href="{{item.enlace}}">{{item.titulo}}</a> </p>
-                    <p><a href="/item/{{item.id_item}}">Enlace al formato detallado del item</a></p></li>
+                    <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id_item}}">(Enlace al formato detallado del item)</a></li></p>
+                    <p></p>
               {% endfor %}
       {% endif %}
 

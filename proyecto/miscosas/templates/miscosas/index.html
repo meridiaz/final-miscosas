@@ -6,6 +6,18 @@
 
       <div id="top10">
         <h2>Top 10 items mas votados:</h2>
+        <p>(Ordenados empezando por el mas votado)</p>
+        {% for item in top10 %}
+              <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id_item}}">(Enlace al formato detallado del item)</a></li></p>
+               <p>Votos positivos: {{item.npos}}</p>
+               <p>Votos negativos: {{item.nneg}}</p>
+               {% if user.is_authenticated %}
+
+                {% endif%}
+        {% endfor %}
+        {% if user.is_authenticated %}
+
+        {% endif%} 
       </div>
 
       <div id="formalimentadores">
@@ -22,7 +34,7 @@
           {% csrf_token %}
           <!-- <input class="textbox" type="text" name="referencia del formulario" placeholder="Identificador"> -->
           <!-- <button type="submit" action="musica">Elegir alimentador</button> -->
-        <!-- </form> --> 
+        <!-- </form> -->
       </div>
 
     {% endblock %}

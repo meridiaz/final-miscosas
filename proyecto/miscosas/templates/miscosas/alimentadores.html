@@ -5,11 +5,11 @@
     <h2>Lista de alimentadores</h2>
     {% for alim in lista %}
         <h3>Nombre canal: <a href="{{alimen.enlace}}">{{alim.nombre}}</a>, <a href="/alimentador/{{alim.nombre}}">{{alim.nombre}} en detalle</a></h3>
-        <h3>Mas items de este alimentador:</h3>
+        <h3>Items de este alimentador:</h3>
         {% for item in alim.item_set.all %}
             <p><li><a href="/item/{{item.id_item}}">{{item.titulo}}</a></li></p>
         {% endfor  %}
-        <p>Puntuacion total del alimentador: Alimentador.count(alim)</p>
+        <p>Puntuacion total del alimentador: {{alim.count}}</p>
     {% endfor  %}
 
 {% endblock %}

@@ -6,7 +6,7 @@
   <h2>Nombre: {{usuario}}</h2>
     <img src="{{foto}}" align="left" width="186" height="150">
   <div id="cambiarestilo" >
-      <h2> Cambiar formato</h2>
+      <h3> Cambiar formato</h3>
       <form method="POST" action="/usuario/{{usuario}}">
           {% csrf_token %}
           {{ form.as_p }}
@@ -14,7 +14,7 @@
       </form>
       </div>
   <div id="fotoperfil" >
-      <h2> Cambiar foto de perfil</h2>
+      <h3> Cambiar foto de perfil</h3>
       <form method="POST" action="/usuario/{{usuario}}">
           {% csrf_token %}
           <input class="textbox" type="url" name="url" placeholder="URL de la imagen">
