@@ -24,6 +24,7 @@ from urllib import request
 from .forms import RegistrationForm, PagUsForm, AlimForm, ComentarioForm, UploadImageForm
 from .models import PagUsuario, tamano, estilous, Alimentador, Item, Comentario, Like
 from .ytalim import YTChannel
+from .redalim import SubReddit
 
 # Create your views here.
 
@@ -49,7 +50,7 @@ def leer_xml(tipo, nombre):
         id = YTChannel(nombre).id_canal()
         print(id)
     elif tipo == "reddit":
-        print("holi2")
+        id = SubReddit(nombre).id_canal()
 
     return id
 
@@ -60,7 +61,6 @@ def gestionar_alims(request):
          return -1
     else:
         print("no hay error")
-
     tipo = form.cleaned_data['tipo_alimentador']
     nombre = form.cleaned_data['identificador_o_nombre']
     print(nombre)
@@ -78,7 +78,7 @@ def alimentador(request, id=-1):
         except ObjectDoesNotExist:
             return render(request, 'miscosas/alimentador.html', {'error': "El alimentador pedido no existe"})
 
-        context = {'alim': alim, "error": "", 'recurso_us': '/alimentador/'+alim.nombre}
+        context = {'alim': alim, "error": "", 'recurso_us': '/alimentador/'+str(alim.id)}
         return render(request, 'miscosas/alimentador.html', context)
 
 def gestionar_voto(action, request, item):
@@ -127,7 +127,7 @@ def mostrar_item(request, id):
 
     boton_like, boton_dislike = iluminar_voto(request, item)
     lista = Comentario.objects.filter(item=item)
-    context = {'item': item, "error": "", 'recurso_us': '/item/'+str(item.id_item),
+    context = {'item': item, "error": "", 'recurso_us': '/item/'+str(item.id),
                 'lista': lista, 'user': request.user, 'form': ComentarioForm(),
                 'boton_like': boton_like, 'boton_dislike': boton_dislike}
     return render(request, 'miscosas/item.html', context)

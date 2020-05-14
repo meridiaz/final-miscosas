@@ -13,22 +13,23 @@ import sys
 import string
 from urllib.request import urlopen
 from django.core.exceptions import ObjectDoesNotExist
-
-class YTHandler(ContentHandler):
+from xml.sax.saxutils import unescape
+#remove html tags from string
+class SUBHandler(ContentHandler):
     def meterBSVideo(self):
         from .models import Item, Alimentador
 
-        if self.canal == "":
+        if self.sub == "":
             try:
-                self.canal = Alimentador.objects.get(enlace=self.CanalLink)
+                self.sub = Alimentador.objects.get(enlace=self.SubLink)
             except ObjectDoesNotExist:
-                self.canal= Alimentador(nombre=self.CanalTit, enlace=self.CanalLink, tipo="yt")
-                self.canal.save()
-        print("-----------------"+self.title)
+                self.sub= Alimentador(nombre=self.SubTit, enlace=self.SubLink, tipo="reddit")
+                self.sub.save()
+
         try:
             v = Item.objects.get(enlace=self.link)
         except ObjectDoesNotExist:
-            v = Item(alimentador=self.canal, titulo=self.title, enlace=self.link,
+            v = Item(alimentador=self.sub, titulo=self.title, enlace=self.link,
                       descrip=self.descrip)
             v.save()
 
@@ -45,11 +46,11 @@ class YTHandler(ContentHandler):
         self.videos = []
 
         self.inContentCanal = False
-        self.canal = ""
-        self.inCanal = False
-        self.CanalLink = ""
+        self.sub = ""
+        self.inSub = False
+        self.SubLink = ""
         self.descrip = ""
-        self.CanalTit = ""
+        self.SubTit = ""
 
     def startElement (self, name, attrs):
         if name == 'entry':
@@ -59,32 +60,39 @@ class YTHandler(ContentHandler):
                 self.inContent = True
             elif name == 'link':
                 self.link = attrs.get('href')
+            elif name == "content":
+                self.inContent = True
         elif name == "feed":
-            self.inCanal = True
-        elif self.inCanal:
+            self.inSub = True
+        elif self.inSub:
             if name == "title":
                 self.inContent = True
             elif name == "link" and (attrs.get('rel') == "alternate"):
-                self.CanalLink = attrs.get('href')
+                self.SubLink = attrs.get('href')
 
     def endElement (self, name):
+
         if name == 'entry':
             self.inEntry = False
-            self.meterBSVideo()
+            #self.meterBSVideo()
+            print("--------------------------ahora lo meteria en la BD")
         elif self.inEntry:
             if name == 'title':
+                print(self.content)
                 self.title = self.content
                 self.content = ""
                 self.inContent = False
-            elif name == "media:description":
+            elif name == "content":
+                print("         descrion:")
+                print(self.content.split('<p>')[1])
                 self.descrip = self.content
                 self.content = ""
                 self.inContent = False
         elif name == "feed":
-            self.inCanal = False
-        elif self.inCanal:
+            self.inSub = False
+        elif self.inSub:
             if name == "title":
-                self.CanalTit = self.content
+                self.SubTit = self.content
                 self.inContent = False
                 self.content = ""
 
@@ -92,21 +100,20 @@ class YTHandler(ContentHandler):
         if self.inContent:
             self.content = self.content + chars
 
-class YTChannel:
+class SubReddit:
 
     def __init__(self, nombre):
 
-        url = 'https://www.youtube.com/feeds/videos.xml?channel_id=' \
-        + nombre
+        url = 'https://www.reddit.com/'+ nombre+".rss"
+        print("--------------------"+url)
         xmlStream = urlopen(url)
         self.parser = make_parser()
-        self.handler = YTHandler()
+        self.handler = SUBHandler()
         self.parser.setContentHandler(self.handler)
         self.parser.parse(xmlStream)
-        # self.handler.canal.id_canal = nombre
-        # self.handler.canal.save()
+        self.handler.sub.id_canal = nombre
+        self.handler.sub.save()
 
 
     def id_canal(self):
-        return 0
-        # return self.handler.canal.id
+        return self.handler.sub.id

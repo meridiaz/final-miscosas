@@ -18,6 +18,7 @@ class Alimentador(models.Model):
     enlace = models.TextField(default="") #al canal o al subreddit
     elegido = models.BooleanField(default=True)
     id_canal = models.CharField(max_length=64, default="")
+    #en el caso del reddit sera igual al nombre del subrredit
 
     def __str__(self):
         return self.nombre
@@ -52,7 +53,6 @@ class Item(models.Model):
     enlace = models.TextField()
     descrip = models.TextField()
     alimentador =  models.ForeignKey(Alimentador, on_delete=models.CASCADE)
-    id_item = models.CharField(max_length=20, default="")
 
     def __str__(self):
         return self.titulo
