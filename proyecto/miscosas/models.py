@@ -17,16 +17,19 @@ class Alimentador(models.Model):
     nombre = models.CharField(max_length=64)
     enlace = models.TextField(default="") #al canal o al subreddit
     elegido = models.BooleanField(default=True)
-    puntuacion = models.IntegerField(default=0)
+    id_canal = models.CharField(max_length=64, default="")
 
     def __str__(self):
         return self.nombre
 
-    def count(self):
+    def count_likes(self):
         count = 0
         for item in self.item_set.all():
-            count = item.count() + count
+            count = item.count_likes() + count
         return count
+
+    def total_it(self):
+        return self.item_set.all().count()
 
 
 
@@ -54,7 +57,7 @@ class Item(models.Model):
     def __str__(self):
         return self.titulo
 
-    def count(self):
+    def count_likes(self):
         count = 0
         for like in self.like_set.all():
             count = like.boton + count

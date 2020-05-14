@@ -12,19 +12,25 @@ from xml.sax import make_parser
 import sys
 import string
 from urllib.request import urlopen
+from django.core.exceptions import ObjectDoesNotExist
 
 class YTHandler(ContentHandler):
     def meterBSVideo(self):
         from .models import Item, Alimentador
 
         if self.canal == "":
-            c = Alimentador(nombre=self.CanalTit, enlace=self.CanalLink, tipo="yt")
-            c.save()
-            self.canal = c
-        print("-----------en ytalim:"+self.canal.nombre)
-        v = Item(alimentador=self.canal, titulo=self.title, enlace=self.link,
-                  descrip=self.descrip, id_item=self.ytid)
-        v.save()
+            try:
+                self.canal = Alimentador.objects.get(enlace=self.CanalLink)
+            except ObjectDoesNotExist:
+                self.canal= Alimentador(nombre=self.CanalTit, enlace=self.CanalLink, tipo="yt")
+                self.canal.save()
+
+        try:
+            v = Item.objects.get(id_item=self.ytid)
+        except ObjectDoesNotExist:
+            v = Item(alimentador=self.canal, titulo=self.title, enlace=self.link,
+                      descrip=self.descrip, id_item=self.ytid)
+            v.save()
 
     def __init__ (self):
 
@@ -104,7 +110,9 @@ class YTChannel:
         self.handler = YTHandler()
         self.parser.setContentHandler(self.handler)
         self.parser.parse(xmlStream)
+        self.handler.canal.id_canal = nombre
+        self.handler.canal.save()
 
-    def __str__(self):
-        print("----en yt parser:"+ self.handler.canal.nombre)
-        return self.handler.canal.nombre
+
+    def id_canal(self):
+        return self.handler.canal.id

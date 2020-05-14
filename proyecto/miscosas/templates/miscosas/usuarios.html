@@ -3,9 +3,12 @@
 
 {% block contenido %}
     <h2>Lista de usuarios con cuenta</h2>
-    {% for us in lista %}
-        <h3> - Nombre: <a href="/usuario/{{us.username}}">{{us.username}}</a></h3>
-        <p>Items votados: {{us.like_set.all.count}}</p>
+    {% for pag in lista %}
+        {%if pag.foto%}
+          <img src='{% static '/miscosas/'%}{{pag.foto.url}}'  width="80" height="75" align="left">
+        {%endif %}
+        <h3> - Nombre: <a href="/usuario/{{pag.usuario.username}}">{{pag.usuario.username}}</a></h3>
+        <p>Items votados: {{pag.usuario.like_set.all.count}}</p>
     {% endfor  %}
 
 {% endblock %}

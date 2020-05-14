@@ -34,7 +34,7 @@ archivo_like={1:  ['like_sel.jpg', 'dis.jpg'],
 }
 
 def usuarios(request):
-    lista = User.objects.all()
+    lista = PagUsuario.objects.all()
     context = {'lista': lista, 'recurso_us': "/usuarios", 'nav_users': 'active'}
     return render(request, 'miscosas/usuarios.html', context)
 
@@ -43,42 +43,38 @@ def alimentadores(request):
     context = {'lista': lista, 'recurso_us': "/alimentadores", 'nav_alims': 'active'}
     return render(request, 'miscosas/alimentadores.html', context)
 
-def alim_yaexiste(id, tipo):
-    try:
-        alim = Alimentador.objects.get(nombre=id)
-        print("el alimentador elegido ya existe")
-        return True #ya existe el alimentador
-    except ObjectDoesNotExist:
-        alim = Alimentador(tipo=tipo, nombre=id)
-        return False
+def leer_xml(tipo, nombre):
+    print("en leer xml")
+    if tipo == "yt":
+        id = YTChannel(nombre).id_canal()
+        print(id)
+    elif tipo == "reddit":
+        print("holi2")
+
+    return id
 
 def gestionar_alims(request):
     form = AlimForm(request.POST)
     if not form.is_valid():
          print("hay un error")
-         return "0"
+         return -1
     else:
         print("no hay error")
 
     tipo = form.cleaned_data['tipo_alimentador']
     nombre = form.cleaned_data['identificador_o_nombre']
-    if not alim_yaexiste(nombre, tipo):
-        if tipo == "yt":
-            nombre = str(YTChannel(nombre))
-        elif tipo == "reddit":
-            print("holi2")
-    else:
-        # actualizar_alim()
-        print("el alimentador elegido ya existe2")
-    return nombre
+    print(nombre)
 
-def alimentador(request, id=0):
+    return leer_xml(tipo, nombre)
+
+def alimentador(request, id=-1):
+    print("en alimentador")
     if request.method == "POST":
         id = gestionar_alims(request)
-        return redirect('/alimentador/'+id)
+        return redirect('/alimentador/'+str(id))
     elif request.method == "GET":
         try:
-            alim = Alimentador.objects.get(nombre=id)
+            alim = Alimentador.objects.get(id=id)
         except ObjectDoesNotExist:
             return render(request, 'miscosas/alimentador.html', {'error': "El alimentador pedido no existe"})
 
@@ -118,8 +114,7 @@ def iluminar_voto(request, item):
 
 def mostrar_item(request, id):
     try:
-        item = Item.objects.get(id_item=id)
-        nombre = item.id_item
+        item = Item.objects.get(id=id)
     except ObjectDoesNotExist:
         return render(request, 'miscosas/item.html', {"error": "El item pedido no existe"})
 
@@ -132,7 +127,7 @@ def mostrar_item(request, id):
 
     boton_like, boton_dislike = iluminar_voto(request, item)
     lista = Comentario.objects.filter(item=item)
-    context = {'item': item, "error": "", 'recurso_us': '/item/'+nombre,
+    context = {'item': item, "error": "", 'recurso_us': '/item/'+str(item.id_item),
                 'lista': lista, 'user': request.user, 'form': ComentarioForm(),
                 'boton_like': boton_like, 'boton_dislike': boton_dislike}
     return render(request, 'miscosas/item.html', context)
@@ -141,35 +136,51 @@ def add_boton_voto(top, request):
     for it in top:
         it.boton_like, it.boton_dislike = iluminar_voto(request, it)
 
+def procesar_post_index(request):
+    action = request.POST['action']
+    if action=="elegir":
+        alim = Alimentador.objects.get(id=request.POST['alim'])
+        id = leer_xml(alim.tipo, alim.id_canal)
+        return redirect('/alimentador/'+str(id))
+    elif action=="eliminar":
+        alim = Alimentador.objects.get(nombre=request.POST['alim'])
+        alim.elegido = not alim.elegido
+        alim.save()
+    elif action=="like" or action =="dislike":
+        item = Item.objects.get(titulo=request.POST['item'])
+        gestionar_voto(action, request, item)
+
+    return redirect('/')
+
 
 def index(request):
     #visto en: https://stackoverflow.com/questions/18198977/django-sum-a-field-based-on-foreign-key
     # y en: https://docs.djangoproject.com/en/3.0/topics/db/aggregation/
     #https://martinpeveri.wordpress.com/2018/06/24/la-funcion-coalesce-en-django/
+    if request.method == "POST":
+        return procesar_post_index(request)
 
     top10 = Item.objects.annotate(npos=Count('like', filter=Q(like__boton=1)),
                                     nneg= Count('like', filter=Q(like__boton=-1)),
                                     nlikes=Coalesce(Sum('like__boton'), Value(0))).order_by('-nlikes')[0:10]
     top5 = []
     if request.user.is_authenticated:
-
         add_boton_voto(top10, request)
         items_user = Item.objects.filter(like__usuario = request.user)
-
         fixed_date = datetime(2000, 1, 1)
         top5 = items_user.annotate(nueva_fecha=
                                     Coalesce('like__fecha', Value(fixed_date))).order_by('-nueva_fecha')[0:5]
         add_boton_voto(top5, request)
 
+    lista = Alimentador.objects.all()
     context = {'user': request.user, 'recurso_us': '/', 'form': AlimForm(),
-                'nav_index': 'active', 'top10': top10, 'top5': top5}
+                'nav_index': 'active', 'top10': top10, 'top5': top5, 'alims': lista}
     return render(request, 'miscosas/index.html', context)
 
 
 def logout_view(request):
     logout(request)
     recurso_us = request.GET['recurso']
-    print(recurso_us)
     return redirect(recurso_us)
 
 
@@ -184,7 +195,7 @@ def login_view(request):
             msg = "El usuario o la contraseña no son correctos"
         else:
             form = AuthenticationForm(data=request.POST)
-            msg = "Informacion de autenticacioin no valida, o el usuario ya tiene cuenta"
+            msg = "Informacion de autenticacion no valida, o el usuario ya tiene cuenta"
         if form.is_valid():
             if action=="Registrar":
                 user = form.save()
@@ -209,11 +220,8 @@ def procesar_post_pagus(request):
 
     if action=="foto":
         form = UploadImageForm(request.POST, request.FILES)
-        print(form)
         if form.is_valid():
             pagUsEstilo.foto = form.cleaned_data['foto']
-            print("aquichiiiiiiiiiiiiiiiiiiiiiii")
-            print(form.cleaned_data['foto'])
     elif action=="formato":
         form = PagUsForm(request.POST)
         if form.is_valid():
@@ -222,18 +230,20 @@ def procesar_post_pagus(request):
     pagUsEstilo.save()
 
 def cuenta_usuario(request, us):
-    try:
-        usuario = User.objects.get(username=us)
-        pagUsEstilo = PagUsuario.objects.get(usuario=usuario)
-        foto = pagUsEstilo.foto
-    except ObjectDoesNotExist:
-        return render(request, 'miscosas/usuario.html', {'error': "El usuario pedido no existe"})
-
     if request.method == 'POST':
         procesar_post_pagus(request)
 
+    try:
+        usuario = User.objects.get(username=us)
+        pagUsEstilo = PagUsuario.objects.get(usuario=usuario)
+    except ObjectDoesNotExist:
+        return render(request, 'miscosas/usuario.html', {'error': "El usuario pedido no existe"})
+
+    lista_vot = Item.objects.filter(like__usuario = usuario)
+    lista_comen = Item.objects.filter(comentario__usuario = usuario)
     context = {'form_estilo': PagUsForm(), 'usuario': usuario, 'recurso_us': '/usuario/'+us,
-                'foto': foto, 'error': "", 'form_foto': UploadImageForm(), 'us_log': request.user}
+                'pag_us': pagUsEstilo, 'error': "", 'form_foto': UploadImageForm(),
+                'us_log': request.user, 'lista_vot': lista_vot, 'lista_comen': lista_comen}
     return render(request, 'miscosas/usuario.html', context)
 
 
