@@ -15,8 +15,6 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.template import Context
-import xml.etree.ElementTree as ET
-import json
 
 from django.db.models import Sum, Count, Q, Case, When, Value
 from django.db.models.functions import Coalesce
@@ -27,7 +25,7 @@ from .forms import RegistrationForm, PagUsForm, AlimForm, ComentarioForm, Upload
 from .models import PagUsuario, tamano, estilous, Alimentador, Item, Comentario, Like
 from .ytalim import YTChannel
 from .redalim import SubReddit
-from .crear_xml import XML_create
+from .crear_docs import XML_create, JSON_create
 
 # Create your views here.
 
@@ -159,109 +157,17 @@ def procesar_post_index(request):
 
     return redirect('/')
 
-def insertar_atributo_xml(child, atributo, valor):
-    """Inserta un atributo en el arbol XML"""
-    atrib = ET.SubElement(child, 'atributo', {'nombre': atributo})
-    atrib.text = valor
-
-def insertar_elemento_xml_top10(child, elemento):
-    """Inserto cada elemento de la lista en el arbol XML"""
-    insertar_atributo_xml(child, "NOMBRE", elemento.titulo)
-    insertar_atributo_xml(child, "ENLACE", elemento.enlace)
-    insertar_atributo_xml(child, "ID", str(elemento.id))
-    insertar_atributo_xml(child, "NPOS", str(elemento.npos))
-    insertar_atributo_xml(child, "NNEG", str(elemento.nneg))
-
-def insertar_elemento_xml_top5(child, elemento):
-    """Inserto cada elemento de la lista en el arbol XML"""
-    insertar_atributo_xml(child, "NOMBRE", elemento.titulo)
-    insertar_atributo_xml(child, "ENLACE", elemento.enlace)
-    insertar_atributo_xml(child, "ID", str(elemento.id))
-
-def insertar_elemento_xml_alims(child, elemento):
-    """Inserto cada elemento de la lista en el arbol XML"""
-    insertar_atributo_xml(child, "NOMBRE", elemento.nombre)
-    insertar_atributo_xml(child, "ENLACE", elemento.enlace)
-    insertar_atributo_xml(child, "ID", str(elemento.id))
-    insertar_atributo_xml(child, "NITEMS", str(elemento.total_it()))
-    insertar_atributo_xml(child, "NPUNT", str(elemento.count_likes()))
-
-def insert_lista_top10(lista, etiqueta, root):
-    top10 = ET.SubElement(root, etiqueta)
-    for i in lista:
-        child = ET.SubElement(top10, 'item')
-        insertar_elemento_xml_top10(child, i)
-
-def insert_lista_top5(lista, etiqueta, root):
-    if lista:
-        top5 = ET.SubElement(root, etiqueta)
-    for i in lista:
-        child = ET.SubElement(top5, 'item')
-        insertar_elemento_xml_top5(child, i)
-
-def insert_lista_alims(lista, etiqueta, root):
-    alims = ET.SubElement(root, etiqueta)
-    for i in lista:
-        child = ET.SubElement(alims, 'alimentador')
-        insertar_elemento_xml_alims(child, i)
-
-def xml(request, top10, top5, lista):
-    root = ET.Element('data')
-    insert_lista_top10(top10, 'top10', root)
-    insert_lista_top5(top5, 'top5', root)
-    insert_lista_alims(lista, 'alimentadores', root)
-    return HttpResponse(ET.tostring(root), content_type="text/xml")
-
-def insertar_alims_json(lista, alim):
-    """Inserta un alimentador en el diccionario para el JSON"""
-    element = {}
-    element['nombre'] = alim.nombre
-    element['enlace'] = alim.enlace
-    element['id'] = str(alim.id)
-    element['tot_items'] = str(alim.total_it())
-    element['nlikes'] = str(alim.count_likes())
-    lista.append(element)
-
-def insert_lista_alims_json(lista, dic):
-    for i in lista:
-        insertar_alims_json(dic['alimentadores'], i)
-
-def insertar_top10_json(lista, item):
-    """Inserta un aparcamiento en el diccionario para el JSON"""
-    element = {}
-    element['nombre'] = item.titulo
-    element['enlace'] = item.enlace
-    element['id'] = str(item.id)
-    element['npos'] = str(item.npos)
-    element['nneg'] = str(item.nneg)
-    lista.append(element)
-
-def insert_lista_top10_json(lista, dic):
-    for i in lista:
-        insertar_top10_json(dic['top10'], i)
-
-def insertar_top5_json(lista, item):
-    """Inserta un aparcamiento en el diccionario para el JSON"""
-    element = {}
-    element['nombre'] = item.titulo
-    element['enlace'] = item.enlace
-    element['id'] = str(item.id)
-    lista.append(element)
-
-def insert_lista_top5_json(lista, dic):
-    for i in lista:
-        insertar_top5_json(dic['top5'], i)
-
-def json_view(request, top10, top5, lista):
-    dic = {}
-    dic['top10'] = []
-    dic['top5'] = []
-    dic['alimentadores'] = []
-    insert_lista_top10_json(top10, dic)
-    insert_lista_alims_json(lista, dic)
-    insert_lista_top5_json(top5, dic)
-    data = json.dumps(dic, indent=4)
-    return HttpResponse(data, content_type="application/json")
+def procesar_docs(request, top10, top5, lista):
+    doc = request.GET['format']
+    if doc == "xml":
+        return HttpResponse(XML_create(top10, top5, lista).xml_to_string()
+                            , content_type="text/xml")
+    elif doc == "json":
+        return HttpResponse(JSON_create(top10, top5, lista).json_to_string()
+                            , content_type="application/json")
+    else:
+        context = {'error': "No se soporta ese tipo de documento", 'recurso_us': '/'}
+        return render(request, 'miscosas/pag_error.html', context)
 
 def index(request):
     #visto en: https://stackoverflow.com/questions/18198977/django-sum-a-field-based-on-foreign-key
@@ -285,15 +191,7 @@ def index(request):
     lista = Alimentador.objects.all()
 
     if request.GET.keys():
-        doc = request.GET['format']
-        if doc == "xml":
-            #return XML_create(top10, top5, lista).respuesta_htthp()
-            return xml(request, top10, top5, lista)
-        elif doc == "json":
-            return json_view(request, top10, top5, lista)
-        else:
-            context = {'error': "No se soporta ese tipo de documento", 'recurso_us': '/'}
-            return render(request, 'miscosas/pag_error.html', context)
+        return procesar_docs(request, top10, top5, lista)
 
     context = {'user': request.user, 'recurso_us': '/', 'form': AlimForm(),
                 'nav_index': 'active', 'top10': top10, 'top5': top5, 'alims': lista}
