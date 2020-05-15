@@ -4,8 +4,8 @@ from datetime import datetime
 #from django.contrib.postgres.fields import ArrayField
 
 tamano = {'pequena': 30,
-            'mediana': 40,
-            'grande': 50}
+            'mediana': 35,
+            'grande': 45}
 
 estilous = {'oscuro': {'color_letra': 'white', 'fondo_cabec': 'fondo_cabecera_oscuro.jpg',
                         'fondo': 'fondo_oscuro.jpg'},

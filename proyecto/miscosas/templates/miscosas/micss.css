@@ -41,6 +41,11 @@ p{
 }
 
 
+#contenido a{
+  color: #17a2b8
+}
+
+
 #cabecera h2{
   right:40;
   top:10;
@@ -202,6 +207,10 @@ button{
     padding-right: 5%;
     padding-bottom: 5%;
 } */
+
+#usuario{
+  margin-bottom: 40px;
+}
 
 #footer{
   margin-top: 20%;

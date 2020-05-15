@@ -92,8 +92,9 @@ def gestionar_voto(action, request, item):
         num = -1
     try:
         voto = Like.objects.get(usuario=request.user, item=item)
-        voto.boton = num
-        voto.fecha = datetime.now()
+        if voto.boton != num:
+            voto.boton = num
+            voto.fecha = datetime.now()
     except ObjectDoesNotExist:
         voto = Like(usuario=request.user, item=item, boton=num)
     voto.save()
