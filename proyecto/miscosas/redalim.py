@@ -13,8 +13,8 @@ import sys
 import string
 from urllib.request import urlopen
 from django.core.exceptions import ObjectDoesNotExist
-from xml.sax.saxutils import unescape
-#remove html tags from string
+from urllib.error import URLError
+
 class SUBHandler(ContentHandler):
     def meterBSVideo(self):
         from .models import Item, Alimentador
@@ -71,20 +71,16 @@ class SUBHandler(ContentHandler):
                 self.SubLink = attrs.get('href')
 
     def endElement (self, name):
-
         if name == 'entry':
             self.inEntry = False
-            #self.meterBSVideo()
-            print("--------------------------ahora lo meteria en la BD")
+            self.meterBSVideo()
         elif self.inEntry:
             if name == 'title':
-                print(self.content)
                 self.title = self.content
                 self.content = ""
                 self.inContent = False
             elif name == "content":
-                print("         descrion:")
-                print(self.content.split('<p>')[1])
+                print("----"+self.content.split('submitted by')[0])
                 self.descrip = self.content
                 self.content = ""
                 self.inContent = False
@@ -106,14 +102,20 @@ class SubReddit:
 
         url = 'https://www.reddit.com/'+ nombre+".rss"
         print("--------------------"+url)
-        xmlStream = urlopen(url)
-        self.parser = make_parser()
-        self.handler = SUBHandler()
-        self.parser.setContentHandler(self.handler)
-        self.parser.parse(xmlStream)
-        self.handler.sub.id_canal = nombre
-        self.handler.sub.save()
+        self.id = -1
+        try:
+            xmlStream = urlopen(url)
+            self.parser = make_parser()
+            self.handler = SUBHandler()
+            self.parser.setContentHandler(self.handler)
+            self.parser.parse(xmlStream)
+            self.handler.sub.id_canal = nombre
+            self.handler.sub.save()
+            self.id= self.handler.sub.id
+        except URLError as e:
+            print("Error al abrir la url")
+            print(e)
 
 
-    def id_canal(self):
-        return self.handler.sub.id
+    def id_reddit(self):
+        return self.id

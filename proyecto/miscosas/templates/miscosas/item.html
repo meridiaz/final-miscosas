@@ -2,25 +2,29 @@
 {% load static %}
 
 {% block contenido %}
-    {% if error %}
-        <div class='alert alert-info'>
-          {{ error }}
-        </div>
-      {% else %}
-          <h2>Titulo: <a href="{{item.enlace}}">{{item.titulo}}</a></h2>
-          <h3>Nombre canal: <a href="{{item.alimentador.enlace}}">{{item.alimentador.nombre}}</a>, <a href="/alimentador/{{item.alimentador.id}}">{{item.alimentador.nombre}} en detalle</a></h3>
-          <h3> Id: {{item.id}}</h3>
-          <div id="video_empo">
-                <iframe width="40%" height="70%"
-                    src="https://www.youtube.com/embed/{{item.id_item}}"
-                    frameborder="0"allow="accelerometer; autoplay; encrypted-media; gyroscope;
-                    picture-in-picture"allowfullscreen>
-                </iframe>
-          </div>
-        <div id="descrip">
-          <h3>Descripcion:</h3>
-          <p> {{item.descrip}}</p>
-        </div>
+        <h2>Titulo: <a href="{{item.enlace}}">{{item.titulo}}</a></h2>
+        <h3>Nombre canal: <a href="{{item.alimentador.enlace}}">{{item.alimentador.nombre}}</a>, <a href="/alimentador/{{item.alimentador.id}}">{{item.alimentador.nombre}} en detalle</a></h3>
+        <h3> Id: {{item.id}}</h3>
+        {%if item.alimentador.tipo == "reddit"%}
+              <div id="descrip">
+                <h3>Descripcion:</h3>
+                <p> {{item.descrip|safe}}</p>
+
+              </div>
+        {%else%}
+              <div id="video_empo">
+                    <iframe width="500" height="275"
+                        src="https://www.youtube.com/embed/{{item.id_item}}"
+                        frameborder="0"allow="accelerometer; autoplay; encrypted-media; gyroscope;
+                        picture-in-picture"allowfullscreen>
+                      </iframe>
+                </div>
+              <div id="descrip">
+                  <h3>Descripcion:</h3>
+                    <p> {{item.descrip}}</p>
+              </div>
+          {%endif%}
+
           <div id="comentarios_us">
               <h3> Comentarios de los usuarios:</h3>
               {% for comentario in lista %}
@@ -30,7 +34,7 @@
           {% if user.is_authenticated %}
             <div id="votar_item">
                 <!-- <h3>Votar item </h3> -->
-                <form method="POST" action="/item/{{item.id_item}}">
+                <form method="POST" action="/item/{{item.id}}">
                   {% csrf_token %}
                   <button type="submit" name= "action" value="like" class="save btn btn-info"><img src = "{{boton_like}}" width="50" height="30"></button>
                   <button type="submit" name= "action" value="dislike" class="save btn btn-info"><img src = "{{boton_dislike}}" width="50" height="30"></button>
@@ -38,7 +42,7 @@
               </div>
                <div id="formu_comentario">
                   <h3>Comentar item</h3>
-                  <form method="POST" action="/item/{{item.id_item}}">
+                  <form method="POST" action="/item/{{item.id}}">
                     {% csrf_token %}
                     {{form.as_p}}
                     <button type="submit" name= "action" value="comentario"class="save btn btn-info">Enviar comentario</button>
@@ -52,7 +56,7 @@
                 <p>Puntuacion total del alimentador: {{item.alimentador.count_likes}}</p>
             </div>
 
-      {% endif %}
+
 
 
 {% endblock %}

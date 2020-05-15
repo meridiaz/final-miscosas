@@ -2,11 +2,8 @@
 {% load static %}
 
 {%block contenido%}
-  {%if error%}
-      <div class='alert alert-info'>
-        {{ error }}
-      </div>
-  {%else%}
+
+
       <div id="presentacion_us">
             <h2>Nombre: {{usuario.username}}</h2>
               {%if pag_us.foto%}
@@ -43,5 +40,4 @@
                 <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">(detalle)</a></li></p>
             {%endfor%}
           </div>
-      {%endif%}
 {% endblock %}

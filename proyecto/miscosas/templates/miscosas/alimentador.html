@@ -1,18 +1,13 @@
 {% extends 'miscosas/base.html' %}
 
 {% block contenido %}
-    {% if error %}
-        <div class='alert alert-info'>
-          {{ error }}
-        </div>
-      {% else %}
-          <h2>Nombre: {{alim.nombre}}, <a href="{{alim.enlace}}">(Enlace)</a></h2>
-          <h3> Lista de items: </h3>
-              {% for item in alim.item_set.all %}
-                    <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">(detalle)</a></li></p>
-                    <p>(Id: {{item.id}})</p>
+        <h2>Nombre: {{alim.nombre}}, <a href="{{alim.enlace}}">(Enlace)</a></h2>
+        <h3> Lista de items: </h3>
+            {% for item in alim.item_set.all %}
+                <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">(detalle)</a></li></p>
+                <p>(Id: {{item.id}})</p>
               {% endfor %}
-      {% endif %}
+
 
 
 {% endblock %}

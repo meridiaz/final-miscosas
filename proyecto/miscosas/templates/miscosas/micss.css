@@ -65,9 +65,8 @@ p{
 }
 
 .nav{
-     box-sizing: content-box;
-    width: 100%;
-    margin-left: 5;
+    box-sizing: content-box;
+
     top:0px;
     border-color: #007bff;
     border-radius: 40px;
@@ -78,14 +77,16 @@ p{
 }
 
 #contenido{
+  box-sizing: content-box;
   margin-top: 20px;
-  margin-left:20px;
+  /* margin-left:25px; */
   border-radius: 50px;
-  padding-left: 20px;
+  padding-left: 40px;
+  padding-right: 40px;
 }
 
 body{
-  background: 90% url(static/miscosas/{{fondo}});
+  background: 100% url(static/miscosas/{{fondo}});
 
 }
 
@@ -113,20 +114,20 @@ button{
   font-weight: 600;
 }
 
-#top5{
+ #top5{
   box-sizing: content-box;
   width: 30%;
   position: absolute;
   right: 3%;
-  top: 80%;
-  text-align:left;
+  /* top: 80%;
+  text-align:left; */
 
 
   border: 3px solid pink;
   border-radius: 10px;
   padding-left: 20px;
   padding-right: 20px;
-  margin-top: 10%;
+  margin-top: 20%;
   padding-top: 2%;
 }
 
@@ -180,12 +181,12 @@ button{
 
 #votar_item{
   position: absolute;
-  bottom: -60%;
-  left: 45%;
+  left: 40%;
+  margin-top: 4%;
 }
 
 
-#info_alim_enitem{
+/* #info_alim_enitem{
     position: absolute;
     right: 5%;
     bottom: -10%;
@@ -197,4 +198,19 @@ button{
     padding-left: 5%;
     padding-right: 5%;
     padding-bottom: 5%;
+} */
+
+#footer{
+  margin-top: 20%;
+  background-color: #52B1E0;
+  /* border-radius: 10px; */
+  height: 15%;
+  padding-top: 10px;
+  padding-left: 10px;
+  text-align: center;
+  border-top: 2px solid black;
+}
+#descrip table{
+  box-sizing: border-box;
+  width: 20px;
 }

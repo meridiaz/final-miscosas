@@ -12,5 +12,6 @@ urlpatterns = [
     path('usuario/<str:us>', views.cuenta_usuario, name="cuenta_usuario"),
     path('alimentadores', views.alimentadores, name="alimentadores"),
     path('usuarios', views.usuarios, name="usuarios"),
+    path('informacion', views.info),
     path('', views.index, name="index"),
 ]

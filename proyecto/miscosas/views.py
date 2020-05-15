@@ -15,6 +15,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.template import Context
+import xml.etree.ElementTree as ET
 
 from django.db.models import Sum, Count, Q, Case, When, Value
 from django.db.models.functions import Coalesce
@@ -34,6 +35,9 @@ archivo_like={1:  ['like_sel.jpg', 'dis.jpg'],
             -1:  ['like.jpg', 'dis_sel.jpg'],
 }
 
+def info(request):
+    return render(request, 'miscosas/info.html', {'nav_info': "active", 'recurso_us': "/informacion"})
+
 def usuarios(request):
     lista = PagUsuario.objects.all()
     context = {'lista': lista, 'recurso_us': "/usuarios", 'nav_users': 'active'}
@@ -45,40 +49,40 @@ def alimentadores(request):
     return render(request, 'miscosas/alimentadores.html', context)
 
 def leer_xml(tipo, nombre):
-    print("en leer xml")
     if tipo == "yt":
         id = YTChannel(nombre).id_canal()
-        print(id)
+        print(str(id))
     elif tipo == "reddit":
-        id = SubReddit(nombre).id_canal()
+        id = SubReddit(nombre).id_reddit()
 
     return id
 
 def gestionar_alims(request):
     form = AlimForm(request.POST)
     if not form.is_valid():
-         print("hay un error")
          return -1
-    else:
-        print("no hay error")
+
     tipo = form.cleaned_data['tipo_alimentador']
     nombre = form.cleaned_data['identificador_o_nombre']
-    print(nombre)
 
     return leer_xml(tipo, nombre)
 
 def alimentador(request, id=-1):
-    print("en alimentador")
     if request.method == "POST":
         id = gestionar_alims(request)
-        return redirect('/alimentador/'+str(id))
+        if id == -1:
+            context = {'error': "No se ha podido encontrar la URL para ese alimentador"}
+            return render(request, 'miscosas/pag_error.html', context)
+        else:
+            return redirect('/alimentador/'+str(id))
     elif request.method == "GET":
         try:
             alim = Alimentador.objects.get(id=id)
         except ObjectDoesNotExist:
-            return render(request, 'miscosas/alimentador.html', {'error': "El alimentador pedido no existe"})
+            context = {'error': "El alimentador pedido no se encuentra"}
+            return render(request, 'miscosas/pag_error.html', context)
 
-        context = {'alim': alim, "error": "", 'recurso_us': '/alimentador/'+str(alim.id)}
+        context = {'alim': alim, 'recurso_us': '/alimentador/'+str(alim.id)}
         return render(request, 'miscosas/alimentador.html', context)
 
 def gestionar_voto(action, request, item):
@@ -89,6 +93,7 @@ def gestionar_voto(action, request, item):
     try:
         voto = Like.objects.get(usuario=request.user, item=item)
         voto.boton = num
+        voto.fecha = datetime.now()
     except ObjectDoesNotExist:
         voto = Like(usuario=request.user, item=item, boton=num)
     voto.save()
@@ -116,7 +121,7 @@ def mostrar_item(request, id):
     try:
         item = Item.objects.get(id=id)
     except ObjectDoesNotExist:
-        return render(request, 'miscosas/item.html', {"error": "El item pedido no existe"})
+        return render(request, 'miscosas/pag_error.html', {"error": "El item pedido no existe"})
 
     if request.method == "POST":
         action = request.POST['action']
@@ -127,7 +132,7 @@ def mostrar_item(request, id):
 
     boton_like, boton_dislike = iluminar_voto(request, item)
     lista = Comentario.objects.filter(item=item)
-    context = {'item': item, "error": "", 'recurso_us': '/item/'+str(item.id),
+    context = {'item': item, 'recurso_us': '/item/'+str(item.id),
                 'lista': lista, 'user': request.user, 'form': ComentarioForm(),
                 'boton_like': boton_like, 'boton_dislike': boton_dislike}
     return render(request, 'miscosas/item.html', context)
@@ -138,20 +143,71 @@ def add_boton_voto(top, request):
 
 def procesar_post_index(request):
     action = request.POST['action']
-    if action=="elegir":
+    if action == "elegir":
         alim = Alimentador.objects.get(id=request.POST['alim'])
         id = leer_xml(alim.tipo, alim.id_canal)
         return redirect('/alimentador/'+str(id))
-    elif action=="eliminar":
+    elif action == "eliminar":
         alim = Alimentador.objects.get(nombre=request.POST['alim'])
         alim.elegido = not alim.elegido
         alim.save()
-    elif action=="like" or action =="dislike":
+    elif action == "like" or action == "dislike":
         item = Item.objects.get(titulo=request.POST['item'])
         gestionar_voto(action, request, item)
 
     return redirect('/')
 
+def insertar_atributo_xml(child, atributo, valor):
+    """Inserta un atributo en el arbol XML"""
+    atrib = ET.SubElement(child, 'atributo', {'nombre': atributo})
+    atrib.text = valor
+
+def insertar_elemento_xml_top10(child, elemento):
+    """Inserto cada elemento de la lista en el arbol XML"""
+    insertar_atributo_xml(child, "NOMBRE", elemento.titulo)
+    insertar_atributo_xml(child, "ENLACE", elemento.enlace)
+    insertar_atributo_xml(child, "ID", str(elemento.id))
+    insertar_atributo_xml(child, "NPOS", str(elemento.npos))
+    insertar_atributo_xml(child, "NNEG", str(elemento.nneg))
+
+def insertar_elemento_xml_top5(child, elemento):
+    """Inserto cada elemento de la lista en el arbol XML"""
+    insertar_atributo_xml(child, "NOMBRE", elemento.titulo)
+    insertar_atributo_xml(child, "ENLACE", elemento.enlace)
+    insertar_atributo_xml(child, "ID", str(elemento.id))
+
+def insertar_elemento_xml_alims(child, elemento):
+    """Inserto cada elemento de la lista en el arbol XML"""
+    insertar_atributo_xml(child, "NOMBRE", elemento.nombre)
+    insertar_atributo_xml(child, "ENLACE", elemento.enlace)
+    insertar_atributo_xml(child, "ID", str(elemento.id))
+    insertar_atributo_xml(child, "NITEMS", str(elemento.total_it))
+    insertar_atributo_xml(child, "NPUNT", str(elemento.count_likes))
+
+def insert_lista_top10(lista, etiqueta, root):
+    top10 = ET.SubElement(root, etiqueta)
+    for i in lista:
+        child = ET.SubElement(top10, 'item')
+        insertar_elemento_xml_top10(child, i)
+
+def insert_lista_top5(lista, etiqueta, root):
+    top5 = ET.SubElement(root, etiqueta)
+    for i in lista:
+        child = ET.SubElement(top5, 'item')
+        insertar_elemento_xml_top5(child, i)
+
+def insert_lista_alims(lista, etiqueta, root):
+    alims = ET.SubElement(root, etiqueta)
+    for i in lista:
+        child = ET.SubElement(alims, 'alimentador')
+        insertar_elemento_xml_alims(child, i)
+
+def xml(request, top10, top5, lista):
+    root = ET.Element('data')
+    insert_lista_top10(top10, 'top10', root)
+    insert_lista_top5(top5, 'top5', root)
+    insert_lista_alims(lista, 'alimentadores', root)
+    return HttpResponse(ET.tostring(root), content_type="text/xml")
 
 def index(request):
     #visto en: https://stackoverflow.com/questions/18198977/django-sum-a-field-based-on-foreign-key
@@ -173,6 +229,17 @@ def index(request):
         add_boton_voto(top5, request)
 
     lista = Alimentador.objects.all()
+
+    if request.GET.keys():
+        doc = request.GET['format']
+        if doc == "xml":
+            return xml(request, top10, top5, lista)
+        #elif doc == "json":
+            #return json(request, top10, top5, lista)
+        else:
+            context = {'error': "No se soporto ese tipo de documento", 'recurso_us': '/'}
+            return render(request, 'miscosas/error.html', context)
+
     context = {'user': request.user, 'recurso_us': '/', 'form': AlimForm(),
                 'nav_index': 'active', 'top10': top10, 'top5': top5, 'alims': lista}
     return render(request, 'miscosas/index.html', context)
@@ -210,7 +277,7 @@ def login_view(request):
                 do_login(request, user)
         else:
             context = {'recurso_us': recurso_us, 'error': msg}
-            return render(request, 'miscosas/login_err.html', context)
+            return render(request, 'miscosas/pag_error.html', context)
 
     return redirect(recurso_us)
 
@@ -237,12 +304,12 @@ def cuenta_usuario(request, us):
         usuario = User.objects.get(username=us)
         pagUsEstilo = PagUsuario.objects.get(usuario=usuario)
     except ObjectDoesNotExist:
-        return render(request, 'miscosas/usuario.html', {'error': "El usuario pedido no existe"})
+        return render(request, 'miscosas/pag_error.html', {'error': "El usuario pedido no existe"})
 
     lista_vot = Item.objects.filter(like__usuario = usuario)
     lista_comen = Item.objects.filter(comentario__usuario = usuario)
     context = {'form_estilo': PagUsForm(), 'usuario': usuario, 'recurso_us': '/usuario/'+us,
-                'pag_us': pagUsEstilo, 'error': "", 'form_foto': UploadImageForm(),
+                'pag_us': pagUsEstilo, 'form_foto': UploadImageForm(),
                 'us_log': request.user, 'lista_vot': lista_vot, 'lista_comen': lista_comen}
     return render(request, 'miscosas/usuario.html', context)
 

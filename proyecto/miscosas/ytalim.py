@@ -13,6 +13,7 @@ import sys
 import string
 from urllib.request import urlopen
 from django.core.exceptions import ObjectDoesNotExist
+from urllib.error import URLError
 
 class YTHandler(ContentHandler):
     def meterBSVideo(self):
@@ -29,7 +30,7 @@ class YTHandler(ContentHandler):
             v = Item.objects.get(enlace=self.link)
         except ObjectDoesNotExist:
             v = Item(alimentador=self.canal, titulo=self.title, enlace=self.link,
-                      descrip=self.descrip)
+                      descrip=self.descrip, id_item=self.ytid)
             v.save()
 
     def __init__ (self):
@@ -39,10 +40,9 @@ class YTHandler(ContentHandler):
         self.content = ""
         self.title = ""
 
-        self.id = ""
+        self.ytid = ""
 
         self.link = ""
-        self.videos = []
 
         self.inContentCanal = False
         self.canal = ""
@@ -55,7 +55,7 @@ class YTHandler(ContentHandler):
         if name == 'entry':
             self.inEntry = True
         elif self.inEntry:
-            if name == 'title' or name == "media:description":
+            if name == 'title' or name == "media:description" or name == 'yt:videoId':
                 self.inContent = True
             elif name == 'link':
                 self.link = attrs.get('href')
@@ -80,6 +80,10 @@ class YTHandler(ContentHandler):
                 self.descrip = self.content
                 self.content = ""
                 self.inContent = False
+            elif name == "yt:videoId":
+                self.ytid = self.content
+                self.content = ""
+                self.inContent = False
         elif name == "feed":
             self.inCanal = False
         elif self.inCanal:
@@ -98,15 +102,19 @@ class YTChannel:
 
         url = 'https://www.youtube.com/feeds/videos.xml?channel_id=' \
         + nombre
-        xmlStream = urlopen(url)
-        self.parser = make_parser()
-        self.handler = YTHandler()
-        self.parser.setContentHandler(self.handler)
-        self.parser.parse(xmlStream)
-        # self.handler.canal.id_canal = nombre
-        # self.handler.canal.save()
+        self.id = -1
+        try:
+            xmlStream = urlopen(url)
+            self.parser = make_parser()
+            self.handler = YTHandler()
+            self.parser.setContentHandler(self.handler)
+            self.parser.parse(xmlStream)
+            self.handler.canal.id_canal = nombre
+            self.handler.canal.save()
+            self.id= self.handler.canal.id
+        except URLError:
+            print("Error al abrir la url")
 
 
     def id_canal(self):
-        return 0
-        # return self.handler.canal.id
+        return self.id

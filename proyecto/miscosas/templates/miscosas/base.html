@@ -21,7 +21,6 @@
         <h2>BIENVENIDO</h2>
         <!-- <p>{{error}}</p> -->
         {% if user.is_authenticated %}
-
                <h2>{{user.username}}
                <a href="/logout?recurso={{recurso_us}}">Logout</a></h2>
         {% else %}
@@ -49,7 +48,7 @@
         <a class="nav-link {{nav_users}}" href="/usuarios">Usuarios</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/informacion">Informacion</a>
+        <a class="nav-link {{nav_info}}" href="/informacion">Informacion</a>
       </li>
     </div>
     <div id="contenido">
@@ -58,7 +57,12 @@
     </div>
     <div id="footer">
       <footer >
-        <p>hpñaaaaaaaaaaaaaaaaaaaaaa</p>
+        <h5> Esta aplicacion utiliza los datos proporcionados por:
+        {%for alim in alims%}
+            <a href="{{alim.enlace}}">{{alim.nombre}}</a>,
+        {% endfor%}
+        </h5>
+        <h5> Página web escrita por Meritxell Diaz para la asignatura de SAT</h5>
       </footer>
     </div>
     </body>
