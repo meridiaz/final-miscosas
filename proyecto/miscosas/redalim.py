@@ -43,7 +43,6 @@ class SUBHandler(ContentHandler):
         self.id = ""
 
         self.link = ""
-        self.videos = []
 
         self.inContentCanal = False
         self.sub = ""
@@ -80,7 +79,6 @@ class SUBHandler(ContentHandler):
                 self.content = ""
                 self.inContent = False
             elif name == "content":
-                print("----"+self.content.split('submitted by')[0])
                 self.descrip = self.content
                 self.content = ""
                 self.inContent = False
