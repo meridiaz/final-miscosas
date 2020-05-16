@@ -36,18 +36,30 @@ archivo_like={1:  ['like_sel.jpg', 'dis.jpg'],
             -1:  ['like.jpg', 'dis_sel.jpg'],
 }
 
+def get_lang(lang):
+    """ Obtiene el idioma a partir de la cabecera de la peticion """
+    if "es" in lang:    #Si hay opcion de darsela en español, la damos en español
+        return "es"
+    elif "en" in lang:
+        return "en"
+    else:   #Si piden otro idioma, se sirve en español
+        return "es"
+
 def info(request):
-    return render(request, 'miscosas/info.html', {'nav_info': "active", 'recurso_us': "/informacion"})
+    lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
+    return render(request, 'miscosas/'+lan+'/info.html', {'nav_info': "active", 'recurso_us': "/informacion"})
 
 def usuarios(request):
     lista = PagUsuario.objects.all()
     context = {'lista': lista, 'recurso_us': "/usuarios", 'nav_users': 'active'}
-    return render(request, 'miscosas/usuarios.html', context)
+    lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
+    return render(request, 'miscosas/'+lan+'/usuarios.html', context)
 
 def alimentadores(request):
     lista = Alimentador.objects.all()
+    lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
     context = {'lista': lista, 'recurso_us': "/alimentadores", 'nav_alims': 'active'}
-    return render(request, 'miscosas/alimentadores.html', context)
+    return render(request, 'miscosas/'+lan+'/alimentadores.html', context)
 
 def nombre_persona(user):
     #funcion que devuelve el nombre del usuario si esta registrado
@@ -94,11 +106,12 @@ def gestionar_alims(request):
 #elegio = False --> elegido= True, #añado a la lista de usuarios, actualizar datos
 #elegido = True--> elegido = False,
 def alimentador(request, id=-1):
+    lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
     if request.method == "POST":
         id = gestionar_alims(request)
         if id == -1:
             context = {'error': "No se ha podido encontrar la URL para ese alimentador"}
-            return render(request, 'miscosas/pag_error.html', context)
+            return render(request, 'miscosas/'+lan+'/pag_error.html', context)
         else:
             guardar_us_enalim(request.user, id)
             return redirect('/alimentador/'+str(id))
@@ -107,10 +120,10 @@ def alimentador(request, id=-1):
             alim = Alimentador.objects.get(id=id)
         except ObjectDoesNotExist:
             context = {'error': "El alimentador pedido no se encuentra"}
-            return render(request, 'miscosas/pag_error.html', context)
+            return render(request, 'miscosas/'+lan+'/pag_error.html', context)
 
         context = {'alim': alim, 'recurso_us': '/alimentador/'+str(alim.id)}
-        return render(request, 'miscosas/alimentador.html', context)
+        return render(request, 'miscosas/'+lan+'/alimentador.html', context)
 
 def gestionar_voto(action, request, item):
     if action == "like":
@@ -145,10 +158,11 @@ def iluminar_voto(request, item):
     return path_foto_votar + archivo_like[valor][0], path_foto_votar +archivo_like[valor][1]
 
 def mostrar_item(request, id):
+    lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
     try:
         item = Item.objects.get(id=id)
     except ObjectDoesNotExist:
-        return render(request, 'miscosas/pag_error.html', {"error": "El item pedido no existe"})
+        return render(request, 'miscosas/'+lan+'/pag_error.html', {"error": "El item pedido no existe"})
 
     if request.method == "POST":
         action = request.POST['action']
@@ -162,7 +176,7 @@ def mostrar_item(request, id):
     context = {'item': item, 'recurso_us': '/item/'+str(item.id),
                 'lista': lista, 'user': request.user, 'form': ComentarioForm(),
                 'boton_like': boton_like, 'boton_dislike': boton_dislike}
-    return render(request, 'miscosas/item.html', context)
+    return render(request, 'miscosas/'+lan+'/item.html', context)
 
 def add_boton_voto(top, request):
     for it in top:
@@ -190,6 +204,7 @@ def procesar_post_index(request):
     return redirect('/')
 
 def procesar_docs(request, top10, top5, lista):
+    lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
     doc = request.GET['format']
     if doc == "xml":
         return HttpResponse(XML_create(top10, top5, lista).xml_to_string()
@@ -198,17 +213,10 @@ def procesar_docs(request, top10, top5, lista):
         return HttpResponse(JSON_create(top10, top5, lista).json_to_string()
                             , content_type="application/json")
     else:
+        lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
         context = {'error': "No se soporta ese tipo de documento", 'recurso_us': '/'}
-        return render(request, 'miscosas/pag_error.html', context)
+        return render(request, 'miscosas/'+lan+'/pag_error.html', context)
 
-def get_lang(lang):
-    """ Obtiene el idioma a partir de la cabecera de la peticion """
-    if "es" in lang:    #Si hay opcion de darsela en español, la damos en español
-        return "es"
-    elif "en" in lang:
-        return "en"
-    else:   #Si piden otro idioma, se sirve en español
-        return "es"
 def index(request):
     #visto en: https://stackoverflow.com/questions/18198977/django-sum-a-field-based-on-foreign-key
     # y en: https://docs.djangoproject.com/en/3.0/topics/db/aggregation/
@@ -232,11 +240,14 @@ def index(request):
     if 'format' in request.GET.keys():
         return procesar_docs(request, top10, top5, lista)
 
-    print(User.objects.get(username="meri").alimentador_set.all())
+    print(User.objects.get(username="pechuga").alimentador_set.all())
+
+    lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
     print(get_lang(request.META['HTTP_ACCEPT_LANGUAGE']))
+
     context = {'user': request.user, 'recurso_us': '/', 'form': AlimForm(),
                 'nav_index': 'active', 'top10': top10, 'top5': top5, 'alims': lista}
-    return render(request, 'miscosas/index.html', context)
+    return render(request, 'miscosas/'+lan+'/index.html', context)
 
 
 def logout_view(request):
@@ -270,8 +281,9 @@ def login_view(request):
             if user is not None:
                 do_login(request, user)
         else:
+            lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
             context = {'recurso_us': recurso_us, 'error': msg}
-            return render(request, 'miscosas/pag_error.html', context)
+            return render(request, 'miscosas/'+lan+'/pag_error.html', context)
 
     return redirect(recurso_us)
 
@@ -291,6 +303,7 @@ def procesar_post_pagus(request):
     pagUsEstilo.save()
 
 def cuenta_usuario(request, us):
+    lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
     if request.method == 'POST':
         procesar_post_pagus(request)
 
@@ -298,14 +311,14 @@ def cuenta_usuario(request, us):
         usuario = User.objects.get(username=us)
         pagUsEstilo = PagUsuario.objects.get(usuario=usuario)
     except ObjectDoesNotExist:
-        return render(request, 'miscosas/pag_error.html', {'error': "El usuario pedido no existe"})
+        return render(request, 'miscosas/'+lan+'/pag_error.html', {'error': "El usuario pedido no existe"})
 
     lista_vot = Item.objects.filter(like__usuario = usuario)
     lista_comen = Item.objects.filter(comentario__usuario = usuario).distinct()
     context = {'form_estilo': PagUsForm(), 'usuario': usuario, 'recurso_us': '/usuario/'+us,
                 'pag_us': pagUsEstilo, 'form_foto': UploadImageForm(),
                 'us_log': request.user, 'lista_vot': lista_vot, 'lista_comen': lista_comen}
-    return render(request, 'miscosas/usuario.html', context)
+    return render(request, 'miscosas/'+lan+'/usuario.html', context)
 
 
 def procesar_css(request):

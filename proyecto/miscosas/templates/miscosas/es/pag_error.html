@@ -1,0 +1,13 @@
+{% extends 'miscosas/es/base.html' %}
+{% load static %}
+
+{% block contenido %}
+      <div class='alert alert-info'>
+        {{ error }}
+      </div>
+      {% if recurso_us%}
+          <p> <a href="{{recurso_us}}">Pulsa aqui para volver a la pagina en la que estaba</a></p>
+      {%else%}
+          <p> <a href="/">Pulsa aqui para volver a la pagina principal</a></p>
+      {%endif%}
+{% endblock %}

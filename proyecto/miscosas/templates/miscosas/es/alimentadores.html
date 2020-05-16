@@ -1,0 +1,12 @@
+{% extends 'miscosas/es/base.html' %}
+{% load static %}
+
+{% block contenido %}
+    <h2>Lista de alimentadores</h2>
+    {% for alim in lista %}
+        <h3> - Nombre: <a href="{{alimen.enlace}}">{{alim.nombre}}</a>, <a href="/alimentador/{{alim.id}}">{{alim.nombre}} en detalle</a></h3>
+        <p>Numero de items de este alimentador: {{alim.total_it}}</p>
+        <p>Puntuacion total del alimentador: {{alim.count_likes}}</p>
+    {% endfor  %}
+
+{% endblock %}

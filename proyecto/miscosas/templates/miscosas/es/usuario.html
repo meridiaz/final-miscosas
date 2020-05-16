@@ -1,0 +1,43 @@
+{% extends 'miscosas/es/base.html' %}
+{% load static %}
+
+{%block contenido%}
+
+{%if us_log.is_authenticated and us_log == usuario%}
+  <div id="cambiarestilo" >
+      <h3> Cambiar formato</h3>
+      <form method="POST" action="/usuario/{{usuario.username}}">
+          {% csrf_token %}
+          {{ form_estilo.as_p }}
+          <button type="submit" name="action" class="save btn btn-info" value="formato">Guardar</button>
+      </form>
+    </div>
+  <div id="fotoperfil" >
+      <h3> Cambiar foto de perfil</h3>
+      <form method="POST" action="/usuario/{{usuario.username}}" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ form_foto.as_p }}
+        <button type="submit" name="action"class="save btn btn-info" value="foto">Enviar</button>
+      </form>
+  </div>
+  {%endif%}
+      <div id="presentacion_us">
+            <h2>Nombre: {{usuario.username}}</h2>
+              {%if pag_us.foto%}
+                <img src='{% static '/miscosas/'%}{{pag_us.foto.url}}'  width="186" height="150">
+              {%endif %}
+        </div>
+
+          <div id="items_votados">
+            <h3> Lista de items votados </h3>
+            {% for item in lista_vot %}
+                <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">(detalle)</a></li></p>
+            {%endfor%}
+          </div>
+          <div id="items_comentados">
+            <h3> Lista de items comentados </h3>
+            {% for item in lista_comen %}
+                <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">(detalle)</a></li></p>
+            {%endfor%}
+          </div>
+{% endblock %}
