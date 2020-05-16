@@ -20,7 +20,7 @@ class AlimForm(forms.Form):
 class ComentarioForm(forms.ModelForm):
     class Meta:
         model = Comentario
-        fields = ('texto', )
+        fields = ('texto', 'foto')
 
 class UploadImageForm(forms.ModelForm):
 

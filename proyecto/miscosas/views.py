@@ -19,7 +19,8 @@ from django.template import Context
 from django.db.models import Sum, Count, Q, Case, When, Value
 from django.db.models.functions import Coalesce
 
-from urllib import request
+#from urllib import request
+import urllib.request
 
 from .forms import RegistrationForm, PagUsForm, AlimForm, ComentarioForm, UploadImageForm
 from .models import PagUsuario, tamano, estilous, Alimentador, Item, Comentario, Like
@@ -48,6 +49,27 @@ def alimentadores(request):
     context = {'lista': lista, 'recurso_us': "/alimentadores", 'nav_alims': 'active'}
     return render(request, 'miscosas/alimentadores.html', context)
 
+def nombre_persona(user):
+    #funcion que devuelve el nombre del usuario si esta registrado
+    #o el codigo de la cookie en caso de no estarlo
+    print("en nombre persona"+user.username)
+    if user.is_authenticated:
+        return user
+    else:
+        return "pechuga"
+
+def guardar_us_enalim(user, id):
+    #funcion que guarda el usuario al que le ha dado a elegir al alimentador
+    print("enguardar us")
+
+    alim = Alimentador.objects.get(id=id)
+    print(alim.nombre)
+    print(alim.id)
+    #este if borrar cuando haga con cookies
+    print(nombre_persona(user))
+    if nombre_persona(user) != "pechuga":
+        alim.usuario.add(nombre_persona(user))
+
 def leer_xml(tipo, nombre):
     if tipo == "yt":
         id = YTChannel(nombre).id_canal()
@@ -66,7 +88,11 @@ def gestionar_alims(request):
     nombre = form.cleaned_data['identificador_o_nombre']
 
     return leer_xml(tipo, nombre)
-
+#if 'enviar' in request.GET:
+    #return redirect('/alimentador/'+str(alim.id))
+#un solo boton
+#elegio = False --> elegido= True, #añado a la lista de usuarios, actualizar datos
+#elegido = True--> elegido = False,
 def alimentador(request, id=-1):
     if request.method == "POST":
         id = gestionar_alims(request)
@@ -74,6 +100,7 @@ def alimentador(request, id=-1):
             context = {'error': "No se ha podido encontrar la URL para ese alimentador"}
             return render(request, 'miscosas/pag_error.html', context)
         else:
+            guardar_us_enalim(request.user, id)
             return redirect('/alimentador/'+str(id))
     elif request.method == "GET":
         try:
@@ -100,11 +127,10 @@ def gestionar_voto(action, request, item):
     voto.save()
 
 def gestionar_comen(request, item):
-    form = ComentarioForm(request.POST)
-    #print(form)
+    form = ComentarioForm(request.POST, request.FILES)
     if form.is_valid():
         comen = Comentario(texto= form.cleaned_data['texto'], usuario=request.user,
-                            item=item)
+                            item=item, foto=form.cleaned_data['foto'])
         comen.save()
 
 def iluminar_voto(request, item):
@@ -147,13 +173,18 @@ def procesar_post_index(request):
     if action == "elegir":
         alim = Alimentador.objects.get(id=request.POST['alim'])
         id = leer_xml(alim.tipo, alim.id_canal)
+        alim.elegido = True
+        alim.save()
+        guardar_us_enalim(request.user, id)
         return redirect('/alimentador/'+str(id))
     elif action == "eliminar":
-        alim = Alimentador.objects.get(nombre=request.POST['alim'])
-        alim.elegido = not alim.elegido
+        alim = Alimentador.objects.get(id=request.POST['alim'])
+        alim.elegido = False
         alim.save()
+        if 'enviar' in request.GET:
+            return redirect('/alimentador/'+str(alim.id))
     elif action == "like" or action == "dislike":
-        item = Item.objects.get(titulo=request.POST['item'])
+        item = Item.objects.get(id=request.POST['item'])
         gestionar_voto(action, request, item)
 
     return redirect('/')
@@ -170,6 +201,14 @@ def procesar_docs(request, top10, top5, lista):
         context = {'error': "No se soporta ese tipo de documento", 'recurso_us': '/'}
         return render(request, 'miscosas/pag_error.html', context)
 
+def get_lang(lang):
+    """ Obtiene el idioma a partir de la cabecera de la peticion """
+    if "es" in lang:    #Si hay opcion de darsela en español, la damos en español
+        return "es"
+    elif "en" in lang:
+        return "en"
+    else:   #Si piden otro idioma, se sirve en español
+        return "es"
 def index(request):
     #visto en: https://stackoverflow.com/questions/18198977/django-sum-a-field-based-on-foreign-key
     # y en: https://docs.djangoproject.com/en/3.0/topics/db/aggregation/
@@ -190,10 +229,11 @@ def index(request):
         add_boton_voto(top5, request)
 
     lista = Alimentador.objects.all()
-
-    if request.GET.keys():
+    if 'format' in request.GET.keys():
         return procesar_docs(request, top10, top5, lista)
 
+    print(User.objects.get(username="meri").alimentador_set.all())
+    print(get_lang(request.META['HTTP_ACCEPT_LANGUAGE']))
     context = {'user': request.user, 'recurso_us': '/', 'form': AlimForm(),
                 'nav_index': 'active', 'top10': top10, 'top5': top5, 'alims': lista}
     return render(request, 'miscosas/index.html', context)
@@ -261,7 +301,7 @@ def cuenta_usuario(request, us):
         return render(request, 'miscosas/pag_error.html', {'error': "El usuario pedido no existe"})
 
     lista_vot = Item.objects.filter(like__usuario = usuario)
-    lista_comen = Item.objects.filter(comentario__usuario = usuario)
+    lista_comen = Item.objects.filter(comentario__usuario = usuario).distinct()
     context = {'form_estilo': PagUsForm(), 'usuario': usuario, 'recurso_us': '/usuario/'+us,
                 'pag_us': pagUsEstilo, 'form_foto': UploadImageForm(),
                 'us_log': request.user, 'lista_vot': lista_vot, 'lista_comen': lista_comen}
@@ -278,7 +318,6 @@ def procesar_css(request):
     except ObjectDoesNotExist:
         estilo = estilous['ligero']
         tam = tamano['mediana']
-    dic1= {'tam': tam}
-    dic1.update(estilo)
-    context = Context(dic1)
-    return HttpResponse(template.render(dic1), content_type="text/css")
+    tam.update(estilo)
+    context = Context(tam)
+    return HttpResponse(template.render(tam), content_type="text/css")

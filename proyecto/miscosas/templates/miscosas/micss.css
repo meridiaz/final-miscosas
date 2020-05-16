@@ -30,14 +30,14 @@ h3{
 
 p{
   color: {{color_letra}};
-  font-size: 16px;
+  font-size: {{p}};
   margin-left: 10px;
   margin-bottom: 5px;
 }
 
 #contenido li{
   color: {{color_letra}};
-  font-size: 16px;
+  font-size: {{p}};
 }
 
 
@@ -110,12 +110,13 @@ button{
 }
 
 #contenido h2{
-  font-size: {{tam}};
+  font-size: {{h2}};
   box-sizing: content-box;
   font-weight: 600;
 }
 
 #contenido h3{
+  font-size: {{h3}};
   font-weight: 600;
 }
 
@@ -181,7 +182,10 @@ button{
 
 }
 
-
+#items_votados, #items_comentados{
+  box-sizing: content-box;
+  width: 55%;
+}
 
  #video_empo{
   margin-top: 20px;
@@ -189,24 +193,9 @@ button{
 
 #votar_item{
   position: absolute;
-  left: 40%;
+  left: 50%;
   margin-top: 4%;
 }
-
-
-/* #info_alim_enitem{
-    position: absolute;
-    right: 5%;
-    bottom: -10%;
-    border-right: 3px solid grey;
-    border-left: 3px solid grey;
-    border-top: 3px solid grey;
-    border-bottom: 3px solid grey;
-    border-radius: 6px;
-    padding-left: 5%;
-    padding-right: 5%;
-    padding-bottom: 5%;
-} */
 
 #usuario{
   margin-bottom: 40px;
@@ -221,8 +210,4 @@ button{
   padding-left: 10px;
   text-align: center;
   border-top: 2px solid black;
-}
-#descrip table{
-  box-sizing: border-box;
-  width: 20px;
 }

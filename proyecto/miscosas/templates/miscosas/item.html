@@ -28,7 +28,15 @@
           <div id="comentarios_us">
               <h3> Comentarios de los usuarios:</h3>
               {% for comentario in lista %}
-              <p>   - El usuario {{comentario.usuario.username}} ha dicho {{comentario.texto}}. A día {{comentario.fecha}}</p>
+                    {%if comentario.foto%}
+                      <img src='{% static '/miscosas/'%}{{comentario.foto.url}}'  width="80" height="75" align="left">
+                      <p>   - El usuario {{comentario.usuario.username}} ha dicho: {{comentario.texto}}. A día {{comentario.fecha}}</p>
+                      <br></br>
+                    {%else%}
+                    <p>   - El usuario {{comentario.usuario.username}} ha dicho: {{comentario.texto}}. A día {{comentario.fecha}}</p>
+                    {%endif %}
+
+
               {% endfor  %}
           </div>
           {% if user.is_authenticated %}
@@ -42,7 +50,7 @@
               </div>
                <div id="formu_comentario">
                   <h3>Comentar item</h3>
-                  <form method="POST" action="/item/{{item.id}}">
+                  <form method="POST" action="/item/{{item.id}}" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{form.as_p}}
                     <button type="submit" name= "action" value="comentario"class="save btn btn-info">Enviar comentario</button>

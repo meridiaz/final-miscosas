@@ -1,13 +1,26 @@
 {% extends 'miscosas/base.html' %}
 
 {% block contenido %}
-        <h2>Nombre: {{alim.nombre}}, <a href="{{alim.enlace}}">(Enlace)</a></h2>
-        <h3> Lista de items: </h3>
-            {% for item in alim.item_set.all %}
-                <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">(detalle)</a></li></p>
-                <p>(Id: {{item.id}})</p>
-              {% endfor %}
+        <div id="presentacion_alim">
+            <h2>Nombre: {{alim.nombre}}, <a href="{{alim.enlace}}">(Enlace)</a></h2>
+            <form method="POST" action="/?enviar=alimentador">
+              {% csrf_token %}
+              <input type="hidden" name="alim" value="{{alim.id}}" ></input>
+                {%if alim.elegido%}
+                        <button type="submit" name= "action" value="eliminar"class="save btn btn-info">Eliminar</button>
+                {%else%}
+                        <button type="submit" name= "action" value="elegir"class="save btn btn-info">Elegir</button>
+                {%endif%}
+            </form>
 
+          </div>
+        <div id="lista_items">
+            <h3> Lista de items: </h3>
+                {% for item in alim.item_set.all %}
+                    <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">(detalle)</a></li></p>
+                    <p>(Id: {{item.id}})</p>
+                  {% endfor %}
+          </div>
 
 
 {% endblock %}

@@ -42,7 +42,7 @@
                  <div id="voto_index">
                    <form method="POST" action="/">
                      {% csrf_token %}
-                      <input type="hidden" name="item" value="{{item.titulo}}" ></input>
+                      <input type="hidden" name="item" value="{{item.id}}" ></input>
                        <button type="submit" name= "action" value="like" class="save btn btn-info"><img src = "{{item.boton_like}}" width="30" height="15"></button>
                        <button type="submit" name= "action" value="dislike" class="save btn btn-info"><img src = "{{item.boton_dislike}}" width="30" height="15"></button>
                      </form>

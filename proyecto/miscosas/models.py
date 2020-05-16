@@ -1,11 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
-#from django.contrib.postgres.fields import ArrayField
 
-tamano = {'pequena': 30,
-            'mediana': 35,
-            'grande': 45}
+
+tamano = {'pequena':{'p': 13, 'h3': 25, 'h2':33},
+            'mediana':{'p': 16, 'h3': 28, 'h2':38},
+            'grande':{'p': 19, 'h3':35, 'h2': 45}
+        }
 
 estilous = {'oscuro': {'color_letra': 'white', 'fondo_cabec': 'fondo_cabecera_oscuro.jpg',
                         'fondo': 'fondo_oscuro.jpg'},
@@ -18,6 +19,7 @@ class Alimentador(models.Model):
     enlace = models.TextField(default="") #al canal o al subreddit
     elegido = models.BooleanField(default=True)
     id_canal = models.CharField(max_length=64, default="")
+    usuario = models.ManyToManyField(User)
     #en el caso del reddit sera igual al nombre del subrredit
 
     def __str__(self):
@@ -69,6 +71,7 @@ class Comentario(models.Model):
     fecha = models.DateTimeField(default=datetime.now)
     texto =  models.TextField()
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    foto = models.ImageField(upload_to="img_comens", blank=True)
 
     def __str__(self):
         return "Comentario del item:"+self.item.titulo
