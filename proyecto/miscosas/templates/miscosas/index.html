@@ -1,0 +1,75 @@
+{% extends 'miscosas/base.html' %}
+{% load static %}
+{%load i18n%}
+
+    {% block contenido %}
+
+    <div id="formalimentadores">
+      <!--<h2>Formularios de alimentadores:</h2>-->
+      <form method="POST" action="/alimentador/-1">
+        <h3>{%trans 'Formulario de alimentadores:'%}</h3>
+        {% csrf_token %}
+        {{form.as_p}}
+        <!-- <input class="textbox" type="text" name="referencia del formulario" placeholder="Identificador"> -->
+        <button type="submit" action="yt">{%trans 'Elegir alimentador'%}</button>
+      </form>
+      </div>
+      {% if user.is_authenticated %}
+      <div id="top5">
+      <h2>{%trans 'Top 5 ultimos items votados:' %}</h2>
+          {% if top5 %}
+                {% for item in top5 %}
+                    <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">({%trans 'detalle' %})</a></li></p>
+                        <form method="POST" action="/">
+                          {% csrf_token %}
+                          <input type="hidden" name="item" value="{{item.titulo}}" ></input>
+                          <button type="submit" name= "action" value="like" class="save btn btn-info"><img src = "{{item.boton_like}}" width="30" height="15"></button>
+                          <button type="submit" name= "action" value="dislike" class="save btn btn-info"><img src = "{{item.boton_dislike}}" width="30" height="15"></button>
+                        </form>
+
+                {% endfor%}
+            {%else%}
+                <p> {% trans 'Vacío' %} </p>
+            {%endif%}
+          </div>
+      {% endif%}
+
+
+    <div id="top10">
+      <h2>{%trans 'Top 10 items mas votados:' %}</h2>
+      <p>({% trans 'Ordenados empezando por el mas votado' %})</p>
+          {% for item in top10 %}
+                <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">({%trans 'detalle' %})</a></li></p>
+                <p>(Id: {{item.id}})</p>
+                 <p>Likes: {{item.npos}}</p>
+                 <p>Dislikes: {{item.nneg}}</p>
+                 {% if user.is_authenticated %}
+                 <div id="voto_index">
+                   <form method="POST" action="/">
+                     {% csrf_token %}
+                      <input type="hidden" name="item" value="{{item.id}}" ></input>
+                       <button type="submit" name= "action" value="like" class="save btn btn-info"><img src = "{{item.boton_like}}" width="30" height="15"></button>
+                       <button type="submit" name= "action" value="dislike" class="save btn btn-info"><img src = "{{item.boton_dislike}}" width="30" height="15"></button>
+                     </form>
+                  </div>
+                  {% endif%}
+          {% endfor %}
+      </div>
+      <div id="alimentador_index">
+        <h2>{%trans 'Alimentadores seleccionados:' %}</h2>
+        {% for alim in alims %}
+          {%if alim.elegido%}
+              <h3> -{% trans 'Nombre' %}: <a href="{{alimen.enlace}}">{{alim.nombre}}</a>, <a href="/alimentador/{{alim.id}}">({%trans 'detalle' %})</a></h3>
+              <p>{%trans 'Numero de items de este alimentador:' %} {{alim.total_it}}</p>
+              <p>{%trans 'Puntuacion total del alimentador:' %} {{alim.count_likes}}</p>
+              <p> (Id: {{alim.id}})</p>
+              <form method="POST" action="/">
+                {% csrf_token %}
+                    <input type="hidden" name="alim" value="{{alim.id}}" ></input>
+                    <button type="submit" name= "action" value="elegir"class="save btn btn-info">{%trans 'Elegir' %}</button>
+                    <button type="submit" name= "action" value="eliminar"class="save btn btn-info">{%trans 'Eliminar' %}</button>
+              </form>
+            {%endif%}
+        {% endfor  %}
+      </div>
+    {% endblock %}

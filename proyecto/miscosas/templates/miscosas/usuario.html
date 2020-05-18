@@ -1,43 +1,46 @@
-{% extends 'miscosas/en/base.html' %}
+{% extends 'miscosas/base.html' %}
+{%load i18n%}
+
 {% load static %}
 
 {%block contenido%}
 
 {%if us_log.is_authenticated and us_log == usuario%}
   <div id="cambiarestilo" >
-      <h3> Change style</h3>
+      <h3> {% trans 'Cambiar formato' %}</h3>
       <form method="POST" action="/usuario/{{usuario.username}}">
           {% csrf_token %}
           {{ form_estilo.as_p }}
-          <button type="submit" name="action" class="save btn btn-info" value="formato">Save</button>
+          <button type="submit" name="action" class="save btn btn-info" value="formato">{% trans 'Guardar' %}</button>
       </form>
     </div>
   <div id="fotoperfil" >
-      <h3> Change profile photo</h3>
+      <h3> {% trans 'Cambiar foto de perfil' %}</h3>
       <form method="POST" action="/usuario/{{usuario.username}}" enctype="multipart/form-data">
           {% csrf_token %}
           {{ form_foto.as_p }}
-        <button type="submit" name="action"class="save btn btn-info" value="foto">Save</button>
+        <button type="submit" name="action"class="save btn btn-info" value="foto">{% trans 'Enviar' %}</button>
       </form>
   </div>
+
   {%endif%}
       <div id="presentacion_us">
-            <h2>Nick: {{usuario.username}}</h2>
+            <h2>{% trans 'Nombre' %}: {{usuario.username}}</h2>
               {%if pag_us.foto%}
                 <img src='{% static '/miscosas/'%}{{pag_us.foto.url}}'  width="186" height="150">
               {%endif %}
         </div>
 
           <div id="items_votados">
-            <h3> Voted items list </h3>
+            <h3> {% trans 'Lista de items votados' %} </h3>
             {% for item in lista_vot %}
-                <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">(detail)</a></li></p>
+                <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">({% trans 'detalle' %})</a></li></p>
             {%endfor%}
           </div>
           <div id="items_comentados">
-            <h3> Commented items list </h3>
+            <h3> {% trans 'Lista de items comentados' %} </h3>
             {% for item in lista_comen %}
-                <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">(detail)</a></li></p>
+                <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">({% trans 'detalle' %})</a></li></p>
             {%endfor%}
           </div>
 {% endblock %}

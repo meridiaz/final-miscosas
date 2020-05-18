@@ -1,4 +1,5 @@
 {% load static %}
+{%load i18n%}
 <html>
   <head>
     <!-- Required meta tags -->
@@ -10,15 +11,15 @@
     <!-- <link rel="stylesheet" href="{% static 'miscosas/micss.css' %}"> -->
     <link href="/style.css" rel="stylesheet" type="text/css">
 
-    <title>MisCosasWeb</title>
+    <title>{% trans 'Mis Cosas Web' %}</title>
   </head>
   <body>
 
     <div id="cabecera" >
       <!-- imagen del sitio #2d6360;-->
       <img src="{% static "miscosas/banner2.jpg" %}" width="186" height="150" align="left">
-      <h1>MIS COSAS WEB</h1>
-        <h2>BIENVENIDO</h2>
+      <h1>{% trans 'MIS COSAS WEB' %}</h1>
+        <h2>{% trans 'BIENVENIDO' %}</h2>
         <!-- <p>{{error}}</p> -->
         {% if user.is_authenticated %}
                <h2>{{user.username}}
@@ -29,9 +30,9 @@
                 {% csrf_token %}
 
                <input class="textbox" type="text" name="username" placeholder="Username" style = "margin-bottom: 5">
-                <input class="textbox" type="password" name="password" placeholder="Contraseña">
+                <input class="textbox" type="password" name="password" placeholder={% trans "Contraseña"%}>
                 <button type="submit" name ="action" value="Login" style="right: 15%">Login</button>
-                <button type="submit" name="action" value="Registrar">Registrar</button>
+                <button type="submit" name="action" value="Registrar">{% trans 'Registrar' %}</button>
           {% endif %}
             </form>
 
@@ -39,16 +40,16 @@
     </div>
     <div class="nav nav-pills">
       <li class="nav-item">
-        <a class="nav-link {{nav_index}}" href="/">Inicio</a>
+        <a class="nav-link {{nav_index}}" href="/">{% trans 'Inicio' %}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link {{nav_alims}}" href="/alimentadores">Alimentadores</a>
+        <a class="nav-link {{nav_alims}}" href="/alimentadores">{% trans 'Alimentadores' %}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link {{nav_users}}" href="/usuarios">Usuarios</a>
+        <a class="nav-link {{nav_users}}" href="/usuarios">{% trans 'Usuarios' %}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link {{nav_info}}" href="/informacion">Informacion</a>
+        <a class="nav-link {{nav_info}}" href="/informacion">{% trans 'Informacion' %}</a>
       </li>
     </div>
     <div id="contenido">
@@ -57,12 +58,12 @@
     </div>
     <div id="footer">
       <footer >
-        <h5> Esta aplicacion utiliza los datos proporcionados por:
+        <h5> {% trans 'Esta aplicacion utiliza los datos proporcionados por' %}:
         {%for alim in alims%}
             <a href="{{alim.enlace}}">{{alim.nombre}}</a>,
         {% endfor%}
         </h5>
-        <h5> Página web escrita por Meritxell Diaz para la asignatura de SAT</h5>
+        <h5> {% trans 'Página web escrita por Meritxell Diaz para la asignatura de SAT' %}</h5>
       </footer>
     </div>
     </body>

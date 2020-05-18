@@ -1,0 +1,317 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-05-19 00:28+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: forms.py:10
+msgid "Pequeño"
+msgstr "Small"
+
+#: forms.py:10
+msgid "Mediana"
+msgstr "Standard"
+
+#: forms.py:10
+msgid "Grande"
+msgstr "Large"
+
+#: forms.py:11
+msgid "Tamaño"
+msgstr "Size"
+
+#: forms.py:12
+msgid "Oscuro"
+msgstr "Dark"
+
+#: forms.py:12
+msgid "Ligero"
+msgstr "Faint"
+
+#: forms.py:13
+msgid "Estilo"
+msgstr "Style"
+
+#: forms.py:17
+msgid "Tipo de alimentador"
+msgstr "Feeder type"
+
+#: forms.py:18
+msgid "Identificador o nombre"
+msgstr "Name or identifier"
+
+#: forms.py:26
+msgid "Texto"
+msgstr "Text"
+
+#: forms.py:27 forms.py:35
+msgid "Foto"
+msgstr "Photo"
+
+#: templates/miscosas/alimentador.html:6
+#: templates/miscosas/alimentadores.html:9 templates/miscosas/index.html:62
+#: templates/miscosas/item.html:7 templates/miscosas/usuario.html:28
+#: templates/miscosas/usuarios.html:11
+msgid "Nombre"
+msgstr "Name"
+
+#: templates/miscosas/alimentador.html:11 templates/miscosas/index.html:70
+msgid "Eliminar"
+msgstr "Delete"
+
+#: templates/miscosas/alimentador.html:13 templates/miscosas/index.html:69
+msgid "Elegir"
+msgstr "Choose"
+
+#: templates/miscosas/alimentador.html:19
+msgid "Lista de items"
+msgstr "Items list"
+
+#: templates/miscosas/alimentador.html:21
+#, fuzzy
+#| msgid "detalle"
+msgid "detail"
+msgstr "detail"
+
+#: templates/miscosas/alimentadores.html:7
+msgid "Lista de alimentadores"
+msgstr "Feeders list"
+
+#: templates/miscosas/alimentadores.html:9 templates/miscosas/index.html:22
+#: templates/miscosas/index.html:42 templates/miscosas/index.html:62
+#: templates/miscosas/item.html:8 templates/miscosas/usuario.html:37
+#: templates/miscosas/usuario.html:43
+msgid "detalle"
+msgstr "detail"
+
+#: templates/miscosas/alimentadores.html:10 templates/miscosas/item.html:65
+msgid "Numero de items de este alimentador"
+msgstr "Total items for this feeder"
+
+#: templates/miscosas/alimentadores.html:11
+msgid "Puntuacion total"
+msgstr "Total score"
+
+#: templates/miscosas/base.html:14
+msgid "Mis Cosas Web"
+msgstr "My Stuff Web"
+
+#: templates/miscosas/base.html:21
+msgid "MIS COSAS WEB"
+msgstr "MY STUFF WEB"
+
+#: templates/miscosas/base.html:22
+msgid "BIENVENIDO"
+msgstr "WELCOME"
+
+#: templates/miscosas/base.html:33
+msgid "Contraseña"
+msgstr "Password"
+
+#: templates/miscosas/base.html:35
+msgid "Registrar"
+msgstr "Register"
+
+#: templates/miscosas/base.html:43
+msgid "Inicio"
+msgstr "Index"
+
+#: templates/miscosas/base.html:46
+msgid "Alimentadores"
+msgstr "Feeders"
+
+#: templates/miscosas/base.html:49
+msgid "Usuarios"
+msgstr "Users"
+
+#: templates/miscosas/base.html:52
+msgid "Informacion"
+msgstr "Information"
+
+#: templates/miscosas/base.html:61
+msgid "Esta aplicacion utiliza los datos proporcionados por"
+msgstr "This aplication uses the data provided by"
+
+#: templates/miscosas/base.html:66
+msgid "Página web escrita por Meritxell Diaz para la asignatura de SAT"
+msgstr "Web page written by Meritxell Diaz for SAT subject"
+
+#: templates/miscosas/index.html:10
+msgid "Formulario de alimentadores:"
+msgstr "Feeders forms"
+
+#: templates/miscosas/index.html:14
+msgid "Elegir alimentador"
+msgstr "Choose feeder"
+
+#: templates/miscosas/index.html:19
+msgid "Top 5 ultimos items votados:"
+msgstr "Top 5 last votated items:"
+
+#: templates/miscosas/index.html:32
+msgid "Vacío"
+msgstr "Empty"
+
+#: templates/miscosas/index.html:39
+msgid "Top 10 items mas votados:"
+msgstr "Top 10 most voted items:"
+
+#: templates/miscosas/index.html:40
+msgid "Ordenados empezando por el mas votado"
+msgstr "Ordered by the most voted ones"
+
+#: templates/miscosas/index.html:59
+msgid "Alimentadores seleccionados:"
+msgstr "Selected feeders"
+
+#: templates/miscosas/index.html:63
+msgid "Numero de items de este alimentador:"
+msgstr "Total items for this feeder:"
+
+#: templates/miscosas/index.html:64
+msgid "Puntuacion total del alimentador:"
+msgstr "Total score:"
+
+#: templates/miscosas/info.html:5
+msgid "Información"
+msgstr "Information"
+
+#: templates/miscosas/info.html:6
+msgid ""
+"Página web escrita por Meritxell Díaz Coque para la asignatura de SAT. Doble "
+"grado: GITT+IAA"
+msgstr ""
+"Web page written by Meritxell Diaz for SAT subject. Dual degree: GITT + IAA"
+
+#: templates/miscosas/info.html:7
+msgid "Funcionamiento"
+msgstr "Performance"
+
+#: templates/miscosas/info.html:8
+msgid "Explicacion"
+msgstr "Explanation"
+
+#: templates/miscosas/item.html:8
+msgid "Nombre canal"
+msgstr "Feeder name"
+
+#: templates/miscosas/item.html:12 templates/miscosas/item.html:25
+msgid "Descripción"
+msgstr "Description"
+
+#: templates/miscosas/item.html:31
+msgid "Comentarios de los usuarios"
+msgstr "Users feedback"
+
+#: templates/miscosas/item.html:35 templates/miscosas/item.html:38
+msgid "El usuario"
+msgstr "User"
+
+#: templates/miscosas/item.html:35 templates/miscosas/item.html:38
+msgid "ha dicho"
+msgstr "has said"
+
+#: templates/miscosas/item.html:35 templates/miscosas/item.html:38
+msgid "A dia"
+msgstr "Date"
+
+#: templates/miscosas/item.html:54
+msgid "Comentar item"
+msgstr "Comment item"
+
+#: templates/miscosas/item.html:58
+msgid "Enviar comentario"
+msgstr "Send comment"
+
+#: templates/miscosas/item.html:64
+msgid "Informacion del alimentador"
+msgstr "Feeder information"
+
+#: templates/miscosas/item.html:66
+msgid "Puntuacion total del alimentador"
+msgstr "Total score"
+
+#: templates/miscosas/pag_error.html:10
+msgid "Pulsa aqui para volver a la pagina principal"
+msgstr "Click here to return to the index"
+
+#: templates/miscosas/usuario.html:10
+msgid "Cambiar formato"
+msgstr "Change format"
+
+#: templates/miscosas/usuario.html:14
+msgid "Guardar"
+msgstr "Save"
+
+#: templates/miscosas/usuario.html:18
+msgid "Cambiar foto de perfil"
+msgstr "Change profile photo"
+
+#: templates/miscosas/usuario.html:22
+msgid "Enviar"
+msgstr "Send"
+
+#: templates/miscosas/usuario.html:35
+msgid "Lista de items votados"
+msgstr "Voted items"
+
+#: templates/miscosas/usuario.html:41
+msgid "Lista de items comentados"
+msgstr "Commented items"
+
+#: templates/miscosas/usuarios.html:8
+msgid "Lista de usuarios con cuenta"
+msgstr "List of registrated users"
+
+#: templates/miscosas/usuarios.html:16
+msgid "Items votados"
+msgstr "Voted items"
+
+#: templates/miscosas/usuarios.html:17
+msgid "Canales elegidos"
+msgstr "Choosen feeders"
+
+#: views.py:106
+msgid "No se ha podido encontrar la URL para ese alimentador"
+msgstr "Cannot find the url for the feeder asked for"
+
+#: views.py:116
+msgid "El alimentador pedido no se encuentra"
+msgstr "Cannot find the feeder asked for "
+
+#: views.py:159
+msgid "El item pedido no existe"
+msgstr "The item asked for does not exit"
+
+#: views.py:228
+msgid "No se soporta ese tipo de documento"
+msgstr "This type of document is not supported"
+
+#: views.py:275
+msgid "Informacion de autenticacion no valida, o el usuario ya tiene cuenta"
+msgstr "Wrong registration infomation, or the user already has an account"
+
+#: views.py:278
+msgid "El usuario o la contraseña no son correctos"
+msgstr "Incorrect nickname or password"
+
+#: views.py:320
+msgid "El usuario pedido no existe"
+msgstr "The user asked for does not exist"
+
+#~ msgid "Pulsa aqui para volver a la pagina en la que estaba"
+#~ msgstr "Click here to return to the page you were visiting"

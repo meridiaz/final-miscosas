@@ -18,6 +18,7 @@ from django.template import Context
 
 from django.db.models import Sum, Count, Q, Case, When, Value
 from django.db.models.functions import Coalesce
+from django.utils.translation import gettext_lazy as _
 
 #from urllib import request
 import urllib.request
@@ -36,30 +37,19 @@ archivo_like={1:  ['like_sel.jpg', 'dis.jpg'],
             -1:  ['like.jpg', 'dis_sel.jpg'],
 }
 
-def get_lang(lang):
-    """ Obtiene el idioma a partir de la cabecera de la peticion """
-    if "es" in lang:    #Si hay opcion de darsela en español, la damos en español
-        return "es"
-    elif "en" in lang:
-        return "en"
-    else:   #Si piden otro idioma, se sirve en español
-        return "es"
 
 def info(request):
-    lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
-    return render(request, 'miscosas/'+lan+'/info.html', {'nav_info': "active", 'recurso_us': "/informacion"})
+    return render(request, 'miscosas/info.html', {'nav_info': "active", 'recurso_us': "/informacion"})
 
 def usuarios(request):
     lista = PagUsuario.objects.all()
     context = {'lista': lista, 'recurso_us': "/usuarios", 'nav_users': 'active'}
-    lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
-    return render(request, 'miscosas/'+lan+'/usuarios.html', context)
+    return render(request, 'miscosas/usuarios.html', context)
 
 def alimentadores(request):
     lista = Alimentador.objects.all()
-    lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
     context = {'lista': lista, 'recurso_us': "/alimentadores", 'nav_alims': 'active'}
-    return render(request, 'miscosas/'+lan+'/alimentadores.html', context)
+    return render(request, 'miscosas/alimentadores.html', context)
 
 def nombre_persona(user):
     #funcion que devuelve el nombre del usuario si esta registrado
@@ -73,7 +63,7 @@ def nombre_persona(user):
 def guardar_us_enalim(user, id):
     #funcion que guarda el usuario al que le ha dado a elegir al alimentador
     print("enguardar us")
-
+    print(id)
     alim = Alimentador.objects.get(id=id)
     print(alim.nombre)
     print(alim.id)
@@ -105,13 +95,17 @@ def gestionar_alims(request):
 #un solo boton
 #elegio = False --> elegido= True, #añado a la lista de usuarios, actualizar datos
 #elegido = True--> elegido = False,
+
 def alimentador(request, id=-1):
-    lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
     if request.method == "POST":
+        # if 'action' in request.POST:
+        #     id = gestionar_elegido_o_eliminado(request)
+        # else:
         id = gestionar_alims(request)
         if id == -1:
-            context = {'error': "No se ha podido encontrar la URL para ese alimentador"}
-            return render(request, 'miscosas/'+lan+'/pag_error.html', context)
+            context = {'error': _("No se ha podido encontrar la URL para ese alimentador"),
+                        'recurso_us': '/'}
+            return render(request, 'miscosas/pag_error.html', context)
         else:
             guardar_us_enalim(request.user, id)
             return redirect('/alimentador/'+str(id))
@@ -119,11 +113,12 @@ def alimentador(request, id=-1):
         try:
             alim = Alimentador.objects.get(id=id)
         except ObjectDoesNotExist:
-            context = {'error': "El alimentador pedido no se encuentra"}
-            return render(request, 'miscosas/'+lan+'/pag_error.html', context)
+            context = {'error': _("El alimentador pedido no se encuentra"),
+                    'recurso_us': '/'}
+            return render(request, 'miscosas/pag_error.html', context)
 
         context = {'alim': alim, 'recurso_us': '/alimentador/'+str(alim.id)}
-        return render(request, 'miscosas/'+lan+'/alimentador.html', context)
+        return render(request, 'miscosas/alimentador.html', context)
 
 def gestionar_voto(action, request, item):
     if action == "like":
@@ -158,11 +153,11 @@ def iluminar_voto(request, item):
     return path_foto_votar + archivo_like[valor][0], path_foto_votar +archivo_like[valor][1]
 
 def mostrar_item(request, id):
-    lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
     try:
         item = Item.objects.get(id=id)
     except ObjectDoesNotExist:
-        return render(request, 'miscosas/'+lan+'/pag_error.html', {"error": "El item pedido no existe"})
+        context = {"error": _("El item pedido no existe"), 'recurso_us': '/'}
+        return render(request, 'miscosas/pag_error.html', context)
 
     if request.method == "POST":
         action = request.POST['action']
@@ -176,11 +171,27 @@ def mostrar_item(request, id):
     context = {'item': item, 'recurso_us': '/item/'+str(item.id),
                 'lista': lista, 'user': request.user, 'form': ComentarioForm(),
                 'boton_like': boton_like, 'boton_dislike': boton_dislike}
-    return render(request, 'miscosas/'+lan+'/item.html', context)
+    return render(request, 'miscosas/item.html', context)
 
 def add_boton_voto(top, request):
     for it in top:
         it.boton_like, it.boton_dislike = iluminar_voto(request, it)
+
+# def gestionar_elegido(request):
+#     action = request.POST['action']
+#     alim = Alimentador.objects.get(id=request.POST['alim'])
+#     if action == "elegir":
+#         id = leer_xml(alim.tipo, alim.id_canal)
+#         alim.elegido = True
+#
+#     elif action == "eliminar":
+#         alim.elegido = False
+#         id = alim.id
+#         if 'enviar' in request.POST:
+#             return redirect()
+#
+#     alim.save()
+#     return id
 
 def procesar_post_index(request):
     action = request.POST['action']
@@ -189,8 +200,9 @@ def procesar_post_index(request):
         id = leer_xml(alim.tipo, alim.id_canal)
         alim.elegido = True
         alim.save()
-        guardar_us_enalim(request.user, id)
-        return redirect('/alimentador/'+str(id))
+        if id != -1:
+            guardar_us_enalim(request.user, id)
+        return redirect('/alimentador/'+str(alim.id))
     elif action == "eliminar":
         alim = Alimentador.objects.get(id=request.POST['alim'])
         alim.elegido = False
@@ -213,9 +225,8 @@ def procesar_docs(request, top10, top5, lista):
         return HttpResponse(JSON_create(top10, top5, lista).json_to_string()
                             , content_type="application/json")
     else:
-        lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
-        context = {'error': "No se soporta ese tipo de documento", 'recurso_us': '/'}
-        return render(request, 'miscosas/'+lan+'/pag_error.html', context)
+        context = {'error': _("No se soporta ese tipo de documento"), 'recurso_us': '/'}
+        return render(request, 'miscosas/pag_error.html', context)
 
 def index(request):
     #visto en: https://stackoverflow.com/questions/18198977/django-sum-a-field-based-on-foreign-key
@@ -240,14 +251,11 @@ def index(request):
     if 'format' in request.GET.keys():
         return procesar_docs(request, top10, top5, lista)
 
-    print(User.objects.get(username="pechuga").alimentador_set.all())
-
-    lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
-    print(get_lang(request.META['HTTP_ACCEPT_LANGUAGE']))
+    print(User.objects.get(username="daniel").alimentador_set.all())
 
     context = {'user': request.user, 'recurso_us': '/', 'form': AlimForm(),
                 'nav_index': 'active', 'top10': top10, 'top5': top5, 'alims': lista}
-    return render(request, 'miscosas/'+lan+'/index.html', context)
+    return render(request, 'miscosas/index.html', context)
 
 
 def logout_view(request):
@@ -264,10 +272,10 @@ def login_view(request):
         if action=="Registrar":
             request.POST['password1'] = request.POST['password']
             form = RegistrationForm(data=request.POST)
-            msg = "El usuario o la contraseña no son correctos"
+            msg = _("Informacion de autenticacion no valida, o el usuario ya tiene cuenta")
         else:
             form = AuthenticationForm(data=request.POST)
-            msg = "Informacion de autenticacion no valida, o el usuario ya tiene cuenta"
+            msg = _("El usuario o la contraseña no son correctos")
         if form.is_valid():
             if action=="Registrar":
                 user = form.save()
@@ -281,9 +289,8 @@ def login_view(request):
             if user is not None:
                 do_login(request, user)
         else:
-            lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
-            context = {'recurso_us': recurso_us, 'error': msg}
-            return render(request, 'miscosas/'+lan+'/pag_error.html', context)
+            context = {'recurso_us': recurso_us, 'error': msg, 'recurso_us': '/'}
+            return render(request, 'miscosas/pag_error.html', context)
 
     return redirect(recurso_us)
 
@@ -303,7 +310,6 @@ def procesar_post_pagus(request):
     pagUsEstilo.save()
 
 def cuenta_usuario(request, us):
-    lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
     if request.method == 'POST':
         procesar_post_pagus(request)
 
@@ -311,14 +317,15 @@ def cuenta_usuario(request, us):
         usuario = User.objects.get(username=us)
         pagUsEstilo = PagUsuario.objects.get(usuario=usuario)
     except ObjectDoesNotExist:
-        return render(request, 'miscosas/'+lan+'/pag_error.html', {'error': "El usuario pedido no existe"})
+        context = {'error': _("El usuario pedido no existe"), 'recurso_us': '/'}
+        return render(request, 'miscosas/pag_error.html', context)
 
     lista_vot = Item.objects.filter(like__usuario = usuario)
     lista_comen = Item.objects.filter(comentario__usuario = usuario).distinct()
     context = {'form_estilo': PagUsForm(), 'usuario': usuario, 'recurso_us': '/usuario/'+us,
                 'pag_us': pagUsEstilo, 'form_foto': UploadImageForm(),
                 'us_log': request.user, 'lista_vot': lista_vot, 'lista_comen': lista_comen}
-    return render(request, 'miscosas/'+lan+'/usuario.html', context)
+    return render(request, 'miscosas/usuario.html', context)
 
 
 def procesar_css(request):

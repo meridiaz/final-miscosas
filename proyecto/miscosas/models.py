@@ -3,9 +3,9 @@ from django.contrib.auth.models import User
 from datetime import datetime
 
 
-tamano = {'pequena':{'p': 13, 'h3': 25, 'h2':33},
-            'mediana':{'p': 16, 'h3': 28, 'h2':38},
-            'grande':{'p': 19, 'h3':35, 'h2': 45}
+tamano = {'pequena':{'p': 13, 'h3': 25, 'h2':31},
+            'mediana':{'p': 16, 'h3': 28, 'h2':35},
+            'grande':{'p': 19, 'h3':32, 'h2': 40}
         }
 
 estilous = {'oscuro': {'color_letra': 'white', 'fondo_cabec': 'fondo_cabecera_oscuro.jpg',
