@@ -14,7 +14,7 @@
             {%endif %}
 
             <p>{% trans 'Items votados' %}: {{pag.usuario.like_set.all.count}}</p>
-            <p> {% trans 'Canales elegidos' %}: {{pag.usuario.alimentador_set.all.count}}</p>
+            <p> {% trans 'Comentarios realizados' %}: {{pag.usuario.comentario_set.all.count}}</p>
           </div>
     {% endfor  %}
 

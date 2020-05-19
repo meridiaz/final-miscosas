@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-19 00:28+0200\n"
+"POT-Creation-Date: 2020-05-19 23:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -282,8 +282,8 @@ msgid "Items votados"
 msgstr "Voted items"
 
 #: templates/miscosas/usuarios.html:17
-msgid "Canales elegidos"
-msgstr "Choosen feeders"
+msgid "Comentarios realizados"
+msgstr "Commented items"
 
 #: views.py:106
 msgid "No se ha podido encontrar la URL para ese alimentador"
@@ -312,6 +312,9 @@ msgstr "Incorrect nickname or password"
 #: views.py:320
 msgid "El usuario pedido no existe"
 msgstr "The user asked for does not exist"
+
+#~ msgid "Canales elegidos"
+#~ msgstr "Choosen feeders"
 
 #~ msgid "Pulsa aqui para volver a la pagina en la que estaba"
 #~ msgstr "Click here to return to the page you were visiting"
