@@ -23,7 +23,8 @@ class YTHandler(ContentHandler):
             try:
                 self.canal = Alimentador.objects.get(enlace=self.CanalLink)
             except ObjectDoesNotExist:
-                self.canal= Alimentador(nombre=self.CanalTit, enlace=self.CanalLink, tipo="yt")
+                self.canal= Alimentador(nombre=self.CanalTit, enlace=self.CanalLink,
+                                        tipo="yt", elegido=True)
                 self.canal.save()
         print("-----------------"+self.title)
         try:
@@ -110,6 +111,7 @@ class YTChannel:
             self.parser.setContentHandler(self.handler)
             self.parser.parse(xmlStream)
             self.handler.canal.id_canal = nombre
+            self.handler.canal.elegido = True
             self.handler.canal.save()
             self.id= self.handler.canal.id
         except URLError:

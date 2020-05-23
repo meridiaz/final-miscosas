@@ -5,7 +5,7 @@
 
 {% block contenido %}
         <h2>{% trans 'Nombre' %}: <a href="{{item.enlace}}">{{item.titulo}}</a></h2>
-        <h3>{% trans 'Nombre canal' %}: <a href="{{item.alimentador.enlace}}">{{item.alimentador.nombre}}</a>, <a href="/alimentador/{{item.alimentador.id}}">({% trans 'detalle' %})</a></h3>
+        <h3>{% trans 'Nombre alimentador' %}: <a href="{{item.alimentador.enlace}}">{{item.alimentador.nombre}}</a>, <a href="/alimentador/{{item.alimentador.id}}">({% trans 'detalle' %})</a></h3>
         <h3> Id: {{item.id}}</h3>
         {%if item.alimentador.tipo == "reddit"%}
               <div id="descrip">
@@ -13,7 +13,7 @@
                 <p> {{item.descrip|safe}}</p>
 
               </div>
-        {%else%}
+        {%elif item.alimentador.tipo == "yt"%}
               <div id="video_empo">
                     <iframe width="500" height="275"
                         src="https://www.youtube.com/embed/{{item.id_item}}"
@@ -25,6 +25,8 @@
                   <h3>{% trans 'Descripción' %}:</h3>
                     <p> {{item.descrip}}</p>
               </div>
+          {%elif item.alimentador.tipo == "fm"%}
+              <img src="{{item.descrip}}" width="186" height="150">
           {%endif%}
 
           <div id="comentarios_us">

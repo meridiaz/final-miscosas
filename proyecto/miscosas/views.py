@@ -27,6 +27,7 @@ from .forms import RegistrationForm, PagUsForm, AlimForm, ComentarioForm, Upload
 from .models import PagUsuario, tamano, estilous, Alimentador, Item, Comentario, Like
 from .ytalim import YTChannel
 from .redalim import SubReddit
+from .fmalim import FMArtista
 from .crear_docs import XML_create, JSON_create
 
 # Create your views here.
@@ -75,10 +76,10 @@ def guardar_us_enalim(user, id):
 def leer_xml(tipo, nombre):
     if tipo == "yt":
         id = YTChannel(nombre).id_canal()
-        print(str(id))
     elif tipo == "reddit":
         id = SubReddit(nombre).id_reddit()
-
+    elif tipo == "fm":
+        id = FMArtista(nombre).id_artista()
     return id
 
 def gestionar_alims(request):

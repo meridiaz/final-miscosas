@@ -23,7 +23,8 @@ class SUBHandler(ContentHandler):
             try:
                 self.sub = Alimentador.objects.get(enlace=self.SubLink)
             except ObjectDoesNotExist:
-                self.sub= Alimentador(nombre=self.SubTit, enlace=self.SubLink, tipo="reddit")
+                self.sub= Alimentador(nombre=self.SubTit, enlace=self.SubLink,
+                                        tipo="reddit", elegido=True)
                 self.sub.save()
 
         try:
@@ -108,6 +109,7 @@ class SubReddit:
             self.parser.setContentHandler(self.handler)
             self.parser.parse(xmlStream)
             self.handler.sub.id_canal = nombre
+            self.handler.sub.elegido = True
             self.handler.sub.save()
             self.id= self.handler.sub.id
         except URLError as e:

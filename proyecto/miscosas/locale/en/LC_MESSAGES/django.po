@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-19 23:48+0200\n"
+"POT-Creation-Date: 2020-05-24 00:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,7 +98,7 @@ msgstr "Feeders list"
 msgid "detalle"
 msgstr "detail"
 
-#: templates/miscosas/alimentadores.html:10 templates/miscosas/item.html:65
+#: templates/miscosas/alimentadores.html:10 templates/miscosas/item.html:67
 msgid "Numero de items de este alimentador"
 msgstr "Total items for this feeder"
 
@@ -146,7 +146,7 @@ msgstr "Information"
 msgid "Esta aplicacion utiliza los datos proporcionados por"
 msgstr "This aplication uses the data provided by"
 
-#: templates/miscosas/base.html:66
+#: templates/miscosas/base.html:65
 msgid "Página web escrita por Meritxell Diaz para la asignatura de SAT"
 msgstr "Web page written by Meritxell Diaz for SAT subject"
 
@@ -206,42 +206,42 @@ msgid "Explicacion"
 msgstr "Explanation"
 
 #: templates/miscosas/item.html:8
-msgid "Nombre canal"
+msgid "Nombre alimentador"
 msgstr "Feeder name"
 
 #: templates/miscosas/item.html:12 templates/miscosas/item.html:25
 msgid "Descripción"
 msgstr "Description"
 
-#: templates/miscosas/item.html:31
+#: templates/miscosas/item.html:33
 msgid "Comentarios de los usuarios"
 msgstr "Users feedback"
 
-#: templates/miscosas/item.html:35 templates/miscosas/item.html:38
+#: templates/miscosas/item.html:37 templates/miscosas/item.html:40
 msgid "El usuario"
 msgstr "User"
 
-#: templates/miscosas/item.html:35 templates/miscosas/item.html:38
+#: templates/miscosas/item.html:37 templates/miscosas/item.html:40
 msgid "ha dicho"
 msgstr "has said"
 
-#: templates/miscosas/item.html:35 templates/miscosas/item.html:38
+#: templates/miscosas/item.html:37 templates/miscosas/item.html:40
 msgid "A dia"
 msgstr "Date"
 
-#: templates/miscosas/item.html:54
+#: templates/miscosas/item.html:56
 msgid "Comentar item"
 msgstr "Comment item"
 
-#: templates/miscosas/item.html:58
+#: templates/miscosas/item.html:60
 msgid "Enviar comentario"
 msgstr "Send comment"
 
-#: templates/miscosas/item.html:64
+#: templates/miscosas/item.html:66
 msgid "Informacion del alimentador"
 msgstr "Feeder information"
 
-#: templates/miscosas/item.html:66
+#: templates/miscosas/item.html:68
 msgid "Puntuacion total del alimentador"
 msgstr "Total score"
 
@@ -285,33 +285,36 @@ msgstr "Voted items"
 msgid "Comentarios realizados"
 msgstr "Commented items"
 
-#: views.py:106
+#: views.py:107
 msgid "No se ha podido encontrar la URL para ese alimentador"
 msgstr "Cannot find the url for the feeder asked for"
 
-#: views.py:116
+#: views.py:117
 msgid "El alimentador pedido no se encuentra"
 msgstr "Cannot find the feeder asked for "
 
-#: views.py:159
+#: views.py:160
 msgid "El item pedido no existe"
 msgstr "The item asked for does not exit"
 
-#: views.py:228
+#: views.py:229
 msgid "No se soporta ese tipo de documento"
 msgstr "This type of document is not supported"
 
-#: views.py:275
+#: views.py:276
 msgid "Informacion de autenticacion no valida, o el usuario ya tiene cuenta"
 msgstr "Wrong registration infomation, or the user already has an account"
 
-#: views.py:278
+#: views.py:279
 msgid "El usuario o la contraseña no son correctos"
 msgstr "Incorrect nickname or password"
 
-#: views.py:320
+#: views.py:321
 msgid "El usuario pedido no existe"
 msgstr "The user asked for does not exist"
+
+#~ msgid "Nombre canal"
+#~ msgstr "Feeder name"
 
 #~ msgid "Canales elegidos"
 #~ msgstr "Choosen feeders"

@@ -18,9 +18,12 @@ class Alimentador(models.Model):
     nombre = models.CharField(max_length=64)
     enlace = models.TextField(default="") #al canal o al subreddit
     elegido = models.BooleanField(default=True)
+    #en el caso del reddit sera igual al nombre del subrredit
+    #en el caso del youtube sera el id del id_canal
+    #en el caso de fm sera el nombre del artista
     id_canal = models.CharField(max_length=64, default="")
     usuario = models.ManyToManyField(User)
-    #en el caso del reddit sera igual al nombre del subrredit
+
 
     def __str__(self):
         return self.nombre

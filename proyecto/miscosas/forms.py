@@ -13,7 +13,7 @@ class PagUsForm(forms.Form):
     estilo = forms.ChoiceField(widget = forms.Select, choices = CHOICES2, label=_('Estilo'))
 
 class AlimForm(forms.Form):
-    CHOICES = [('reddit', 'Reddit'), ('yt', 'Youtube')]
+    CHOICES = [('reddit', 'Reddit'), ('yt', 'Youtube'), ('fm', 'LastFm')]
     tipo_alimentador = forms.ChoiceField(widget = forms.Select, choices = CHOICES, label=_('Tipo de alimentador'))
     identificador_o_nombre = forms.CharField(label=_('Identificador o nombre')) #este sera el nombre en el modelo
 
