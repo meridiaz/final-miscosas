@@ -1,12 +1,5 @@
 #!/usr/bin/python3
 
-# Simple XML parser for YouTube XML channels
-# Jesus M. Gonzalez-Barahona <jgb @ gsyc.es> 2020
-# SARO and SAT subjects (Universidad Rey Juan Carlos)
-#
-# Example of XML document for a YouTube channel:
-# https://www.youtube.com/feeds/videos.xml?channel_id=UC300utwSVAYOoRLEqmsprfg
-
 from xml.sax.handler import ContentHandler
 from xml.sax import make_parser
 import sys

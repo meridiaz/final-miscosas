@@ -58,7 +58,6 @@
       <div id="alimentador_index">
         <h2>{%trans 'Alimentadores seleccionados:' %}</h2>
         {% for alim in alims %}
-          {%if alim.elegido%}
               <h3> -{% trans 'Nombre' %}: <a href="{{alimen.enlace}}">{{alim.nombre}}</a>, <a href="/alimentador/{{alim.id}}">({%trans 'detalle' %})</a></h3>
               <p>{%trans 'Numero de items de este alimentador:' %} {{alim.total_it}}</p>
               <p>{%trans 'Puntuacion total del alimentador:' %} {{alim.count_likes}}</p>
@@ -69,7 +68,6 @@
                     <button type="submit" name= "action" value="elegir"class="save btn btn-info">{%trans 'Elegir' %}</button>
                     <button type="submit" name= "action" value="eliminar"class="save btn btn-info">{%trans 'Eliminar' %}</button>
               </form>
-            {%endif%}
         {% endfor  %}
       </div>
     {% endblock %}

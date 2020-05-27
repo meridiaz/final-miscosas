@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-24 00:46+0200\n"
+"POT-Creation-Date: 2020-05-27 12:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,21 +82,16 @@ msgid "Lista de items"
 msgstr "Items list"
 
 #: templates/miscosas/alimentador.html:21
-#, fuzzy
-#| msgid "detalle"
-msgid "detail"
-msgstr "detail"
-
-#: templates/miscosas/alimentadores.html:7
-msgid "Lista de alimentadores"
-msgstr "Feeders list"
-
 #: templates/miscosas/alimentadores.html:9 templates/miscosas/index.html:22
 #: templates/miscosas/index.html:42 templates/miscosas/index.html:62
 #: templates/miscosas/item.html:8 templates/miscosas/usuario.html:37
 #: templates/miscosas/usuario.html:43
 msgid "detalle"
 msgstr "detail"
+
+#: templates/miscosas/alimentadores.html:7
+msgid "Lista de alimentadores"
+msgstr "Feeders list"
 
 #: templates/miscosas/alimentadores.html:10 templates/miscosas/item.html:67
 msgid "Numero de items de este alimentador"
@@ -285,33 +280,38 @@ msgstr "Voted items"
 msgid "Comentarios realizados"
 msgstr "Commented items"
 
-#: views.py:107
+#: views.py:104
 msgid "No se ha podido encontrar la URL para ese alimentador"
 msgstr "Cannot find the url for the feeder asked for"
 
-#: views.py:117
+#: views.py:114
 msgid "El alimentador pedido no se encuentra"
 msgstr "Cannot find the feeder asked for "
 
-#: views.py:160
+#: views.py:157
 msgid "El item pedido no existe"
 msgstr "The item asked for does not exit"
 
-#: views.py:229
+#: views.py:225
 msgid "No se soporta ese tipo de documento"
 msgstr "This type of document is not supported"
 
-#: views.py:276
+#: views.py:272
 msgid "Informacion de autenticacion no valida, o el usuario ya tiene cuenta"
 msgstr "Wrong registration infomation, or the user already has an account"
 
-#: views.py:279
+#: views.py:275
 msgid "El usuario o la contraseña no son correctos"
 msgstr "Incorrect nickname or password"
 
-#: views.py:321
+#: views.py:317
 msgid "El usuario pedido no existe"
 msgstr "The user asked for does not exist"
+
+#, fuzzy
+#~| msgid "detalle"
+#~ msgid "detail"
+#~ msgstr "detail"
 
 #~ msgid "Nombre canal"
 #~ msgstr "Feeder name"

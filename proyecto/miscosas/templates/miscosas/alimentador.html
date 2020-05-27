@@ -18,7 +18,7 @@
         <div id="lista_items">
             <h3> {% trans 'Lista de items' %}: </h3>
                 {% for item in alim.item_set.all %}
-                    <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">({% trans 'detail' %})</a></li></p>
+                    <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">({% trans 'detalle' %})</a></li></p>
                     <p>(Id: {{item.id}})</p>
                   {% endfor %}
           </div>

@@ -38,39 +38,64 @@ archivo_like={1:  ['like_sel.jpg', 'dis.jpg'],
             -1:  ['like.jpg', 'dis_sel.jpg'],
 }
 
+def devolver_404(request, url, context):
+    resp = render(request, url, context)
+    resp.status_code = 404
+    return resp
 
 def info(request):
     return render(request, 'miscosas/info.html', {'nav_info': "active", 'recurso_us': "/informacion"})
 
+def procesar_docs_users(request, lista):
+    doc = request.GET['format']
+    if doc == "xml":
+        return HttpResponse(XML_create().xml_users(lista)
+                            , content_type="text/xml")
+    elif doc == "json":
+        return HttpResponse(JSON_create().json_users(lista)
+                            , content_type="application/json")
+    else:
+        context = {'error': _("No se soporta ese tipo de documento"), 'recurso_us': '/usuarios'}
+        return devolver_404(request, 'miscosas/pag_error.html', context)
+
 def usuarios(request):
     lista = PagUsuario.objects.all()
+    if 'format' in request.GET.keys():
+        return procesar_docs_users(request, lista)
     context = {'lista': lista, 'recurso_us': "/usuarios", 'nav_users': 'active'}
     return render(request, 'miscosas/usuarios.html', context)
 
+def procesar_docs_alims(request, lista):
+    doc = request.GET['format']
+    if doc == "xml":
+        return HttpResponse(XML_create().xml_alims(lista)
+                            , content_type="text/xml")
+    elif doc == "json":
+        return HttpResponse(JSON_create().json_alims(lista)
+                            , content_type="application/json")
+    else:
+        context = {'error': _("No se soporta ese tipo de documento"), 'recurso_us': '/alimentadores'}
+        return devolver_404(request, 'miscosas/pag_error.html', context)
+
 def alimentadores(request):
     lista = Alimentador.objects.all()
+    if 'format' in request.GET.keys():
+        return procesar_docs_alims(request, lista)
     context = {'lista': lista, 'recurso_us': "/alimentadores", 'nav_alims': 'active'}
     return render(request, 'miscosas/alimentadores.html', context)
 
 def nombre_persona(user):
     #funcion que devuelve el nombre del usuario si esta registrado
     #o el codigo de la cookie en caso de no estarlo
-    print("en nombre persona"+user.username)
     if user.is_authenticated:
         return user
     else:
-        return "pechuga"
+        return ""
 
 def guardar_us_enalim(user, id):
     #funcion que guarda el usuario al que le ha dado a elegir al alimentador
-    print("enguardar us")
-    print(id)
     alim = Alimentador.objects.get(id=id)
-    print(alim.nombre)
-    print(alim.id)
-    #este if borrar cuando haga con cookies
-    print(nombre_persona(user))
-    if nombre_persona(user) != "pechuga":
+    if nombre_persona(user) != "":
         alim.usuario.add(nombre_persona(user))
 
 def leer_xml(tipo, nombre):
@@ -96,6 +121,17 @@ def gestionar_alims(request):
 #un solo boton
 #elegio = False --> elegido= True, #añado a la lista de usuarios, actualizar datos
 #elegido = True--> elegido = False,
+def procesar_docs_alim(request, alim):
+    doc = request.GET['format']
+    if doc == "xml":
+        return HttpResponse(XML_create().xml_alim(alim)
+                            , content_type="text/xml")
+    elif doc == "json":
+        return HttpResponse(JSON_create().json_alim(alim)
+                            , content_type="application/json")
+    else:
+        context = {'error': _("No se soporta ese tipo de documento"), 'recurso_us': '/alimentador'+str(alim.id)}
+        return devolver_404(request, 'miscosas/pag_error.html', context)
 
 def alimentador(request, id=-1):
     if request.method == "POST":
@@ -106,20 +142,23 @@ def alimentador(request, id=-1):
         if id == -1:
             context = {'error': _("No se ha podido encontrar la URL para ese alimentador"),
                         'recurso_us': '/'}
-            return render(request, 'miscosas/pag_error.html', context)
+            return devolver_404(request, 'miscosas/pag_error.html', context)
         else:
             guardar_us_enalim(request.user, id)
-            return redirect('/alimentador/'+str(id))
-    elif request.method == "GET":
-        try:
-            alim = Alimentador.objects.get(id=id)
-        except ObjectDoesNotExist:
-            context = {'error': _("El alimentador pedido no se encuentra"),
-                    'recurso_us': '/'}
-            return render(request, 'miscosas/pag_error.html', context)
+            #return redirect('/alimentador/'+str(id))
 
-        context = {'alim': alim, 'recurso_us': '/alimentador/'+str(alim.id)}
-        return render(request, 'miscosas/alimentador.html', context)
+    try:
+        alim = Alimentador.objects.get(id=id)
+    except ObjectDoesNotExist:
+        context = {'error': _("El alimentador pedido no se encuentra"),
+                'recurso_us': '/'}
+        return devolver_404(request, 'miscosas/pag_error.html', context)
+
+    if 'format' in request.GET.keys():
+        return procesar_docs_alim(request, alim)
+
+    context = {'alim': alim, 'recurso_us': '/alimentador/'+str(alim.id)}
+    return render(request, 'miscosas/alimentador.html', context)
 
 def gestionar_voto(action, request, item):
     if action == "like":
@@ -158,7 +197,7 @@ def mostrar_item(request, id):
         item = Item.objects.get(id=id)
     except ObjectDoesNotExist:
         context = {"error": _("El item pedido no existe"), 'recurso_us': '/'}
-        return render(request, 'miscosas/pag_error.html', context)
+        return devolver_404(request, 'miscosas/pag_error.html', context)
 
     if request.method == "POST":
         action = request.POST['action']
@@ -217,17 +256,16 @@ def procesar_post_index(request):
     return redirect('/')
 
 def procesar_docs(request, top10, top5, lista):
-    lan = get_lang(request.META['HTTP_ACCEPT_LANGUAGE'])
     doc = request.GET['format']
     if doc == "xml":
-        return HttpResponse(XML_create(top10, top5, lista).xml_to_string()
+        return HttpResponse(XML_create().xml_index(top10, top5, lista)
                             , content_type="text/xml")
     elif doc == "json":
-        return HttpResponse(JSON_create(top10, top5, lista).json_to_string()
+        return HttpResponse(JSON_create().json_index(top10, top5, lista)
                             , content_type="application/json")
     else:
         context = {'error': _("No se soporta ese tipo de documento"), 'recurso_us': '/'}
-        return render(request, 'miscosas/pag_error.html', context)
+        return devolver_404(request, 'miscosas/pag_error.html', context)
 
 def index(request):
     #visto en: https://stackoverflow.com/questions/18198977/django-sum-a-field-based-on-foreign-key
@@ -248,11 +286,11 @@ def index(request):
                                     Coalesce('like__fecha', Value(fixed_date))).order_by('-nueva_fecha')[0:5]
         add_boton_voto(top5, request)
 
-    lista = Alimentador.objects.all()
+    lista = Alimentador.objects.all().filter(elegido=True)
     if 'format' in request.GET.keys():
         return procesar_docs(request, top10, top5, lista)
 
-    print(User.objects.get(username="daniel").alimentador_set.all())
+    #print(User.objects.get(username="daniel").alimentador_set.all())
 
     context = {'user': request.user, 'recurso_us': '/', 'form': AlimForm(),
                 'nav_index': 'active', 'top10': top10, 'top5': top5, 'alims': lista}
@@ -291,7 +329,7 @@ def login_view(request):
                 do_login(request, user)
         else:
             context = {'recurso_us': recurso_us, 'error': msg, 'recurso_us': '/'}
-            return render(request, 'miscosas/pag_error.html', context)
+            return devolver_404(request, 'miscosas/pag_error.html', context)
 
     return redirect(recurso_us)
 
@@ -310,6 +348,18 @@ def procesar_post_pagus(request):
             pagUsEstilo.estilo = form.cleaned_data['estilo']
     pagUsEstilo.save()
 
+def procesar_docs_us(request, pag_us):
+    doc = request.GET['format']
+    if doc == "xml":
+        return HttpResponse(XML_create().xml_us(pag_us)
+                            , content_type="text/xml")
+    elif doc == "json":
+        return HttpResponse(JSON_create().json_us(pag_us)
+                            , content_type="application/json")
+    else:
+        context = {'error': _("No se soporta ese tipo de documento"), 'recurso_us': '/'+pag_us.usuario.username}
+        return devolver_404(request, 'miscosas/pag_error.html', context)
+
 def cuenta_usuario(request, us):
     if request.method == 'POST':
         procesar_post_pagus(request)
@@ -319,7 +369,10 @@ def cuenta_usuario(request, us):
         pagUsEstilo = PagUsuario.objects.get(usuario=usuario)
     except ObjectDoesNotExist:
         context = {'error': _("El usuario pedido no existe"), 'recurso_us': '/'}
-        return render(request, 'miscosas/pag_error.html', context)
+        return devolver_404(request, 'miscosas/pag_error.html', context)
+
+    if 'format' in request.GET.keys():
+        return procesar_docs_us(request, pagUsEstilo)
 
     lista_vot = Item.objects.filter(like__usuario = usuario)
     lista_comen = Item.objects.filter(comentario__usuario = usuario).distinct()
