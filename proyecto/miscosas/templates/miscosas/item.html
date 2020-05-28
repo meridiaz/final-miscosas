@@ -34,10 +34,10 @@
               {% for comentario in lista %}
                     {%if comentario.foto%}
                       <img src='{% static '/miscosas/'%}{{comentario.foto.url}}'  width="80" height="75" align="left">
+                    {%endif %}
                       <p>   - {% trans 'El usuario' %} {{comentario.usuario.username}} {% trans 'ha dicho' %}: {{comentario.texto}}. {% trans 'A dia' %} {{comentario.fecha}}</p>
+                    {%if comentario.foto%}
                       <br></br>
-                    {%else%}
-                      <p>   - {% trans 'El usuario' %} {{comentario.usuario.username}} {% trans 'ha dicho' %}: {{comentario.texto}}. {% trans 'A dia' %} {{comentario.fecha}}</p>
                     {%endif %}
 
 

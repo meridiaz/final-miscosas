@@ -135,9 +135,6 @@ def procesar_docs_alim(request, alim):
 
 def alimentador(request, id=-1):
     if request.method == "POST":
-        # if 'action' in request.POST:
-        #     id = gestionar_elegido_o_eliminado(request)
-        # else:
         id = gestionar_alims(request)
         if id == -1:
             context = {'error': _("No se ha podido encontrar la URL para ese alimentador"),
@@ -145,7 +142,6 @@ def alimentador(request, id=-1):
             return devolver_404(request, 'miscosas/pag_error.html', context)
         else:
             guardar_us_enalim(request.user, id)
-            #return redirect('/alimentador/'+str(id))
 
     try:
         alim = Alimentador.objects.get(id=id)
@@ -337,11 +333,11 @@ def procesar_post_pagus(request):
     action = request.POST['action']
     pagUsEstilo = PagUsuario.objects.get(usuario=request.user)
 
-    if action=="foto":
+    if action == "foto":
         form = UploadImageForm(request.POST, request.FILES)
         if form.is_valid():
             pagUsEstilo.foto = form.cleaned_data['foto']
-    elif action=="formato":
+    elif action == "formato":
         form = PagUsForm(request.POST)
         if form.is_valid():
             pagUsEstilo.tamLetra = form.cleaned_data['tamano']
