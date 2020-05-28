@@ -1,5 +1,5 @@
 import string
-from .models import Item, Alimentador
+from .models import Item, Alimentador, Comentario
 import xml.etree.ElementTree as ET
 import json
 
@@ -44,6 +44,18 @@ class JSON_create():
         element['enlace_miscosas'] = "/usuario/"+elemento.usuario.username
         return element
 
+    def insert_comen_json(self, elemento):
+        """Inserta un usuario en el diccionario para el JSON"""
+        element = {}
+        element['nombre'] = elemento.usuario.username
+        element['texto'] = elemento.texto
+        element['fecha'] = str(elemento.fecha)
+        if elemento.foto:
+            element['foto'] = '/static/miscosas/'+ elemento.foto.url
+        else:
+            element['foto'] = ''
+        return element
+
     def insert_lista_json(self, lista, dic, etiqueta):
         for i in lista:
             if etiqueta == "top5" or etiqueta == "lista_items" \
@@ -55,6 +67,8 @@ class JSON_create():
                 dic['alimentadores'].append(self.insertar_alims_json(i))
             elif etiqueta == "usuarios":
                 dic['usuarios'].append(self.insertar_users_json(i))
+            elif etiqueta == "comentarios":
+                dic['comentarios'].append(self.insert_comen_json(i))
 
 
     def __init__ (self):
@@ -88,6 +102,7 @@ class JSON_create():
         element['enlace_miscosas'] = "/alimentador/"+str(elemento.id)
         return element
 
+
     def insert_us_json(self, elemento):
         """Inserta un usuario en el diccionario para el JSON"""
         element = {}
@@ -116,6 +131,18 @@ class JSON_create():
         self.dic['usuario'].append(self.insert_us_json(pagus))
         return json.dumps(self.dic, indent=4)
 
+    def json_item(self, item):
+        self.dic['item'] = []
+        self.dic['comentarios'] = []
+        self.dic['alimentador'] = []
+        self.dic['alimentador'].append(self.insert_alim_json(item.alimentador))
+        self.dic['item'].append(self.insertar_top5_json(item))
+        element = {}
+        element['descrip'] = item.descrip
+        self.dic['item'].append(element)
+        self.insert_lista_json(Comentario.objects.filter(item=item), self.dic, "comentarios")
+        return json.dumps(self.dic, indent=4)
+
 class XML_create():
     def insertar_atributo_xml(self, child, atributo, valor):
         """Inserta un atributo en el arbol XML"""
@@ -139,7 +166,7 @@ class XML_create():
         self.insertar_atributo_xml(child, "ENLACE_MISCOSAS", "/item/"+str(elemento.id))
 
     def insertar_elemento_xml_alims(self, child, elemento):
-        """Inserto cada elemento de la lista en el arbol XML"""
+        """Inserto cada alimentador de la lista en el arbol XML"""
         self.insertar_atributo_xml(child, "NOMBRE", elemento.nombre)
         self.insertar_atributo_xml(child, "ENLACE", elemento.enlace)
         self.insertar_atributo_xml(child, "ID", str(elemento.id))
@@ -170,6 +197,16 @@ class XML_create():
         else:
             self.insertar_atributo_xml(child, "FOTO", '')
 
+    def insertar_elemento_xml_comen(self, child, elemento):
+        """Inserto cada comentario de la lista en el arbol XML"""
+        self.insertar_atributo_xml(child, "TEXTO", elemento.texto)
+        self.insertar_atributo_xml(child, "USUARIO", elemento.usuario.username)
+        self.insertar_atributo_xml(child, "FECHA", str(elemento.fecha))
+        if elemento.foto:
+            self.insertar_atributo_xml(child, "FOTO", '/static/miscosas/'+ elemento.foto.url)
+        else:
+            self.insertar_atributo_xml(child, "FOTO", '')
+
     def insert_lista(self ,lista, etiqueta):
         recurso = ET.SubElement(self.root, etiqueta)
         for i in lista:
@@ -186,7 +223,9 @@ class XML_create():
             elif etiqueta == "usuarios":
                 child = ET.SubElement(recurso, 'usuario')
                 self.insertar_elemento_xml_us(child, i)
-
+            elif etiqueta == "comentarios":
+                child = ET.SubElement(recurso, 'comentario')
+                self.insertar_elemento_xml_comen(child, i)
 
 
     def __init__ (self):
@@ -219,4 +258,13 @@ class XML_create():
         self.insert_us(pag_us)
         self.insert_lista(lista_vot, 'lista_vot')
         self.insert_lista(lista_comen, 'lista_comen')
+        return ET.tostring(self.root)
+
+    def xml_item(self, item):
+        child = ET.SubElement(self.root, 'alimentador')
+        self.insertar_elemento_xml_alims(child, item.alimentador)
+        child = ET.SubElement(self.root, 'item')
+        self.insertar_elemento_xml_top5(child, item)
+        self.insertar_atributo_xml(child, "DESCRIP", item.descrip)
+        self.insert_lista(Comentario.objects.filter(item=item), 'comentarios')
         return ET.tostring(self.root)

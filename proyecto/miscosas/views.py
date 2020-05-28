@@ -188,6 +188,18 @@ def iluminar_voto(request, item):
 
     return path_foto_votar + archivo_like[valor][0], path_foto_votar +archivo_like[valor][1]
 
+def procesar_docs_item(request, item):
+    doc = request.GET['format']
+    if doc == "xml":
+        return HttpResponse(XML_create().xml_item(item)
+                            , content_type="text/xml")
+    elif doc == "json":
+        return HttpResponse(JSON_create().json_item(item)
+                            , content_type="application/json")
+    else:
+        context = {'error': _("No se soporta ese tipo de documento"), 'recurso_us': '/alimentador'+str(item.id)}
+        return devolver_404(request, 'miscosas/pag_error.html', context)
+
 def mostrar_item(request, id):
     try:
         item = Item.objects.get(id=id)
@@ -201,6 +213,9 @@ def mostrar_item(request, id):
             gestionar_comen(request, item)
         elif action=="like" or action =="dislike":
             gestionar_voto(action, request, item)
+
+    if 'format' in request.GET.keys():
+        return procesar_docs_item(request, item)
 
     boton_like, boton_dislike = iluminar_voto(request, item)
     lista = Comentario.objects.filter(item=item)
