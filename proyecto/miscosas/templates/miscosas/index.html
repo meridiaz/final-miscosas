@@ -4,37 +4,8 @@
 
     {% block contenido %}
 
-    <div id="formalimentadores">
-      <!--<h2>Formularios de alimentadores:</h2>-->
-      <form method="POST" action="/alimentador/-1">
-        <h3>{%trans 'Formulario de alimentadores:'%}</h3>
-        {% csrf_token %}
-        {{form.as_p}}
-        <!-- <input class="textbox" type="text" name="referencia del formulario" placeholder="Identificador"> -->
-        <button type="submit" action="enviar">{%trans 'Elegir alimentador'%}</button>
-      </form>
-      </div>
-      {% if user.is_authenticated %}
-      <div id="top5">
-      <h2>{%trans 'Top 5 ultimos items votados:' %}</h2>
-          {% if top5 %}
-                {% for item in top5 %}
-                    <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">({%trans 'detalle' %})</a></li></p>
-                        <form method="POST" action="/">
-                          {% csrf_token %}
-                          <input type="hidden" name="item" value="{{item.titulo}}" >
-                          <button type="submit" name= "action" value="like" class="save btn btn-info"><img src = "{{item.boton_like}}" width="30" height="15"></button>
-                          <button type="submit" name= "action" value="dislike" class="save btn btn-info"><img src = "{{item.boton_dislike}}" width="30" height="15"></button>
-                        </form>
-
-                {% endfor%}
-            {%else%}
-                <p> {% trans 'Vacío' %} </p>
-            {%endif%}
-          </div>
-      {% endif%}
-
-
+  <div class="row">
+    <div class="col-xs-6">
     <div id="top10">
       <h2>{%trans 'Top 10 items mas votados:' %}</h2>
       <p>({% trans 'Ordenados empezando por el mas votado' %})</p>
@@ -69,5 +40,43 @@
                     <button type="submit" name= "action" value="eliminar"class="save btn btn-info">{%trans 'Eliminar' %}</button>
               </form>
         {% endfor  %}
+      </div>
+      </div>
+
+      <div class="col mini-box">
+        <div class="row float-right">
+      <div id="formalimentadores">
+        <!--<h2>Formularios de alimentadores:</h2>-->
+        <form method="POST" action="/alimentador/-1">
+          <h3>{%trans 'Formulario de alimentadores:'%}</h3>
+          {% csrf_token %}
+          {{form.as_p}}
+          <!-- <input class="textbox" type="text" name="referencia del formulario" placeholder="Identificador"> -->
+          <button type="submit" action="enviar">{%trans 'Elegir alimentador'%}</button>
+        </form>
+        </div>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="row float-right">
+        <div id="top5">
+        <h2>{%trans 'Top 5 ultimos items votados:' %}</h2>
+            {% if top5 %}
+                  {% for item in top5 %}
+                      <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">({%trans 'detalle' %})</a></li></p>
+                          <form method="POST" action="/">
+                            {% csrf_token %}
+                            <input type="hidden" name="item" value="{{item.titulo}}" >
+                            <button type="submit" name= "action" value="like" class="save btn btn-info"><img src = "{{item.boton_like}}" width="30" height="15"></button>
+                            <button type="submit" name= "action" value="dislike" class="save btn btn-info"><img src = "{{item.boton_dislike}}" width="30" height="15"></button>
+                          </form>
+
+                  {% endfor%}
+              {%else%}
+                  <p> {% trans 'Vacío' %} </p>
+              {%endif%}
+            </div>
+            </div>
+        {% endif%}
+        </div>
       </div>
     {% endblock %}

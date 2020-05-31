@@ -385,8 +385,8 @@ def cuenta_usuario(request, us):
     if 'format' in request.GET.keys():
         return procesar_docs_us(request, pagUsEstilo)
 
-    lista_vot = Item.objects.filter(like__usuario = usuario)
-    lista_comen = Item.objects.filter(comentario__usuario = usuario).distinct()
+    lista_vot = Item.objects.filter(like__usuario=usuario)
+    lista_comen = Item.objects.filter(comentario__usuario=usuario).distinct()
     context = {'form_estilo': PagUsForm(), 'usuario': usuario, 'recurso_us': '/usuario/'+us,
                 'pag_us': pagUsEstilo, 'form_foto': UploadImageForm(),
                 'us_log': request.user, 'lista_vot': lista_vot, 'lista_comen': lista_comen}

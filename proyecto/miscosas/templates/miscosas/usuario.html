@@ -5,25 +5,8 @@
 
 {%block contenido%}
 
-{%if us_log.is_authenticated and us_log == usuario%}
-  <div id="cambiarestilo" >
-      <h3> {% trans 'Cambiar formato' %}</h3>
-      <form method="POST" action="/usuario/{{usuario.username}}">
-          {% csrf_token %}
-          {{ form_estilo.as_p }}
-          <button type="submit" name="action" class="save btn btn-info" value="formato">{% trans 'Guardar' %}</button>
-      </form>
-    </div>
-  <div id="fotoperfil" >
-      <h3> {% trans 'Cambiar foto de perfil' %}</h3>
-      <form method="POST" action="/usuario/{{usuario.username}}" enctype="multipart/form-data">
-          {% csrf_token %}
-          {{ form_foto.as_p }}
-        <button type="submit" name="action"class="save btn btn-info" value="foto">{% trans 'Enviar' %}</button>
-      </form>
-  </div>
-
-  {%endif%}
+<div class="row">
+  <div class="col-xs-6">
       <div id="presentacion_us">
             <h2>{% trans 'Nombre' %}: {{usuario.username}}</h2>
               {%if pag_us.foto%}
@@ -43,4 +26,32 @@
                 <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">({% trans 'detalle' %})</a></li></p>
             {%endfor%}
           </div>
+    </div>
+    {%if us_log.is_authenticated and us_log == usuario%}
+    <div class="col mini-box">
+        <div class="row float-right">
+          <div id="fotoperfil" >
+              <h3> {% trans 'Cambiar foto de perfil' %}</h3>
+              <form method="POST" action="/usuario/{{usuario.username}}" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  {{ form_foto.as_p }}
+                <button type="submit" name="action"class="save btn btn-info" value="foto">{% trans 'Enviar' %}</button>
+              </form>
+          </div>
+          </div>
+          <div class="row float-right">
+            <div id="cambiarestilo" >
+                <h3> {% trans 'Cambiar formato' %}</h3>
+                <form method="POST" action="/usuario/{{usuario.username}}">
+                    {% csrf_token %}
+                    {{ form_estilo.as_p }}
+                    <button type="submit" name="action" class="save btn btn-info" value="formato">{% trans 'Guardar' %}</button>
+                </form>
+              </div>
+
+          </div>
+      </div>
+      {%endif%}
+
+  </div>
 {% endblock %}

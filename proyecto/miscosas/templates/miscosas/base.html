@@ -14,30 +14,35 @@
     <title>{% trans 'Mis Cosas Web' %}</title>
   </head>
   <body>
-
     <div id="cabecera" >
+    <div class="row">
+
       <!-- imagen del sitio #2d6360;-->
-      <img src="{% static "miscosas/banner2.jpg" %}" width="186" height="150" align="left">
-      <h1>{% trans 'MIS COSAS WEB' %}</h1>
-        <h2>{% trans 'BIENVENIDO' %}</h2>
-        <!-- <p>{{error}}</p> -->
-        {% if user.is_authenticated %}
-               <h2>{{user.username}}
-               <a href="/logout?recurso={{recurso_us}}">Logout</a></h2>
-        {% else %}
+      <div class="col-3">
+        <img src="{% static "miscosas/banner2.jpg" %}" width="186" height="150" align="left">
+      </div>
+        <div class="col-5">
+        <h1>{% trans 'MIS COSAS WEB' %}</h1>
+        </div>
+        <div class="col-4">
+          <h2>{% trans 'BIENVENIDO' %}</h2>
+          <!-- <p>{{error}}</p> -->
+          {% if user.is_authenticated %}
+                 <h2>{{user.username}}
+                 <a href="/logout?recurso={{recurso_us}}">Logout</a></h2>
+          {% else %}
 
-             <form method="POST" action="/login?recurso={{recurso_us}}">
-                {% csrf_token %}
+               <form method="POST" action="/login?recurso={{recurso_us}}">
+                  {% csrf_token %}
 
-               <input class="textbox" type="text" name="username" placeholder="Username" style = "margin-bottom: 5">
-                <input class="textbox" type="password" name="password" placeholder={% trans "Contraseña"%}>
-                <button type="submit" name ="action" value="Login" style="right: 15%">Login</button>
-                <button type="submit" name="action" value="Registrar">{% trans 'Registrar' %}</button>
-              </form>
-          {% endif %}
-
-
-
+                 <input class="textbox" type="text" name="username" placeholder="Username" style = "margin-bottom: 5">
+                  <input class="textbox" type="password" name="password" placeholder={% trans "Contraseña"%}>
+                  <button type="submit" name ="action" value="Login" style="right: 15%">Login</button>
+                  <button type="submit" name="action" value="Registrar">{% trans 'Registrar' %}</button>
+                </form>
+            {% endif %}
+            </div>
+        </div>
     </div>
     <div class="nav nav-pills">
       <li class="nav-item">
@@ -54,6 +59,7 @@
       </li>
     </div>
     <div id="contenido">
+
         {% block contenido %}
         {% endblock %}
     </div>
