@@ -228,22 +228,6 @@ def add_boton_voto(top, request):
     for it in top:
         it.boton_like, it.boton_dislike = iluminar_voto(request, it)
 
-# def gestionar_elegido(request):
-#     action = request.POST['action']
-#     alim = Alimentador.objects.get(id=request.POST['alim'])
-#     if action == "elegir":
-#         id = leer_xml(alim.tipo, alim.id_canal)
-#         alim.elegido = True
-#
-#     elif action == "eliminar":
-#         alim.elegido = False
-#         id = alim.id
-#         if 'enviar' in request.POST:
-#             return redirect()
-#
-#     alim.save()
-#     return id
-
 def procesar_post_index(request):
     action = request.POST['action']
     if action == "elegir":

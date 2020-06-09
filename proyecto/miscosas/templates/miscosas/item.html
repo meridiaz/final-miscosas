@@ -44,15 +44,10 @@
               {% endfor  %}
           </div>
           {% if user.is_authenticated %}
-            <div id="votar_item">
-                <!-- <h3>Votar item </h3> -->
-                <form method="POST" action="/item/{{item.id}}">
-                  {% csrf_token %}
-                  <button type="submit" name= "action" value="like" class="save btn btn-info"><img src = "{{boton_like}}" width="50" height="30"></button>
-                  <button type="submit" name= "action" value="dislike" class="save btn btn-info"><img src = "{{boton_dislike}}" width="50" height="30"></button>
-                </form>
-              </div>
-               <div id="formu_comentario">
+          <div class="row">
+
+              <div class="col-xs-12 col-md-8 col-lg-8 col-sm-8">
+                <div id="formu_comentario">
                   <h3>{% trans 'Comentar item' %}</h3>
                   <form method="POST" action="/item/{{item.id}}" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -60,7 +55,18 @@
                     <button type="submit" name= "action" value="comentario"class="save btn btn-info">{% trans 'Enviar comentario' %}</button>
                   </form>
                 </div>
-
+              </div>
+              <div class="col mini-box col mini-box col-xs-12 col-md-4 col-lg-4 col-sm-4">
+                <div id="votar_item">
+                    <!-- <h3>Votar item </h3> -->
+                    <form method="POST" action="/item/{{item.id}}">
+                      {% csrf_token %}
+                      <button type="submit" name= "action" value="like" class="save btn btn-info"><img src = "{{boton_like}}" width="50" height="30"></button>
+                      <button type="submit" name= "action" value="dislike" class="save btn btn-info"><img src = "{{boton_dislike}}" width="50" height="30"></button>
+                    </form>
+                  </div>
+                </div>
+            </div>
             {% endif %}
             <div id="info_alim_enitem">
                 <h3>{% trans 'Informacion del alimentador' %}:</h3>

@@ -58,7 +58,7 @@ p{
 
 #cabecera h1{
   position: absolute;
-  top:40%;
+  top:37%;
   left: 20%;
   font-size: 45px;
   text-align: center;
@@ -160,8 +160,8 @@ button{
   padding-left: 20px;
   /* position: absolute;
   text-align:left;
-  right: 3%; */
-  margin-bottom: 10%;
+  right: 3%;
+  margin-bottom: 10%;*/
   border: 3px solid grey;
    /* background-color: #aca2a2; */
   border-radius: 6px;
@@ -192,9 +192,9 @@ button{
 }
 
 #votar_item{
-  position: absolute;
-  left: 50%;
-  margin-top: 4%;
+/*  position: absolute;
+  left: 50%;*/
+  margin-top: 5%;
 }
 
 #usuario{
