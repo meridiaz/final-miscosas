@@ -3,7 +3,7 @@
 
   position: relative;
 
-  height:166px;
+  /*height:166px;*/
   text-align:right;
   background: #2d6360 100% url(static/miscosas/{{fondo_cabec}});
 }
@@ -57,21 +57,18 @@ p{
 }
 
 #cabecera h1{
-  position: absolute;
+  /*position: absolute;
   top:37%;
-  left: 20%;
+  left: 20%;*/
+
   font-size: 45px;
+  padding-top: 10%;
   text-align: center;
 }
 
 
 #cabecera form{
-  /* position: absolute;
-  box-sizing: content-box; */
   padding: 5px;
-  /* text-align:right;
-  right: 2%; */
-
 }
 
 .nav{
@@ -98,13 +95,6 @@ p{
 body{
   background: 100% url(static/miscosas/{{fondo}});
 
-}
-
-#cabecera button{
-  position: absolute;
-  top: 85%;
-  right: 32%;
-  margin-top: 3;
 }
 
 button{
