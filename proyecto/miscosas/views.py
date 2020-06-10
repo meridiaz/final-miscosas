@@ -294,12 +294,19 @@ def index(request):
 
 def logout_view(request):
     logout(request)
-    recurso_us = request.GET['recurso']
+    if 'recurso' in request.GET:
+        recurso_us = request.GET['recurso']
+    else:
+        recurso_us = '/'
     return redirect(recurso_us)
 
 
 def login_view(request):
-    recurso_us = request.GET['recurso']
+    if 'recurso' in request.GET:
+        recurso_us = request.GET['recurso']
+    else:
+        recurso_us = '/'
+
     if request.method == "POST":
         action = request.POST['action']
         request.POST =  request.POST.copy()

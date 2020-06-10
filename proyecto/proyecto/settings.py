@@ -27,7 +27,7 @@ SECRET_KEY = '(gtu&#!a-h5@kke0g&q)idyjp%(5zd14h1#qmgu-@rq$i98x%('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [pichu.pythonanywhere.com]
+ALLOWED_HOSTS = ['pichu.pythonanywhere.com', 'localhost']
 
 
 # Application definition
