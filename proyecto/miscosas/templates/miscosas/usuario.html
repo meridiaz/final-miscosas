@@ -26,6 +26,12 @@
                 <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">({% trans 'detalle' %})</a></li></p>
             {%endfor%}
           </div>
+          <div id="alim_sel">
+            <h3> {% trans 'Lista de alimentadores seleccionados por este usuario' %} </h3>
+            {% for alim in lista_sel %}
+                <p><li><a href="{{alim.enlace}}">{{alim.nombre}}</a> <a href="/alimentador/{{alim.id}}">({% trans 'detalle' %})</a></li></p>
+            {%endfor%}
+          </div>
     </div>
     {%if us_log.is_authenticated and us_log == usuario%}
     <div class="col mini-box col-xs-12 col-md-4 col-lg-4 col-sm-4">

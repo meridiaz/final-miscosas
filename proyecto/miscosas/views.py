@@ -379,9 +379,11 @@ def cuenta_usuario(request, us):
 
     lista_vot = Item.objects.filter(like__usuario=usuario)
     lista_comen = Item.objects.filter(comentario__usuario=usuario).distinct()
+    lista_sel = Alimentador.objects.filter(usuario=usuario)
     context = {'form_estilo': PagUsForm(), 'usuario': usuario, 'recurso_us': '/usuario/'+us,
                 'pag_us': pagUsEstilo, 'form_foto': UploadImageForm(),
-                'us_log': request.user, 'lista_vot': lista_vot, 'lista_comen': lista_comen}
+                'us_log': request.user, 'lista_vot': lista_vot,
+                'lista_comen': lista_comen, 'lista_sel': lista_sel}
     return render(request, 'miscosas/usuario.html', context)
 
 
