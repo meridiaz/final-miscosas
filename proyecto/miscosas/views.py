@@ -142,7 +142,7 @@ def alimentador(request, id=-1):
             return devolver_404(request, 'miscosas/pag_error.html', context)
         else:
             guardar_us_enalim(request.user, id)
-        return redirect('/alimentador/'+id)
+        return redirect('/alimentador/'+str(id))
 
     try:
         alim = Alimentador.objects.get(id=id)
