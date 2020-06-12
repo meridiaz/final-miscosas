@@ -35,9 +35,25 @@ class TestViewsIndex(TestCase):
 
     def test_post_eliminar(self):
         alim = Alimentador.objects.get(nombre="gato")
+
+
+
+    def test_post_elegir(self):
+        #meto un nuevo alimentador
+        id = "UCT9zcQNlyht7fRlcjmflRSA"
+        response = self.client.post('/alimentador/-1', {'identificador_o_nombre': id,
+                                    'tipo_alimentador': 'yt', 'action': "enviar"})
+        alim = Alimentador.objects.get(id_canal=id)
+        #lo elimino en la pagina principal
         response = self.client.post('/', {'alim': alim.id, 'action': 'eliminar'})
         self.assertEqual(response.status_code, 302) #me redirige otra vez a la /
         self.assertEqual(response.url, "/")
+        self.assertFalse(Alimentador.objects.get(id_canal=id).elegido)
+        #lo vuelvo a elegir
+        response = self.client.post('/', {'alim': alim.id, 'action': 'elegir'})
+        self.assertEqual(response.status_code, 302) #me redirige al alimentador
+        self.assertEqual(response.url, "/alimentador/"+str(alim.id))
+        self.assertTrue(Alimentador.objects.get(id_canal=id).elegido)
 
 
     def test_get_ok(self):
@@ -68,9 +84,10 @@ class TestViewsAlim(TestCase):
         content = response.content.decode(encoding='UTF-8')
         self.assertTrue(Alimentador.objects.filter(id_canal=id).exists())
         alim = Alimentador.objects.get(id_canal=id)
-        response = self.client.post('/alimentador/'+str(alim.id), {'alim': alim.id, 'action': "eliminar"})
-        print(alim.elegido)
-        self.assertFalse(alim.elegido)
+        response = self.client.post('/?enviar=alimentador', {'alim': alim.id, 'action': "eliminar"})
+        self.assertFalse(Alimentador.objects.get(id_canal=id).elegido)
+        self.assertEqual(response.url, "/alimentador/"+str(alim.id))
+
 
     def test_get_ok(self):
         alim = Alimentador.objects.get(nombre="gato")

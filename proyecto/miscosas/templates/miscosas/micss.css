@@ -3,9 +3,6 @@
   position: relative;
   text-align:right;
   background: #2d6360 100% url(static/miscosas/{{fondo_cabec}});
-}
-
-#cabecera .row {
   margin-right: 0px;
 }
 
