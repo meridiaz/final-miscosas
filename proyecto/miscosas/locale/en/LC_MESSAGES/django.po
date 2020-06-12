@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-27 12:53+0200\n"
+"POT-Creation-Date: 2020-06-12 18:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,17 +63,17 @@ msgid "Foto"
 msgstr "Photo"
 
 #: templates/miscosas/alimentador.html:6
-#: templates/miscosas/alimentadores.html:9 templates/miscosas/index.html:62
-#: templates/miscosas/item.html:7 templates/miscosas/usuario.html:28
+#: templates/miscosas/alimentadores.html:9 templates/miscosas/index.html:32
+#: templates/miscosas/item.html:7 templates/miscosas/usuario.html:11
 #: templates/miscosas/usuarios.html:11
 msgid "Nombre"
 msgstr "Name"
 
-#: templates/miscosas/alimentador.html:11 templates/miscosas/index.html:70
+#: templates/miscosas/alimentador.html:11 templates/miscosas/index.html:40
 msgid "Eliminar"
 msgstr "Delete"
 
-#: templates/miscosas/alimentador.html:13 templates/miscosas/index.html:69
+#: templates/miscosas/alimentador.html:13 templates/miscosas/index.html:39
 msgid "Elegir"
 msgstr "Choose"
 
@@ -82,10 +82,10 @@ msgid "Lista de items"
 msgstr "Items list"
 
 #: templates/miscosas/alimentador.html:21
-#: templates/miscosas/alimentadores.html:9 templates/miscosas/index.html:22
-#: templates/miscosas/index.html:42 templates/miscosas/index.html:62
-#: templates/miscosas/item.html:8 templates/miscosas/usuario.html:37
-#: templates/miscosas/usuario.html:43
+#: templates/miscosas/alimentadores.html:9 templates/miscosas/index.html:13
+#: templates/miscosas/index.html:32 templates/miscosas/index.html:65
+#: templates/miscosas/item.html:8 templates/miscosas/usuario.html:20
+#: templates/miscosas/usuario.html:26 templates/miscosas/usuario.html:32
 msgid "detalle"
 msgstr "detail"
 
@@ -93,7 +93,7 @@ msgstr "detail"
 msgid "Lista de alimentadores"
 msgstr "Feeders list"
 
-#: templates/miscosas/alimentadores.html:10 templates/miscosas/item.html:67
+#: templates/miscosas/alimentadores.html:10 templates/miscosas/item.html:73
 msgid "Numero de items de este alimentador"
 msgstr "Total items for this feeder"
 
@@ -105,81 +105,81 @@ msgstr "Total score"
 msgid "Mis Cosas Web"
 msgstr "My Stuff Web"
 
-#: templates/miscosas/base.html:21
+#: templates/miscosas/base.html:25
 msgid "MIS COSAS WEB"
 msgstr "MY STUFF WEB"
 
-#: templates/miscosas/base.html:22
+#: templates/miscosas/base.html:28
 msgid "BIENVENIDO"
 msgstr "WELCOME"
 
-#: templates/miscosas/base.html:33
+#: templates/miscosas/base.html:39
 msgid "Contraseña"
 msgstr "Password"
 
-#: templates/miscosas/base.html:35
+#: templates/miscosas/base.html:42
 msgid "Registrar"
 msgstr "Register"
 
-#: templates/miscosas/base.html:43
+#: templates/miscosas/base.html:51
 msgid "Inicio"
 msgstr "Index"
 
-#: templates/miscosas/base.html:46
+#: templates/miscosas/base.html:54
 msgid "Alimentadores"
 msgstr "Feeders"
 
-#: templates/miscosas/base.html:49
+#: templates/miscosas/base.html:57
 msgid "Usuarios"
 msgstr "Users"
 
-#: templates/miscosas/base.html:52
+#: templates/miscosas/base.html:60
 msgid "Informacion"
 msgstr "Information"
 
-#: templates/miscosas/base.html:61
+#: templates/miscosas/base.html:70
 msgid "Esta aplicacion utiliza los datos proporcionados por"
 msgstr "This aplication uses the data provided by"
 
-#: templates/miscosas/base.html:65
+#: templates/miscosas/base.html:76
 msgid "Página web escrita por Meritxell Diaz para la asignatura de SAT"
 msgstr "Web page written by Meritxell Diaz for SAT subject"
 
 #: templates/miscosas/index.html:10
-msgid "Formulario de alimentadores:"
-msgstr "Feeders forms"
-
-#: templates/miscosas/index.html:14
-msgid "Elegir alimentador"
-msgstr "Choose feeder"
-
-#: templates/miscosas/index.html:19
-msgid "Top 5 ultimos items votados:"
-msgstr "Top 5 last votated items:"
-
-#: templates/miscosas/index.html:32
-msgid "Vacío"
-msgstr "Empty"
-
-#: templates/miscosas/index.html:39
 msgid "Top 10 items mas votados:"
 msgstr "Top 10 most voted items:"
 
-#: templates/miscosas/index.html:40
+#: templates/miscosas/index.html:11
 msgid "Ordenados empezando por el mas votado"
 msgstr "Ordered by the most voted ones"
 
-#: templates/miscosas/index.html:59
+#: templates/miscosas/index.html:30
 msgid "Alimentadores seleccionados:"
 msgstr "Selected feeders"
 
-#: templates/miscosas/index.html:63
+#: templates/miscosas/index.html:33
 msgid "Numero de items de este alimentador:"
 msgstr "Total items for this feeder:"
 
-#: templates/miscosas/index.html:64
+#: templates/miscosas/index.html:34
 msgid "Puntuacion total del alimentador:"
 msgstr "Total score:"
+
+#: templates/miscosas/index.html:51
+msgid "Formulario de alimentadores:"
+msgstr "Feeders forms"
+
+#: templates/miscosas/index.html:55
+msgid "Elegir alimentador"
+msgstr "Choose feeder"
+
+#: templates/miscosas/index.html:62
+msgid "Top 5 ultimos items votados:"
+msgstr "Top 5 last votated items:"
+
+#: templates/miscosas/index.html:75
+msgid "Vacío"
+msgstr "Empty"
 
 #: templates/miscosas/info.html:5
 msgid "Información"
@@ -212,31 +212,31 @@ msgstr "Description"
 msgid "Comentarios de los usuarios"
 msgstr "Users feedback"
 
-#: templates/miscosas/item.html:37 templates/miscosas/item.html:40
+#: templates/miscosas/item.html:38
 msgid "El usuario"
 msgstr "User"
 
-#: templates/miscosas/item.html:37 templates/miscosas/item.html:40
+#: templates/miscosas/item.html:38
 msgid "ha dicho"
 msgstr "has said"
 
-#: templates/miscosas/item.html:37 templates/miscosas/item.html:40
+#: templates/miscosas/item.html:38
 msgid "A dia"
 msgstr "Date"
 
-#: templates/miscosas/item.html:56
+#: templates/miscosas/item.html:51
 msgid "Comentar item"
 msgstr "Comment item"
 
-#: templates/miscosas/item.html:60
+#: templates/miscosas/item.html:55
 msgid "Enviar comentario"
 msgstr "Send comment"
 
-#: templates/miscosas/item.html:66
+#: templates/miscosas/item.html:72
 msgid "Informacion del alimentador"
 msgstr "Feeder information"
 
-#: templates/miscosas/item.html:68
+#: templates/miscosas/item.html:74
 msgid "Puntuacion total del alimentador"
 msgstr "Total score"
 
@@ -244,29 +244,33 @@ msgstr "Total score"
 msgid "Pulsa aqui para volver a la pagina principal"
 msgstr "Click here to return to the index"
 
-#: templates/miscosas/usuario.html:10
-msgid "Cambiar formato"
-msgstr "Change format"
-
-#: templates/miscosas/usuario.html:14
-msgid "Guardar"
-msgstr "Save"
-
 #: templates/miscosas/usuario.html:18
-msgid "Cambiar foto de perfil"
-msgstr "Change profile photo"
-
-#: templates/miscosas/usuario.html:22
-msgid "Enviar"
-msgstr "Send"
-
-#: templates/miscosas/usuario.html:35
 msgid "Lista de items votados"
 msgstr "Voted items"
 
-#: templates/miscosas/usuario.html:41
+#: templates/miscosas/usuario.html:24
 msgid "Lista de items comentados"
 msgstr "Commented items"
+
+#: templates/miscosas/usuario.html:30
+msgid "Lista de alimentadores seleccionados por este usuario"
+msgstr "Selected feeders by this user"
+
+#: templates/miscosas/usuario.html:40
+msgid "Cambiar foto de perfil"
+msgstr "Change profile photo"
+
+#: templates/miscosas/usuario.html:44
+msgid "Enviar"
+msgstr "Send"
+
+#: templates/miscosas/usuario.html:50
+msgid "Cambiar formato"
+msgstr "Change format"
+
+#: templates/miscosas/usuario.html:54
+msgid "Guardar"
+msgstr "Save"
 
 #: templates/miscosas/usuarios.html:8
 msgid "Lista de usuarios con cuenta"
@@ -280,31 +284,31 @@ msgstr "Voted items"
 msgid "Comentarios realizados"
 msgstr "Commented items"
 
-#: views.py:104
-msgid "No se ha podido encontrar la URL para ese alimentador"
-msgstr "Cannot find the url for the feeder asked for"
-
-#: views.py:114
-msgid "El alimentador pedido no se encuentra"
-msgstr "Cannot find the feeder asked for "
-
-#: views.py:157
-msgid "El item pedido no existe"
-msgstr "The item asked for does not exit"
-
-#: views.py:225
+#: views.py:58 views.py:77 views.py:133 views.py:201 views.py:263 views.py:363
 msgid "No se soporta ese tipo de documento"
 msgstr "This type of document is not supported"
 
-#: views.py:272
+#: views.py:140
+msgid "No se ha podido encontrar la URL para ese alimentador"
+msgstr "Cannot find the url for the feeder asked for"
+
+#: views.py:150
+msgid "El alimentador pedido no se encuentra"
+msgstr "Cannot find the feeder asked for "
+
+#: views.py:208
+msgid "El item pedido no existe"
+msgstr "The item asked for does not exit"
+
+#: views.py:317
 msgid "Informacion de autenticacion no valida, o el usuario ya tiene cuenta"
 msgstr "Wrong registration infomation, or the user already has an account"
 
-#: views.py:275
+#: views.py:320
 msgid "El usuario o la contraseña no son correctos"
 msgstr "Incorrect nickname or password"
 
-#: views.py:317
+#: views.py:374
 msgid "El usuario pedido no existe"
 msgstr "The user asked for does not exist"
 
