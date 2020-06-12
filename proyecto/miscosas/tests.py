@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from miscosas.models import Comentario, PagUsuario, Item, Alimentador
+from miscosas.models import Comentario, PagUsuario, Item, Alimentador, Like
 
 # Create your tests here.
 
@@ -28,10 +28,12 @@ class TestViewsIndex(TestCase):
     def setUp(self):
          alim = Alimentador(nombre="gato")
          alim.save()
+         item = Item(titulo="pechuga", alimentador=alim)
+         item.save()
          User = get_user_model()
          user = User.objects.create_user('temporary', 'temporary@gmail.com', 'temporary')
 
-    def test_post_ok(self):
+    def test_post_eliminar(self):
         alim = Alimentador.objects.get(nombre="gato")
         response = self.client.post('/', {'alim': alim.id, 'action': 'eliminar'})
         self.assertEqual(response.status_code, 302) #me redirige otra vez a la /
@@ -45,6 +47,15 @@ class TestViewsIndex(TestCase):
         self.assertInHTML("<h2>Top 10 items mas votados:</h2>", content)
         self.assertInHTML("<h2>Top 5 ultimos items votados:</h2>", content)
 
+    def test_post_like(self):
+        self.client.login(username='temporary', password='temporary')
+        User = get_user_model()
+        user = User.objects.get(username="temporary")
+        item = Item.objects.get(titulo="pechuga")
+        response = self.client.post('/', {'item': item.id, 'action': 'like'})
+        self.assertEqual(response.status_code, 302) #me redirige otra vez a la /
+        self.assertTrue(Like.objects.filter(usuario=user, item=item).exists())
+
 class TestViewsAlim(TestCase):
     def setUp(self):
          alim = Alimentador(nombre="gato")
@@ -56,6 +67,10 @@ class TestViewsAlim(TestCase):
                                     'tipo_alimentador': 'yt', 'action': "enviar"})
         content = response.content.decode(encoding='UTF-8')
         self.assertTrue(Alimentador.objects.filter(id_canal=id).exists())
+        alim = Alimentador.objects.get(id_canal=id)
+        response = self.client.post('/alimentador/'+str(alim.id), {'alim': alim.id, 'action': "eliminar"})
+        print(alim.elegido)
+        self.assertFalse(alim.elegido)
 
     def test_get_ok(self):
         alim = Alimentador.objects.get(nombre="gato")
@@ -80,7 +95,7 @@ class TestViewsUser(TestCase):
         content = response.content.decode(encoding='UTF-8')
         self.assertInHTML("<h3> Cambiar foto de perfil</h3>", content)
 
-    def test_post(self):
+    def test_post_estilo(self):
         self.client.login(username='temporary', password='temporary')
         response = self.client.post('/usuario/temporary', {'action': 'formato', 'tamano': 'grande', 'estilo':'oscuro'})
         css = self.client.get('/style.css', follow=True)
@@ -111,3 +126,12 @@ class TestViewsItem(TestCase):
         response = self.client.post('/item/'+str(item.id), {'action': 'comentario', 'texto': 'algopechuga'})
         content = response.content.decode(encoding='UTF-8')
         self.assertIn("<p>   - El usuario temporary ha dicho: algopechuga", content)
+
+    def test_post_dislike(self):
+        self.client.login(username='temporary', password='temporary')
+        User = get_user_model()
+        user = User.objects.get(username="temporary")
+        item = Item.objects.get(titulo="pechuga")
+        response = self.client.post('/', {'item': item.id, 'action': 'like'})
+        self.assertEqual(response.status_code, 302) #me redirige otra vez a la /
+        self.assertTrue(Like.objects.filter(usuario=user, item=item).exists())

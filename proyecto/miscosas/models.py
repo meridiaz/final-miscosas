@@ -47,8 +47,8 @@ class PagUsuario(models.Model):
 
 class Item(models.Model):
     titulo = models.CharField(max_length=64)
-    enlace = models.TextField()
-    descrip = models.TextField()
+    enlace = models.TextField(default="")
+    descrip = models.TextField(default="")
     alimentador =  models.ForeignKey(Alimentador, on_delete=models.CASCADE)
     id_item = models.CharField(max_length=20, default="")
 

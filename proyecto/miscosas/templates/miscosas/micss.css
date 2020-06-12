@@ -1,9 +1,6 @@
 #cabecera{
   box-sizing: content-box;
-
   position: relative;
-
-  /*height:166px;*/
   text-align:right;
   background: #2d6360 100% url(static/miscosas/{{fondo_cabec}});
 }
@@ -57,10 +54,6 @@ p{
 }
 
 #cabecera h1{
-  /*position: absolute;
-  top:37%;
-  left: 20%;*/
-
   font-size: 45px;
   padding-top: 10%;
   text-align: center;
@@ -73,12 +66,10 @@ p{
 
 .nav{
     box-sizing: content-box;
-
     top:0px;
     border-color: #007bff;
     border-radius: 40px;
     font: bold 1.0em sans-serif;
-    /* justify-content:  center; */
     background-color: white;
 
 }
@@ -86,7 +77,6 @@ p{
 #contenido{
   box-sizing: content-box;
   margin-top: 20px;
-  /* margin-left:25px; */
   border-radius: 50px;
   padding-left: 40px;
   padding-right: 40px;
@@ -116,13 +106,8 @@ button{
 }
 
  #top5{
-  /* width: 30%;*/
   margin-left: 6%;
   padding-top: 20px;
-  /* top: 80%;
-  text-align:left; */
-
-
   border: 3px solid pink;
   border-radius: 10px;
   padding-left: 20px;
@@ -136,40 +121,26 @@ button{
   border-radius: 10px;
   padding-left: 20px;
   padding-right: 20px;
+  margin-left: 6%;
 }
 
 #top10{
-  /* width: 60%; */
   margin-bottom: 40px;
   padding-right: 3%;
 }
 
 #fotoperfil{
-  /* box-sizing: content-box; */
   padding: 5px;
   padding-left: 20px;
-  /* position: absolute;
-  text-align:left;
-  right: 3%;
-  margin-bottom: 10%;*/
   border: 3px solid grey;
-   /* background-color: #aca2a2; */
   border-radius: 6px;
-  /* width: 35%; */
 }
 
 #cambiarestilo{
-  /* background-color: #41d8ed; */
   border: 3px solid grey;
   border-radius: 6px;
-
-  /* position: absolute;
-  right: 3%;
-  margin-top: 0%;
-  margin-bottom: 10%; */
-   padding-left: 20px;
+  padding-left: 20px;
   padding-right: 14%;
-  /* margin-left: 6%; */
   margin-top: 10%;
 }
 
@@ -182,8 +153,6 @@ button{
 }
 
 #votar_item{
-/*  position: absolute;
-  left: 50%;*/
   margin-top: 5%;
 }
 
@@ -194,7 +163,6 @@ button{
 #footer{
   margin-top: 25%;
   background-color: #52B1E0;
-  /* border-radius: 10px; */
   height: 15%;
   padding-top: 10px;
   padding-left: 10px;
