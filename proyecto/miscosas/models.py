@@ -38,19 +38,11 @@ class Alimentador(models.Model):
         return self.item_set.all().count()
 
 
-
-#class LastAlim(Alimentador):
-
-# class estiloPag(models.Model):
-#     color_letra = models.CharField(max_length=10)
-#     fondo_cabec = models.CharField(max_length=20)
-
 class PagUsuario(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     foto = models.ImageField(upload_to="img_users")
     tamLetra =  models.CharField(max_length=10, default='mediana')
     estilo = models.CharField(default='ligero', max_length=100)
-    #alimentadores = ArrayField(ArrayField(Alimentador))
 
 
 class Item(models.Model):

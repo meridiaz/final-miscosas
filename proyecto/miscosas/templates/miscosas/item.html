@@ -61,8 +61,8 @@
                     <!-- <h3>Votar item </h3> -->
                     <form method="POST" action="/item/{{item.id}}">
                       {% csrf_token %}
-                      <button type="submit" name= "action" value="like" class="save btn btn-info"><img src = "{{boton_like}}" width="50" height="30"></button>
-                      <button type="submit" name= "action" value="dislike" class="save btn btn-info"><img src = "{{boton_dislike}}" width="50" height="30"></button>
+                      <button type="submit" name= "action" value="like" class="save btn btn-info"><img src = '{% static '/miscosas/'%}{{boton_like}}' width="50" height="30"></button>
+                      <button type="submit" name= "action" value="dislike" class="save btn btn-info"><img src = '{% static '/miscosas/'%}{{boton_dislike}}' width="50" height="30"></button>
                     </form>
                   </div>
                 </div>

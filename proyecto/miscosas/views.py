@@ -32,7 +32,6 @@ from .crear_docs import XML_create, JSON_create
 
 # Create your views here.
 
-path_foto_votar = "/static/miscosas/"
 archivo_like={1:  ['like_sel.jpg', 'dis.jpg'],
             0:  ['like.jpg', 'dis.jpg'],
             -1:  ['like.jpg', 'dis_sel.jpg'],
@@ -187,7 +186,7 @@ def iluminar_voto(request, item):
     else:
         valor = 0
 
-    return path_foto_votar + archivo_like[valor][0], path_foto_votar +archivo_like[valor][1]
+    return archivo_like[valor][0], archivo_like[valor][1]
 
 def procesar_docs_item(request, item):
     doc = request.GET['format']
