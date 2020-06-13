@@ -48,7 +48,7 @@
 
               <div class="col-xs-12 col-md-8 col-lg-8 col-sm-8">
                 <div id="formu_comentario">
-                  <h3>{% trans 'Comentar item' %}</h3>
+                  <h3>{% trans 'Comentar ítem' %}</h3>
                   <form method="POST" action="/item/{{item.id}}" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{form.as_p}}
@@ -69,9 +69,9 @@
             </div>
             {% endif %}
             <div id="info_alim_enitem">
-                <h3>{% trans 'Informacion del alimentador' %}:</h3>
-                <p>{% trans 'Numero de items de este alimentador' %}: {{item.alimentador.total_it}}</p>
-                <p>{% trans 'Puntuacion total del alimentador' %}: {{item.alimentador.count_likes}}</p>
+                <h3>{% trans 'Información del alimentador' %}:</h3>
+                <p>{% trans 'Número de ítems de este alimentador' %}: {{item.alimentador.total_it}}</p>
+                <p>{% trans 'Puntuación total del alimentador' %}: {{item.alimentador.count_likes}}</p>
             </div>
 
 

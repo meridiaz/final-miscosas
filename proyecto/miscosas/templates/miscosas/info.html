@@ -5,6 +5,13 @@
       <h2> {% trans 'Información' %}</h2>
       <h3> {% trans 'Página web escrita por Meritxell Díaz Coque para la asignatura de SAT. Doble grado: GITT+IAA' %}</h3>
       <h3> {% trans 'Funcionamiento' %}</h3>
-      <p> {% trans 'Explicacion' %}</p>
+      <p> {% trans 'Esta aplicación usa los datos del XML de las páginas web que se indican en el footer. Se distingue entre alimentadores, que pueden ser canales de youtube, subrredits o un artista. Cada alimentador tiene asociado unos items, en este caso pueden ser videos, noticias o albumes, respectivamente. Tenemos varios recursos:' %}</p>
+      <br></br>
+      <p> {% trans '- La página principal nos muestra los 10 items más votados en la aplicación, el formulario para introducir un alimentador y los alimentadores seleccionados por cualquier usuario. Además, si el usuario está autenticado, se mostrará el top5 de sus items votados más recientes. Además, cada alimentador de la lista anterior, aparecerá con dos botones, uno para elegirlo (lo que implica volver a leer su XML) y otro para eliminarlo de esta lista' %}</p>
+      <p> {% trans '- La página de alimentadores nos muestra todos los alimentadores de los que se ha descargado información alguna vez' %}</p>
+      <p> {% trans '- La página de usuarios que muestra la lista de todos los usuarios con cuenta de la aplicación.' %}</p>
+      <p> {% trans '- La página de cada usuario, que muestra su foto de perfil, items comentados y votados, y los alimentadores que haya seleccionado alguna vez. Además, si el usuario que está visitando esta página coincide con el que está registrado, podrá cambiar la foto de perfil y formato de visualización de la aplicación, esto es el estilo y el tamaño.' %}</p>
+      <p> {% trans '- La página de cada alimentador, que muestra un botón elimiar para borrar dicho alimentador del listado de la página principal, si estaba elegido. O lo elige, lo que conlleva actualizar sus datos y que ya aparece en la página principal, en el caso de que estuviese eliminado. Además, aparece el listado de items asociados a dicho alimentador.' %}</p>
+      <p> {% trans '- La página de cada item, en el que se muestra su nombre, información del alimentador asociado, lista de comentarios de los usuarios, una descripción, y el vídeo empotrado en el caso de Youtube, o una imagen del álbum del artista en el caso de LastFM. Si además, el usuario que visita esta página está registrado, podrá votar y comentar el item' %}</p>
 
     {%endblock%}

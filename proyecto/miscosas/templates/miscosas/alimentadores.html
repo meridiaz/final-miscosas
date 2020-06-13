@@ -7,8 +7,8 @@
     <h2>{% trans 'Lista de alimentadores' %}</h2>
     {% for alim in lista %}
         <h3> - {% trans 'Nombre' %}: <a href="{{alimen.enlace}}">{{alim.nombre}}</a>, <a href="/alimentador/{{alim.id}}">({% trans 'detalle' %})</a></h3>
-        <p>{% trans 'Numero de items de este alimentador' %}: {{alim.total_it}}</p>
-        <p>{% trans 'Puntuacion total' %}: {{alim.count_likes}}</p>
+        <p>{% trans 'Número de ítems de este alimentador' %}: {{alim.total_it}}</p>
+        <p>{% trans 'Puntuación total' %}: {{alim.count_likes}}</p>
     {% endfor  %}
 
 {% endblock %}

@@ -7,8 +7,8 @@
   <div class="row">
     <div id="prim_col" class="col-xs-12 col-md-8 col-lg-8 col-sm-8">
     <div id="top10">
-      <h2>{%trans 'Top 10 items mas votados:' %}</h2>
-      <p>({% trans 'Ordenados empezando por el mas votado' %})</p>
+      <h2>{%trans 'Top 10 ítems más votados:' %}</h2>
+      <p>({% trans 'Ordenados empezando por el más votado' %})</p>
           {% for item in top10 %}
                 <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">({%trans 'detalle' %})</a></li></p>
                 <p>(Id: {{item.id}})</p>
@@ -30,8 +30,8 @@
         <h2>{%trans 'Alimentadores seleccionados:' %}</h2>
         {% for alim in alims %}
               <h3> -{% trans 'Nombre' %}: <a href="{{alimen.enlace}}">{{alim.nombre}}</a>, <a href="/alimentador/{{alim.id}}">({%trans 'detalle' %})</a></h3>
-              <p>{%trans 'Numero de items de este alimentador:' %} {{alim.total_it}}</p>
-              <p>{%trans 'Puntuacion total del alimentador:' %} {{alim.count_likes}}</p>
+              <p>{%trans 'Número de ítems de este alimentador:' %} {{alim.total_it}}</p>
+              <p>{%trans 'Puntuación total del alimentador:' %} {{alim.count_likes}}</p>
               <p> (Id: {{alim.id}})</p>
               <form method="POST" action="/">
                 {% csrf_token %}
@@ -55,7 +55,7 @@
         </div>
         {% if user.is_authenticated %}
         <div id="top5" class="row float-right">
-          <h2>{%trans 'Top 5 ultimos items votados:' %}</h2>
+          <h2>{%trans 'Top 5 últimos ítems votados:' %}</h2>
               {% if top5 %}
                     {% for item in top5 %}
                         <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">({%trans 'detalle' %})</a></li></p>

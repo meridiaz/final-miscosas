@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-12 18:07+0200\n"
+"POT-Creation-Date: 2020-06-13 11:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -83,7 +83,7 @@ msgstr "Items list"
 
 #: templates/miscosas/alimentador.html:21
 #: templates/miscosas/alimentadores.html:9 templates/miscosas/index.html:13
-#: templates/miscosas/index.html:32 templates/miscosas/index.html:65
+#: templates/miscosas/index.html:32 templates/miscosas/index.html:61
 #: templates/miscosas/item.html:8 templates/miscosas/usuario.html:20
 #: templates/miscosas/usuario.html:26 templates/miscosas/usuario.html:32
 msgid "detalle"
@@ -94,63 +94,63 @@ msgid "Lista de alimentadores"
 msgstr "Feeders list"
 
 #: templates/miscosas/alimentadores.html:10 templates/miscosas/item.html:73
-msgid "Numero de items de este alimentador"
+msgid "Número de ítems de este alimentador"
 msgstr "Total items for this feeder"
 
 #: templates/miscosas/alimentadores.html:11
-msgid "Puntuacion total"
+msgid "Puntuación total"
 msgstr "Total score"
 
 #: templates/miscosas/base.html:14
 msgid "Mis Cosas Web"
 msgstr "My Stuff Web"
 
-#: templates/miscosas/base.html:25
+#: templates/miscosas/base.html:23
 msgid "MIS COSAS WEB"
 msgstr "MY STUFF WEB"
 
-#: templates/miscosas/base.html:28
+#: templates/miscosas/base.html:26
 msgid "BIENVENIDO"
 msgstr "WELCOME"
 
-#: templates/miscosas/base.html:39
+#: templates/miscosas/base.html:37
 msgid "Contraseña"
 msgstr "Password"
 
-#: templates/miscosas/base.html:42
+#: templates/miscosas/base.html:40
 msgid "Registrar"
 msgstr "Register"
 
-#: templates/miscosas/base.html:51
+#: templates/miscosas/base.html:48
 msgid "Inicio"
 msgstr "Index"
 
-#: templates/miscosas/base.html:54
+#: templates/miscosas/base.html:51
 msgid "Alimentadores"
 msgstr "Feeders"
 
-#: templates/miscosas/base.html:57
+#: templates/miscosas/base.html:54
 msgid "Usuarios"
 msgstr "Users"
 
-#: templates/miscosas/base.html:60
-msgid "Informacion"
+#: templates/miscosas/base.html:57 templates/miscosas/info.html:5
+msgid "Información"
 msgstr "Information"
 
-#: templates/miscosas/base.html:70
-msgid "Esta aplicacion utiliza los datos proporcionados por"
+#: templates/miscosas/base.html:67
+msgid "Esta aplicación utiliza los datos proporcionados por"
 msgstr "This aplication uses the data provided by"
 
-#: templates/miscosas/base.html:76
-msgid "Página web escrita por Meritxell Diaz para la asignatura de SAT"
+#: templates/miscosas/base.html:73
+msgid "Página web escrita por Meritxell Díaz para la asignatura de SAT"
 msgstr "Web page written by Meritxell Diaz for SAT subject"
 
 #: templates/miscosas/index.html:10
-msgid "Top 10 items mas votados:"
+msgid "Top 10 ítems más votados:"
 msgstr "Top 10 most voted items:"
 
 #: templates/miscosas/index.html:11
-msgid "Ordenados empezando por el mas votado"
+msgid "Ordenados empezando por el más votado"
 msgstr "Ordered by the most voted ones"
 
 #: templates/miscosas/index.html:30
@@ -158,32 +158,28 @@ msgid "Alimentadores seleccionados:"
 msgstr "Selected feeders"
 
 #: templates/miscosas/index.html:33
-msgid "Numero de items de este alimentador:"
+msgid "Número de ítems de este alimentador:"
 msgstr "Total items for this feeder:"
 
 #: templates/miscosas/index.html:34
-msgid "Puntuacion total del alimentador:"
+msgid "Puntuación total del alimentador:"
 msgstr "Total score:"
 
-#: templates/miscosas/index.html:51
+#: templates/miscosas/index.html:49
 msgid "Formulario de alimentadores:"
 msgstr "Feeders forms"
 
-#: templates/miscosas/index.html:55
+#: templates/miscosas/index.html:53
 msgid "Elegir alimentador"
 msgstr "Choose feeder"
 
-#: templates/miscosas/index.html:62
-msgid "Top 5 ultimos items votados:"
+#: templates/miscosas/index.html:58
+msgid "Top 5 últimos ítems votados:"
 msgstr "Top 5 last votated items:"
 
-#: templates/miscosas/index.html:75
+#: templates/miscosas/index.html:71
 msgid "Vacío"
 msgstr "Empty"
-
-#: templates/miscosas/info.html:5
-msgid "Información"
-msgstr "Information"
 
 #: templates/miscosas/info.html:6
 msgid ""
@@ -197,8 +193,87 @@ msgid "Funcionamiento"
 msgstr "Performance"
 
 #: templates/miscosas/info.html:8
-msgid "Explicacion"
-msgstr "Explanation"
+msgid ""
+"Esta aplicación usa los datos del XML de las páginas web que se indican en "
+"el footer. Se distingue entre alimentadores, que pueden ser canales de "
+"youtube, subrredits o un artista. Cada alimentador tiene asociado unos "
+"items, en este caso pueden ser videos, noticias o albumes, respectivamente. "
+"Tenemos varios recursos:"
+msgstr ""
+"This web page uses XML data from the pages specified in the footer. We have "
+"feeders, that can be youtube channels, subrredits or artists. Each feeder is "
+"associated with items, that can be videos, news or albums, repectively. We "
+"have several resources: "
+
+#: templates/miscosas/info.html:10
+msgid ""
+"- La página principal nos muestra los 10 items más votados en la aplicación, "
+"el formulario para introducir un alimentador y los alimentadores "
+"seleccionados por cualquier usuario. Además, si el usuario está autenticado, "
+"se mostrará el top5 de sus items votados más recientes. Además, cada "
+"alimentador de la lista anterior, aparecerá con dos botones, uno para "
+"elegirlo (lo que implica volver a leer su XML) y otro para eliminarlo de "
+"esta lista"
+msgstr ""
+"- The main page shows top 10 most voted items in the whole app, the feeders "
+"form,and the selected feeders. Also, if the user is authenticated, it will "
+"show top5last voted items for this user. In addition, every feeder will "
+"appear with thowbottons, the first one selects it(which implies updating its "
+"data), and the other onedeletes it from this list"
+
+#: templates/miscosas/info.html:11
+msgid ""
+"- La página de alimentadores nos muestra todos los alimentadores de los que "
+"se ha descargado información alguna vez"
+msgstr ""
+"- Feeders page shows us all feeders from which data has ever been downloaded"
+
+#: templates/miscosas/info.html:12
+msgid ""
+"- La página de usuarios que muestra la lista de todos los usuarios con "
+"cuenta de la aplicación."
+msgstr ""
+"- Users page displays the list of users who have an account in this app "
+
+#: templates/miscosas/info.html:13
+msgid ""
+"- La página de cada usuario, que muestra su foto de perfil, items comentados "
+"y votados, y los alimentadores que haya seleccionado alguna vez. Además, si "
+"el usuario que está visitando esta página coincide con el que está "
+"registrado, podrá cambiar la foto de perfil y formato de visualización de la "
+"aplicación, esto es el estilo y el tamaño."
+msgstr ""
+"- User page, shows his profile photo, commented items and voted, and "
+"feedersthis user has ever selected. If the user authenticated is visiting "
+"his own webpage,  it will also show, two forms: One to change his profile "
+"photo, and the other one to change the theme and size in which the app is "
+"displayed"
+
+#: templates/miscosas/info.html:14
+msgid ""
+"- La página de cada alimentador, que muestra un botón elimiar para borrar "
+"dicho alimentador del listado de la página principal, si estaba elegido. O "
+"lo elige, lo que conlleva actualizar sus datos y que ya aparece en la página "
+"principal, en el caso de que estuviese eliminado. Además, aparece el listado "
+"de items asociados a dicho alimentador."
+msgstr ""
+"- Feeder webpage displays: If the feeder was selected it will show a button "
+"to delete the feeder from the selected feeders list. Conversely if the "
+"feeder was already deleted, this button will update its data and show it "
+"again in the index list "
+
+#: templates/miscosas/info.html:15
+msgid ""
+"- La página de cada item, en el que se muestra su nombre, información del "
+"alimentador asociado, lista de comentarios de los usuarios, una descripción, "
+"y el vídeo empotrado en el caso de Youtube, o una imagen del álbum del "
+"artista en el caso de LastFM. Si además, el usuario que visita esta página "
+"está registrado, podrá votar y comentar el item"
+msgstr ""
+"- Item webpage, it will show its name, feeder info, user comments, a "
+"description, and embebed video in case of Youtube, or the album image in "
+"case of an artist from LastFM.If the user who´s visiting this webpage is "
+"authenticated, the user may vote and comment the item"
 
 #: templates/miscosas/item.html:8
 msgid "Nombre alimentador"
@@ -225,7 +300,7 @@ msgid "A dia"
 msgstr "Date"
 
 #: templates/miscosas/item.html:51
-msgid "Comentar item"
+msgid "Comentar ítem"
 msgstr "Comment item"
 
 #: templates/miscosas/item.html:55
@@ -233,23 +308,23 @@ msgid "Enviar comentario"
 msgstr "Send comment"
 
 #: templates/miscosas/item.html:72
-msgid "Informacion del alimentador"
+msgid "Información del alimentador"
 msgstr "Feeder information"
 
 #: templates/miscosas/item.html:74
-msgid "Puntuacion total del alimentador"
+msgid "Puntuación total del alimentador"
 msgstr "Total score"
 
 #: templates/miscosas/pag_error.html:10
-msgid "Pulsa aqui para volver a la pagina principal"
+msgid "Pulsa aquí para volver a la página principal"
 msgstr "Click here to return to the index"
 
 #: templates/miscosas/usuario.html:18
-msgid "Lista de items votados"
+msgid "Lista de ítems votados"
 msgstr "Voted items"
 
 #: templates/miscosas/usuario.html:24
-msgid "Lista de items comentados"
+msgid "Lista de ítems comentados"
 msgstr "Commented items"
 
 #: templates/miscosas/usuario.html:30
@@ -277,40 +352,46 @@ msgid "Lista de usuarios con cuenta"
 msgstr "List of registrated users"
 
 #: templates/miscosas/usuarios.html:16
-msgid "Items votados"
+msgid "Ítems votados"
 msgstr "Voted items"
 
 #: templates/miscosas/usuarios.html:17
 msgid "Comentarios realizados"
 msgstr "Commented items"
 
-#: views.py:58 views.py:77 views.py:133 views.py:201 views.py:263 views.py:363
+#: views.py:57 views.py:76 views.py:132 views.py:200 views.py:262 views.py:362
 msgid "No se soporta ese tipo de documento"
 msgstr "This type of document is not supported"
 
-#: views.py:140
+#: views.py:139
 msgid "No se ha podido encontrar la URL para ese alimentador"
 msgstr "Cannot find the url for the feeder asked for"
 
-#: views.py:150
+#: views.py:149
 msgid "El alimentador pedido no se encuentra"
 msgstr "Cannot find the feeder asked for "
 
-#: views.py:208
+#: views.py:207
 msgid "El item pedido no existe"
 msgstr "The item asked for does not exit"
 
-#: views.py:317
+#: views.py:316
 msgid "Informacion de autenticacion no valida, o el usuario ya tiene cuenta"
 msgstr "Wrong registration infomation, or the user already has an account"
 
-#: views.py:320
+#: views.py:319
 msgid "El usuario o la contraseña no son correctos"
 msgstr "Incorrect nickname or password"
 
-#: views.py:374
+#: views.py:373
 msgid "El usuario pedido no existe"
 msgstr "The user asked for does not exist"
+
+#~ msgid "Informacion"
+#~ msgstr "Information"
+
+#~ msgid "Explicacion"
+#~ msgstr "Explanation"
 
 #, fuzzy
 #~| msgid "detalle"

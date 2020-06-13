@@ -331,7 +331,7 @@ def login_view(request):
                 do_login(request, user)
         else:
             context = {'recurso_us': recurso_us, 'error': msg, 'recurso_us': '/'}
-            return devolver_404(request, 'miscosas/pag_error.html', context)
+            return render(request, 'miscosas/pag_error.html', context)
 
     return redirect(recurso_us)
 

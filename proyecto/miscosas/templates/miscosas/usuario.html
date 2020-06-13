@@ -15,13 +15,13 @@
         </div>
 
           <div id="items_votados">
-            <h3> {% trans 'Lista de items votados' %} </h3>
+            <h3> {% trans 'Lista de ítems votados' %} </h3>
             {% for item in lista_vot %}
                 <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">({% trans 'detalle' %})</a></li></p>
             {%endfor%}
           </div>
           <div id="items_comentados">
-            <h3> {% trans 'Lista de items comentados' %} </h3>
+            <h3> {% trans 'Lista de ítems comentados' %} </h3>
             {% for item in lista_comen %}
                 <p><li><a href="{{item.enlace}}">{{item.titulo}}</a> <a href="/item/{{item.id}}">({% trans 'detalle' %})</a></li></p>
             {%endfor%}

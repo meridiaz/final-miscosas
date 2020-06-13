@@ -13,7 +13,7 @@
               <img src='{% static '/miscosas/'%}{{pag.foto.url}}'  width="80" height="75" align="left">
             {%endif %}
 
-            <p>{% trans 'Items votados' %}: {{pag.usuario.like_set.all.count}}</p>
+            <p>{% trans 'Ítems votados' %}: {{pag.usuario.like_set.all.count}}</p>
             <p> {% trans 'Comentarios realizados' %}: {{pag.usuario.comentario_set.all.count}}</p>
           </div>
     {% endfor  %}
