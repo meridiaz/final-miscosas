@@ -2,7 +2,6 @@
 # Entrega practica
 
 ## Datos
-
 * Nombre Meritxell Díaz Coque
 * Titulación: Doble grado en GITT+IAA
 * Despliegue: http://pichu.pythonanywhere.com/
@@ -12,9 +11,11 @@
 
 ## Cuenta Admin Site
 * meri/miscosas001
+
 ##Cuentas usuarios
 * maite/miscosas002
 * julian/avernoso
+
 ##Resumen parte obligatoria
 * La primera peculiaridad es que al visualizarse un recurso, este aparecerá iluminado en la barra
 de navegación.
