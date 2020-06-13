@@ -12,11 +12,11 @@
 ## Cuenta Admin Site
 * meri/miscosas001
 
-##Cuentas usuarios
+## Cuentas usuarios
 * maite/miscosas002
 * julian/avernoso
 
-##Resumen parte obligatoria
+## Resumen parte obligatoria
 * La primera peculiaridad es que al visualizarse un recurso, este aparecerá iluminado en la barra
 de navegación.
 * También he incluido en un formulario conjunto la posibilidad de cambiar el tema y tamaño en la página
@@ -30,7 +30,7 @@ si se había hecho like y se vuelve a dar like se ignorará el segundo voto, mie
 actualizará dicho voto
 
 
-##Lista de partes opcionales
+## Lista de partes opcionales
 * Nombre parte: Inclusión Favicon.ico
 * Nombre parte: Registrar usuarios desde mi aplicación, solo hay introducir una vez la contraseña
 * Nombre parte: Asociar usuarios logeados a alimentadores elegidos
